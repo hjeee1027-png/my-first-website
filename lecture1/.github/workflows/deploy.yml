@@ -24,12 +24,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       # ui_test 빌드
       - name: Install ui_test dependencies
         working-directory: ui_test
-        run: npm ci
+        run: npm install
 
       - name: Build ui_test
         working-directory: ui_test
@@ -38,7 +38,7 @@ jobs:
       # my-community 빌드
       - name: Install my-community dependencies
         working-directory: my-community
-        run: npm ci
+        run: npm install
 
       - name: Build my-community
         working-directory: my-community
