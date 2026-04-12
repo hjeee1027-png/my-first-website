@@ -21,19 +21,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: |
-            ui_test/package-lock.json
-            my-community/package-lock.json
-
       # ui_test 빌드
       - name: Install ui_test dependencies
         working-directory: ui_test
-        run: npm ci
+        run: npm install
 
       - name: Build ui_test
         working-directory: ui_test
@@ -42,7 +33,7 @@ jobs:
       # my-community 빌드
       - name: Install my-community dependencies
         working-directory: my-community
-        run: npm ci
+        run: npm install
 
       - name: Build my-community
         working-directory: my-community
