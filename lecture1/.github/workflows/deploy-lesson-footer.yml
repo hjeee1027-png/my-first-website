@@ -1,0 +1,34 @@
+name: Deploy lesson-footer to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'lesson-footer/**'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        working-directory: lesson-footer
+        run: npm install
+
+      - name: Build
+        working-directory: lesson-footer
+        run: npm run build
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: lesson-footer/dist
+          destination_dir: lesson-footer
+          keep_files: true
