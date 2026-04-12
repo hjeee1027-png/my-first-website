@@ -45,34 +45,15 @@ jobs:
       # 결과물 합치기
       - name: Combine build outputs
         run: |
+          set -e
           mkdir -p combined_dist/ui_test
           mkdir -p combined_dist/my-community
-          cp -r ui_test/dist/. combined_dist/ui_test/
-          cp -r my-community/dist/. combined_dist/my-community/
-          cat > combined_dist/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="ko">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>My Projects</title>
-            <style>
-              body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #FFFBF0; margin: 0; }
-              h1 { color: #5C3D00; margin-bottom: 2rem; }
-              .links { display: flex; gap: 1rem; }
-              a { padding: 1rem 2rem; background: linear-gradient(135deg, #FFD93D, #6BCB77); color: #5C3D00; border-radius: 16px; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
-              a:hover { opacity: 0.85; }
-            </style>
-          </head>
-          <body>
-            <h1>🐾 My Projects</h1>
-            <div class="links">
-              <a href="./ui_test/">UI Test</a>
-              <a href="./my-community/">마이냥멍</a>
-            </div>
-          </body>
-          </html>
-          EOF
+          cp -rv ui_test/dist/. combined_dist/ui_test/
+          cp -rv my-community/dist/. combined_dist/my-community/
+          cp root-index.html combined_dist/index.html
+          echo "=== combined_dist 구조 ==="
+          ls -la combined_dist/
+          ls -la combined_dist/my-community/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
