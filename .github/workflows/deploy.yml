@@ -46,6 +46,10 @@ jobs:
         working-directory: lecture1/lesson-content3
         run: npm install && npm run build
 
+      - name: Install & Build lesson-header
+        working-directory: lecture1/lesson-header
+        run: npm install && npm run build
+
       - name: Install & Build lesson-final
         working-directory: lecture1/lesson-final
         run: npm install && npm run build
@@ -56,12 +60,14 @@ jobs:
           mkdir -p combined/lesson-banner
           mkdir -p combined/lesson-content2
           mkdir -p combined/lesson-content3
+          mkdir -p combined/lesson-header
           mkdir -p combined/lesson-final
           cp -r lecture1/lesson-content1/dist/. combined/
           cp -r lecture1/lesson-footer/dist/. combined/lesson-footer/
           cp -r lecture1/lesson-banner/dist/. combined/lesson-banner/
           cp -r lecture1/lesson-content2/dist/. combined/lesson-content2/
           cp -r lecture1/lesson-content3/dist/. combined/lesson-content3/
+          cp -r lecture1/lesson-header/dist/. combined/lesson-header/
           cp -r lecture1/lesson-final/dist/. combined/lesson-final/
 
       - name: Setup Pages
