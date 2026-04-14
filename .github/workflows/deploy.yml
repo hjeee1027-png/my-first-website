@@ -25,16 +25,44 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: lecture1/lesson-content1/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install & Build lesson-content1
         working-directory: lecture1/lesson-content1
+        run: npm install && npm run build
 
-      - name: Build
-        run: npm run build
-        working-directory: lecture1/lesson-content1
+      - name: Install & Build lesson-footer
+        working-directory: lecture1/lesson-footer
+        run: npm install && npm run build
+
+      - name: Install & Build lesson-banner
+        working-directory: lecture1/lesson-banner
+        run: npm install && npm run build
+
+      - name: Install & Build lesson-content2
+        working-directory: lecture1/lesson-content2
+        run: npm install && npm run build
+
+      - name: Install & Build lesson-content3
+        working-directory: lecture1/lesson-content3
+        run: npm install && npm run build
+
+      - name: Install & Build lesson-final
+        working-directory: lecture1/lesson-final
+        run: npm install && npm run build
+
+      - name: Combine dist folders
+        run: |
+          mkdir -p combined/lesson-footer
+          mkdir -p combined/lesson-banner
+          mkdir -p combined/lesson-content2
+          mkdir -p combined/lesson-content3
+          mkdir -p combined/lesson-final
+          cp -r lecture1/lesson-content1/dist/. combined/
+          cp -r lecture1/lesson-footer/dist/. combined/lesson-footer/
+          cp -r lecture1/lesson-banner/dist/. combined/lesson-banner/
+          cp -r lecture1/lesson-content2/dist/. combined/lesson-content2/
+          cp -r lecture1/lesson-content3/dist/. combined/lesson-content3/
+          cp -r lecture1/lesson-final/dist/. combined/lesson-final/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -42,7 +70,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: lecture1/lesson-content1/dist
+          path: combined
 
   deploy:
     needs: build
