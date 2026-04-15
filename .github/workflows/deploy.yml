@@ -54,6 +54,10 @@ jobs:
         working-directory: lecture1/lesson-final
         run: npm install && npm run build
 
+      - name: Install & Build car-site
+        working-directory: lecture1/car-site
+        run: npm install && npm run build
+
       - name: Combine dist folders
         run: |
           mkdir -p combined/lesson-footer
@@ -62,6 +66,7 @@ jobs:
           mkdir -p combined/lesson-content3
           mkdir -p combined/lesson-header
           mkdir -p combined/lesson-final
+          mkdir -p combined/car-site
           cp -r lecture1/lesson-content1/dist/. combined/
           cp -r lecture1/lesson-footer/dist/. combined/lesson-footer/
           cp -r lecture1/lesson-banner/dist/. combined/lesson-banner/
@@ -69,6 +74,7 @@ jobs:
           cp -r lecture1/lesson-content3/dist/. combined/lesson-content3/
           cp -r lecture1/lesson-header/dist/. combined/lesson-header/
           cp -r lecture1/lesson-final/dist/. combined/lesson-final/
+          cp -r lecture1/car-site/dist/. combined/car-site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
