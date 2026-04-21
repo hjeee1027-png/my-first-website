@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', function () {
   st.textContent = [
 
     /* ── 서브메뉴 (class="submenu") ── */
-    '.gnb li { position: relative; }',
+    /* gnb a 포커스 outline 제거 → 검정 세로선 방지 */
+    '.gnb a { outline: none; }',
+    '.gnb li { position: relative; overflow: visible; }',
 
     '.submenu {',
     '  display: none;',
     '  position: absolute;',
     '  top: 100%;',
-    '  left: 50%;',                      /* li 중앙 기준 */
-    '  transform: translateX(-50%);',    /* 서브메뉴 중앙 정렬 */
+    '  left: 50%;',
+    '  transform: translateX(-50%);',
     '  width: 150px;',
     '  background: #fff;',
     '  list-style: none;',
@@ -23,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
     '  max-height: 0;',
     '  overflow: hidden;',
     '  z-index: 1000;',
-    '  border: 1px solid #ddd;',
+    /* border 대신 box-shadow 사용 → 0높이일 때 세로선 렌더 방지 */
+    '  box-shadow: 0 2px 8px rgba(0,0,0,0.12);',
     '  box-sizing: border-box;',
     '}',
 
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '  line-height: 40px;',
     '  padding: 0;',
     '  margin: 0;',
+    '  outline: none;',
     '  box-sizing: border-box;',
     '}',
     '.submenu li a:hover { background: #f5f5f5; }',
@@ -136,16 +140,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ── slideDown / slideUp (0.5초, 타이머 충돌 방지) ── */
   function slideDown(el) {
-    /* 진행 중인 slideUp 타이머 취소 */
     if (el._upTimer) { clearTimeout(el._upTimer); el._upTimer = null; }
-    el.style.display    = 'block';
+    /* transition 없이 초기 상태(0) 확정 → border 잔상 방지 */
+    el.style.transition = 'none';
+    el.style.maxHeight  = '0px';
     el.style.overflow   = 'hidden';
-    el.style.transition = 'max-height 0.5s ease';
+    el.style.display    = 'block';
     var h = el.scrollHeight;
-    /* 두 번의 rAF로 display:block 반영 후 높이 전환 */
+    /* 두 번의 rAF: 초기 렌더 반영 후 transition 켜고 높이 전환 */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        el.style.maxHeight = h + 'px';
+        el.style.transition = 'max-height 0.5s ease';
+        el.style.maxHeight  = h + 'px';
       });
     });
   }
