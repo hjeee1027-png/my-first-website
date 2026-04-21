@@ -35,9 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
     '}',
 
     '.submenu li {',
-    '  width: 120px;',
-    '  margin: 0;',
-    '  padding: 0;',
+    '  width: 120px !important;',
+    '  margin: 0 !important;',          /* .gnb li margin-left:40px !important 무력화 */
+    '  padding: 0 !important;',
+    '  float: none !important;',        /* .gnb li float:left 상속 차단 */
+    '  line-height: normal !important;',/* .gnb li line-height:50px 상속 차단 */
     '  border-bottom: 1px solid #ddd;',
     '  box-sizing: border-box;',
     '}',
