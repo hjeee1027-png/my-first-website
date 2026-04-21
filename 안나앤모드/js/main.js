@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── 서브메뉴 (class="submenu") ── */
     /* gnb a 포커스 outline 제거 → 검정 세로선 방지 */
     '.gnb a { outline: none; }',
+    /* gnb 전체 너비: 10개×80px + 9간격×40px = 1160px */
+    '.gnb { width: 1160px !important; }',
     /* margin-left 기존 20px → 40px (first-child는 0 유지) */
     '.gnb li { position: relative; overflow: visible; margin-left: 40px !important; }',
     '.gnb li:nth-child(1) { margin-left: 0 !important; }',
@@ -128,16 +130,16 @@ document.addEventListener('DOMContentLoaded', function () {
      1. GNB 서브메뉴 – 각 li를 this로 구별하여 slideDown/Up
      ===================================================== */
   var menuData = [
-    { subs: ['신상 원피스', '신상 상의', '신상 하의'] },
-    { subs: ['블라우스', '니트', '티셔츠'] },
-    { subs: ['팬츠', '스커트', '레깅스'] },
-    { subs: ['코트', '재킷', '가디건'] },
-    { subs: ['미니원피스', '미디원피스', '맥시원피스'] },
-    { subs: ['토트백', '숄더백', '크로스백'] },
-    { subs: ['스니커즈', '플랫슈즈', '샌들'] },
-    { subs: ['목걸이', '귀걸이', '반지'] },
-    { subs: ['10% 세일', '30% 세일', '50% 세일'] },
-    { subs: ['공지사항', '이벤트', 'FAQ'] }
+    { subs: ['10% 할인', '30% 할인', '50% 할인'] },       /* 세일상품 */
+    { subs: ['신상 원피스', '신상 상의', '신상 하의'] },   /* 신상품   */
+    { subs: ['베스트 TOP10', '베스트 아우터', '베스트 원피스'] }, /* 베스트 */
+    { subs: ['블라우스', '니트', '티셔츠'] },              /* 상의     */
+    { subs: ['와이드팬츠', '슬림팬츠', '레깅스'] },        /* 팬츠     */
+    { subs: ['미니스커트', '미디스커트', '롱스커트'] },     /* 스커트   */
+    { subs: ['미니원피스', '미디원피스', '맥시원피스'] },   /* 원피스   */
+    { subs: ['코트', '재킷', '가디건'] },                  /* 아우터   */
+    { subs: ['토트백', '숄더백', '크로스백'] },             /* 가방     */
+    { subs: ['목걸이', '귀걸이', '반지'] }                 /* 악세사리 */
   ];
 
   /* ── slideDown / slideUp (0.5초, 타이머 충돌 방지) ── */
@@ -243,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
      ===================================================== */
 
   /* ── 메인 메뉴명 변경 ── */
-  var menuNames = ['신상품','상의','하의','아우터','원피스','가방','신발','악세서리','세일','커뮤니티'];
+  var menuNames = ['세일상품','신상품','베스트','상의','팬츠','스커트','원피스','아우터','가방','악세사리'];
   document.querySelectorAll('.gnb li').forEach(function (li, i) {
     if (!menuNames[i]) return;
     var h2  = li.querySelector('h2');
