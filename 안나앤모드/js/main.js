@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── 서브메뉴 (class="submenu") ── */
     /* gnb a 포커스 outline 제거 → 검정 세로선 방지 */
     '.gnb a { outline: none; }',
-    '.gnb li { position: relative; overflow: visible; }',
+    /* margin-left 기존 20px → 40px (first-child는 0 유지) */
+    '.gnb li { position: relative; overflow: visible; margin-left: 40px !important; }',
+    '.gnb li:nth-child(1) { margin-left: 0 !important; }',
 
     '.submenu {',
     '  display: none;',
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '  top: 100%;',
     '  left: 50%;',
     '  transform: translateX(-50%);',
-    '  width: 150px;',
+    '  width: 120px;',
     '  background: #fff;',
     '  list-style: none;',
     '  margin: 0;',
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '}',
 
     '.submenu li {',
-    '  width: 150px;',
+    '  width: 120px;',
     '  margin: 0;',
     '  padding: 0;',
     '  border-bottom: 1px solid #ddd;',
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     '.submenu li a {',
     '  display: block;',
-    '  width: 150px;',
+    '  width: 120px;',
     '  text-align: center;',
     '  font-size: 14px;',
     '  color: #333;',
