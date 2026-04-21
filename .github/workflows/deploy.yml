@@ -67,6 +67,7 @@ jobs:
           mkdir -p combined/lesson-header
           mkdir -p combined/lesson-final
           mkdir -p combined/car-site
+          mkdir -p combined/안나앤모드
           cp -r lecture1/lesson-content1/dist/. combined/
           cp -r lecture1/lesson-footer/dist/. combined/lesson-footer/
           cp -r lecture1/lesson-banner/dist/. combined/lesson-banner/
@@ -75,6 +76,7 @@ jobs:
           cp -r lecture1/lesson-header/dist/. combined/lesson-header/
           cp -r lecture1/lesson-final/dist/. combined/lesson-final/
           cp -r lecture1/car-site/dist/. combined/car-site/
+          cp -r 안나앤모드/. combined/안나앤모드/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

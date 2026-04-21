@@ -1,0 +1,123 @@
+#wrap{
+    width: 1660px;
+    margin: 0 auto;
+}
+
+.logo{
+    /* 이미지와 같은 사이즈로 */
+    width: 164px;
+    margin: 0 auto;
+    /* 첫째라서 밀려남 */
+    /* margin-top: 80px; */
+    /* 내영역 늘어남 -> 빈공간을 클릭해도 이동 */
+    /* padding-top: 80px; */
+    /* 동생요소와 겹치기 때문에 사용불가 */
+    /* position: relative;
+    top: 80px; */
+    line-height: 140px;
+}
+
+.gnb{
+    width: 980px;
+    margin: 0 auto;
+}
+
+.gnb li{
+    width: 80px;
+    margin-left: 20px;
+    float: left;
+    line-height: 50px;
+    text-align: center;
+}
+
+.gnb li:nth-child(1){margin-left: 0;}
+
+/* 이미지 사이즈를 블록요소 만큼 차지하도록 */
+.main_ad a img{
+    width: 100%;
+}
+
+.sub_ad{
+    /* 신상품 위아래 여백 줌 */
+    margin: 80px 0;
+}
+
+.sub_ad_title,.best_title{
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.sub_ad_title h3,.best_title h3{
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 35px;
+}
+
+.sub_ad_title p,.best_title p{
+    font-size: 16px;
+    line-height: 32px;
+}
+
+.new_item li{
+    width: 316px;
+    margin-left: 20px;
+    float: left;
+}
+
+.new_item li:nth-child(1){margin-left: 0;}
+
+.new_item li img{width: 100%;}
+
+.con{margin-top: 130px;}
+
+.best_item li{
+    width: 394px;
+    margin-left: 28px;
+    margin-top: 28px;
+    float: left;
+    
+}
+
+.best_item li:nth-child(4n+1){margin-left: 0;}
+
+.best_item li img{width: 100%;}
+
+.best_item li h4,.new_item li h4{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    margin-top: 15px;
+}
+
+.best_item li p,.new_item li p{
+    font-size: 12px;
+    color: #969696;
+    line-height: 1.7;
+}
+
+.best_item li span,.new_item li span{
+    font-size: 20px;
+    line-height: 2.7;
+    font-weight: bold;
+}
+
+.footer{
+    background-color: #ddd;
+    margin-top: 100px;
+}
+
+.foot_wrap{
+    width: 1660px;
+    margin: 0 auto;
+    padding: 50px 0;
+}
+
+.footer p{
+    text-align: center;
+    line-height: 1.7;
+}
+
+/* 각 텍스트 줄간격 -> line-height */
+/* 텍스트 크기 -> font-size */
+/* 텍스트 굵기 -> font-weight */
+/* 줄간격 tip -> 글자크기보다 크게 줘야 벌어짐 */

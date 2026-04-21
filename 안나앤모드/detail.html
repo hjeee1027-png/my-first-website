@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 상세페이지 – 안나앤모드</title>
+  <link rel="stylesheet" href="css/초기화.css">
+  <style>
+    /* ── 레이아웃 ── */
+    #wrap { width: 1000px; margin: 0 auto; padding: 60px 0 100px; }
+
+    /* ── 뒤로가기 ── */
+    .back_btn {
+      display: inline-block;
+      margin-bottom: 30px;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+    }
+    .back_btn:hover { color: #111; text-decoration: underline; }
+
+    /* ── 상세 본문 ── */
+    .detail_wrap { display: flex; gap: 60px; align-items: flex-start; }
+
+    .detail_img { flex: 0 0 420px; }
+    .detail_img img { width: 100%; display: block; }
+
+    .detail_info { flex: 1; }
+
+    /* ── 상품명 / 가격 ── */
+    .d_name  { font-size: 22px; font-weight: 600; color: #111; line-height: 1.4; margin-bottom: 12px; }
+    .d_price { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 20px; }
+    .d_price em { font-size: 14px; font-weight: 400; color: #888; margin-left: 6px; }
+
+    /* ── 구분선 ── */
+    .divider { border: none; border-top: 1px solid #e0e0e0; margin: 18px 0; }
+
+    /* ── 설명 ── */
+    .d_desc { font-size: 14px; color: #555; line-height: 1.8; margin-bottom: 24px; }
+
+    /* ── 재고 ── */
+    .d_stock { font-size: 13px; color: #e04040; margin-bottom: 20px; }
+    .d_stock span { font-weight: 600; }
+
+    /* ── 색상 선택 ── */
+    .d_row { display: flex; align-items: center; margin-bottom: 16px; gap: 12px; }
+    .d_row label { font-size: 13px; color: #555; width: 70px; flex-shrink: 0; }
+    .d_row select {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #333;
+      background: #fff;
+      min-width: 180px;
+    }
+
+    /* ── 수량 ── */
+    .qty_wrap { display: flex; align-items: center; gap: 0; }
+    .qty_btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .qty_btn:hover { background: #f0f0f0; }
+    .qty_input {
+      width: 50px;
+      height: 36px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-left: none;
+      border-right: none;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* ── 쿠폰 ── */
+    .coupon_wrap {
+      background: #f9f5ff;
+      border: 1px dashed #c9a8f5;
+      padding: 14px 18px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .coupon_wrap p { font-size: 13px; color: #555; }
+    .coupon_wrap p strong { color: #8b4fd8; }
+    .btn_coupon {
+      padding: 8px 20px;
+      border: 1px solid #8b4fd8;
+      background: #fff;
+      color: #8b4fd8;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn_coupon:hover { background: #8b4fd8; color: #fff; }
+
+    /* ── CTA 버튼 ── */
+    .btn_wrap { display: flex; gap: 12px; margin-top: 24px; }
+    .btn_cart, .btn_buy {
+      flex: 1;
+      height: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      letter-spacing: 1px;
+    }
+    .btn_cart {
+      background: #fff;
+      border: 2px solid #111;
+      color: #111;
+    }
+    .btn_cart:hover { background: #111; color: #fff; }
+    .btn_buy  { background: #111; color: #fff; }
+    .btn_buy:hover  { background: #333; }
+
+    /* ── 토스트 알림 ── */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 12px 28px;
+      font-size: 14px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <a class="back_btn" onclick="history.back()">← 목록으로 돌아가기</a>
+
+    <div class="detail_wrap">
+      <div class="detail_img">
+        <img id="d_img" src="" alt="상품 이미지">
+      </div>
+
+      <div class="detail_info">
+        <p class="d_name"  id="d_name">-</p>
+        <p class="d_price" id="d_price">-<em>원</em></p>
+        <hr class="divider">
+        <p class="d_desc"  id="d_desc">-</p>
+        <p class="d_stock">재고 : <span id="d_stock">-</span>개 남음</p>
+        <hr class="divider">
+
+        <!-- 색상 선택 -->
+        <div class="d_row">
+          <label>색상 선택</label>
+          <select id="d_color"></select>
+        </div>
+
+        <!-- 수량 -->
+        <div class="d_row">
+          <label>수량</label>
+          <div class="qty_wrap">
+            <button class="qty_btn" id="btn_minus">−</button>
+            <input  class="qty_input" id="qty_input" type="number" value="1" min="1">
+            <button class="qty_btn" id="btn_plus">+</button>
+          </div>
+        </div>
+
+        <!-- 쿠폰 -->
+        <div class="coupon_wrap">
+          <p>지금 다운로드하면 <strong>5% 즉시할인 쿠폰</strong>을 드려요!</p>
+          <button class="btn_coupon" id="btn_coupon">쿠폰 받기</button>
+        </div>
+
+        <!-- CTA -->
+        <div class="btn_wrap">
+          <button class="btn_cart" id="btn_cart">장바구니 담기</button>
+          <button class="btn_buy"  id="btn_buy" >바로 결제</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 토스트 -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── 상품 데이터 ── */
+    var PRODUCTS = {
+      new: [
+        {
+          img: 'img/new1.jfif',
+          name: '플로럴 미디 원피스',
+          price: '58,000',
+          desc: '봄·여름을 위한 화사한 꽃무늬 패턴의 우아한 미디 원피스입니다. 부드러운 폴리 소재로 착용감이 편안하며 다양한 신발과 잘 어울립니다.',
+          stock: 12,
+          colors: ['아이보리', '핑크', '라벤더']
+        },
+        {
+          img: 'img/new2.jfif',
+          name: '린넨 와이드 팬츠',
+          price: '42,000',
+          desc: '시원한 린넨 소재의 루즈핏 와이드 팬츠입니다. 통기성이 뛰어나 여름 일상복으로 제격이며, 슬림하거나 크롭 상의와 매치하면 세련된 스타일이 완성됩니다.',
+          stock: 8,
+          colors: ['베이지', '화이트', '카키']
+        },
+        {
+          img: 'img/new3.jfif',
+          name: '스트라이프 크롭 티셔츠',
+          price: '35,000',
+          desc: '캐주얼한 줄무늬 패턴의 크롭 반팔 티셔츠입니다. 하이웨이스트 팬츠나 스커트와 코디하면 균형 잡힌 실루엣이 완성됩니다.',
+          stock: 20,
+          colors: ['화이트/블랙', '네이비/화이트', '레드/화이트']
+        },
+        {
+          img: 'img/new4.jfif',
+          name: '레이스 트리밍 블라우스',
+          price: '48,000',
+          desc: '섬세한 레이스 트리밍 포인트의 여성스러운 블라우스입니다. 데이트룩이나 오피스룩으로 활용하기 좋으며, 와이드 팬츠와 잘 어울립니다.',
+          stock: 5,
+          colors: ['화이트', '아이보리', '블랙']
+        },
+        {
+          img: 'img/new5.jfif',
+          name: '컬러블록 니트 조끼',
+          price: '39,000',
+          desc: '빈티지 감성의 배색 컬러블록 슬리브리스 니트입니다. 셔츠나 블라우스 위에 레이어드하면 개성 있는 스타일링이 완성됩니다.',
+          stock: 15,
+          colors: ['베이지/브라운', '네이비/크림', '그린/카키']
+        }
+      ],
+      best: [
+        {
+          img: 'img/best1.jfif',
+          name: '오버핏 체크 코트',
+          price: '128,000',
+          desc: '클래식 체크 패턴의 오버핏 울 혼방 코트입니다. 가을·겨울 필수 아우터로 심플한 이너와 매치해도 고급스러운 분위기가 연출됩니다.',
+          stock: 7,
+          colors: ['베이지/브라운', '그레이/블랙', '네이비/화이트']
+        },
+        {
+          img: 'img/best2.jfif',
+          name: '하이웨이스트 슬림 팬츠',
+          price: '55,000',
+          desc: '날씬해 보이는 하이웨이스트 슬림 핏 팬츠입니다. 다리 라인을 길고 슬림하게 연출해주며 출근룩부터 데이트룩까지 두루 활용할 수 있습니다.',
+          stock: 18,
+          colors: ['블랙', '네이비', '그레이', '베이지']
+        },
+        {
+          img: 'img/best3.jfif',
+          name: '프릴 넥 블라우스',
+          price: '45,000',
+          desc: '로맨틱한 프릴 디테일이 돋보이는 여성스러운 블라우스입니다. 단독 착용 또는 재킷 이너로 활용하기 좋습니다.',
+          stock: 10,
+          colors: ['화이트', '아이보리', '라이트블루']
+        },
+        {
+          img: 'img/best4.jfif',
+          name: 'A라인 데님 스커트',
+          price: '52,000',
+          desc: '클래식 데님 소재의 A라인 미디 스커트입니다. 청바지 데님 특유의 워싱감이 자연스럽고, 다양한 상의와 캐주얼하게 매치할 수 있습니다.',
+          stock: 9,
+          colors: ['라이트블루', '인디고', '블랙']
+        },
+        {
+          img: 'img/best5.jfif',
+          name: '터틀넥 니트 스웨터',
+          price: '89,000',
+          desc: '부드러운 소재의 루즈핏 터틀넥 니트입니다. 따뜻하면서도 세련된 가을·겨울 필수 아이템이며 코트나 점퍼 이너로도 잘 어울립니다.',
+          stock: 6,
+          colors: ['크림', '그레이', '블랙', '카멜']
+        },
+        {
+          img: 'img/best6.jfif',
+          name: '플리츠 미니스커트',
+          price: '38,000',
+          desc: '사랑스러운 주름 플리츠 미니스커트입니다. 블라우스나 크롭탑과 매치하면 발랄하고 여성스러운 스타일이 연출됩니다.',
+          stock: 23,
+          colors: ['블랙', '네이비', '플라워']
+        },
+        {
+          img: 'img/best7.jfif',
+          name: '기모 후드 집업',
+          price: '65,000',
+          desc: '따뜻하고 캐주얼한 기모 소재의 후드 집업입니다. 두꺼운 내부 기모로 겨울에도 따뜻하게 착용 가능하며 스포티한 룩에 어울립니다.',
+          stock: 14,
+          colors: ['그레이', '블랙', '베이지', '네이비']
+        },
+        {
+          img: 'img/best8.jfif',
+          name: '벨티드 트렌치코트',
+          price: '145,000',
+          desc: '허리 벨트 디테일의 클래식 트렌치코트입니다. 봄·가을 시즌 스타일리시한 아우터로, 허리 벨트를 활용하면 다양한 실루엣 연출이 가능합니다.',
+          stock: 4,
+          colors: ['베이지', '블랙', '카키']
+        },
+        {
+          img: 'img/best9.jfif',
+          name: '셔링 미니 원피스',
+          price: '69,000',
+          desc: '부드러운 코튼 소재의 셔링 디테일 미니 원피스입니다. 귀엽고 발랄한 스타일링에 잘 어울리며, 스니커즈부터 힐까지 다양한 신발과 매치됩니다.',
+          stock: 11,
+          colors: ['화이트', '핑크', '스카이블루']
+        },
+        {
+          img: 'img/best10.jfif',
+          name: '리본 버킷백',
+          price: '78,000',
+          desc: '리본 포인트가 귀여운 버킷 숄더백입니다. 가볍고 수납공간이 넉넉하여 데일리 가방으로 활용하기 좋습니다.',
+          stock: 8,
+          colors: ['화이트', '블랙', '베이지']
+        },
+        {
+          img: 'img/best11.jfif',
+          name: '스트링 크롭 티',
+          price: '29,000',
+          desc: '어깨 스트링 디테일이 포인트인 크롭 반팔 티셔츠입니다. 시원하고 캐주얼한 여름 스타일링에 잘 어울립니다.',
+          stock: 30,
+          colors: ['화이트', '블랙', '라임', '핑크']
+        },
+        {
+          img: 'img/best12.jfif',
+          name: '와이드 슬랙스',
+          price: '62,000',
+          desc: '편안하고 세련된 와이드 핏 슬랙스입니다. 트렌디한 오피스룩과 캐주얼룩 모두에 어울리며 체형 커버 효과도 뛰어납니다.',
+          stock: 16,
+          colors: ['블랙', '그레이', '아이보리', '카키']
+        },
+        {
+          img: 'img/best13.jfif',
+          name: '퍼프 소매 블라우스',
+          price: '47,000',
+          desc: '볼륨감 있는 퍼프 소매가 돋보이는 우아한 블라우스입니다. 로맨틱한 스타일링에 완벽하며 스커트와 잘 어울립니다.',
+          stock: 12,
+          colors: ['화이트', '핑크', '하늘색']
+        },
+        {
+          img: 'img/best14.jfif',
+          name: '오버사이즈 맨투맨',
+          price: '55,000',
+          desc: '편안하고 루즈한 오버사이즈 스웨트셔츠입니다. 일상 캐주얼룩의 베이직 아이템으로 다양한 하의와 자연스럽게 매치됩니다.',
+          stock: 25,
+          colors: ['그레이', '블랙', '크림', '네이비']
+        },
+        {
+          img: 'img/best15.jfif',
+          name: '뷔스티에 탑',
+          price: '42,000',
+          desc: '세련된 리본 포인트의 뷔스티에 탑입니다. 카디건이나 재킷 안에 이너로 착용하거나 단독으로 스타일리시하게 코디할 수 있습니다.',
+          stock: 9,
+          colors: ['블랙', '화이트', '네이비']
+        },
+        {
+          img: 'img/best16.jfif',
+          name: '캐시미어 가디건',
+          price: '98,000',
+          desc: '고급스러운 캐시미어 혼방의 롱 가디건입니다. 어깨에 걸치거나 단독 착용 모두 가능하며 가을·겨울 레이어드룩에 완성도를 더합니다.',
+          stock: 3,
+          colors: ['아이보리', '카멜', '그레이', '블랙']
+        }
+      ]
+    };
+
+    /* ── URL 파라미터 파싱 ── */
+    function getParam(key) {
+      return new URLSearchParams(location.search).get(key);
+    }
+
+    var type = getParam('type') || 'new';
+    var idx  = parseInt(getParam('idx') || '0', 10);
+    var p    = (PRODUCTS[type] && PRODUCTS[type][idx]) ? PRODUCTS[type][idx] : null;
+
+    if (p) {
+      document.getElementById('d_img').src       = p.img;
+      document.getElementById('d_img').alt       = p.name;
+      document.getElementById('d_name').textContent  = p.name;
+      document.getElementById('d_price').innerHTML   = p.price + '<em>원</em>';
+      document.getElementById('d_desc').textContent  = p.desc;
+      document.getElementById('d_stock').textContent = p.stock;
+      document.title = p.name + ' – 안나앤모드';
+
+      var colorSel = document.getElementById('d_color');
+      p.colors.forEach(function (c) {
+        var opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        colorSel.appendChild(opt);
+      });
+    }
+
+    /* ── 수량 +/- ── */
+    var qtyInput = document.getElementById('qty_input');
+    document.getElementById('btn_minus').addEventListener('click', function () {
+      if (parseInt(qtyInput.value) > 1) qtyInput.value = parseInt(qtyInput.value) - 1;
+    });
+    document.getElementById('btn_plus').addEventListener('click', function () {
+      if (p && parseInt(qtyInput.value) < p.stock) {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+      }
+    });
+
+    /* ── 토스트 ── */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 2200);
+    }
+
+    /* ── 쿠폰 다운로드 ── */
+    document.getElementById('btn_coupon').addEventListener('click', function () {
+      this.textContent = '다운 완료 ✓';
+      this.disabled = true;
+      showToast('5% 할인 쿠폰이 다운로드되었습니다.');
+    });
+
+    /* ── 장바구니 담기 ── */
+    document.getElementById('btn_cart').addEventListener('click', function () {
+      var qty = parseInt(qtyInput.value);
+      showToast((p ? p.name : '') + ' ' + qty + '개를 장바구니에 담았습니다.');
+    });
+
+    /* ── 바로 결제 ── */
+    document.getElementById('btn_buy').addEventListener('click', function () {
+      showToast('결제 페이지로 이동합니다.');
+    });
+  </script>
+</body>
+</html>
