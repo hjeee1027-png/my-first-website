@@ -239,7 +239,66 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* =====================================================
-     3. 상품 이미지 img_box 래핑 (li 크기 유지, 이미지만 확대)
+     3. 콘텐츠 텍스트 업데이트 (메뉴명 / 신상품 / 베스트)
+     ===================================================== */
+
+  /* ── 메인 메뉴명 변경 ── */
+  var menuNames = ['신상품','상의','하의','아우터','원피스','가방','신발','악세서리','세일','커뮤니티'];
+  document.querySelectorAll('.gnb li').forEach(function (li, i) {
+    if (!menuNames[i]) return;
+    var h2  = li.querySelector('h2');
+    if (!h2) return;
+    var span = h2.querySelector('span');
+    if (span) span.textContent = menuNames[i];
+    else       h2.textContent  = menuNames[i];
+  });
+
+  /* ── 신상품 콘텐츠 ── */
+  var newItems = [
+    { name: '플로럴 미디 원피스',     desc: '봄·여름 시즌 화사한 플라워 패턴 미디 원피스',  price: '58,000원' },
+    { name: '린넨 와이드 팬츠',       desc: '통기성 좋은 린넨 소재 루즈핏 여름 팬츠',        price: '42,000원' },
+    { name: '스트라이프 크롭 티셔츠', desc: '데일리로 입기 좋은 줄무늬 크롭 반팔 티셔츠',    price: '35,000원' },
+    { name: '레이스 트리밍 블라우스', desc: '섬세한 레이스 포인트의 여성스러운 블라우스',      price: '48,000원' },
+    { name: '컬러블록 니트 조끼',     desc: '빈티지 감성의 배색 슬리브리스 니트 조끼',        price: '39,000원' }
+  ];
+  document.querySelectorAll('.new_item li').forEach(function (li, i) {
+    if (!newItems[i]) return;
+    var h4 = li.querySelector('h4'), p = li.querySelector('p'), sp = li.querySelector('span');
+    if (h4) h4.textContent = newItems[i].name;
+    if (p)  p.textContent  = newItems[i].desc;
+    if (sp) sp.textContent = newItems[i].price;
+  });
+
+  /* ── 베스트 상품 콘텐츠 ── */
+  var bestItems = [
+    { name: '오버핏 체크 코트',      desc: '클래식 체크 패턴의 오버핏 울 혼방 롱 코트',       price: '128,000원' },
+    { name: '하이웨이스트 슬림 팬츠', desc: '다리 라인을 길게 연출하는 하이웨이스트 슬림 팬츠', price: '55,000원'  },
+    { name: '프릴 넥 블라우스',      desc: '로맨틱한 프릴 디테일이 돋보이는 여성 블라우스',    price: '45,000원'  },
+    { name: 'A라인 데님 스커트',     desc: '클래식 데님 소재의 A라인 미디 스커트',             price: '52,000원'  },
+    { name: '터틀넥 니트 스웨터',    desc: '포근하고 부드러운 루즈핏 터틀넥 니트',             price: '89,000원'  },
+    { name: '플리츠 미니스커트',     desc: '사랑스러운 주름 플리츠 미니스커트',                price: '38,000원'  },
+    { name: '기모 후드 집업',        desc: '두꺼운 기모 안감으로 따뜻한 후드 집업',             price: '65,000원'  },
+    { name: '벨티드 트렌치코트',     desc: '허리 벨트 포인트의 클래식 봄·가을 트렌치코트',     price: '145,000원' },
+    { name: '코튼 셔링 원피스',      desc: '편안한 코튼 소재의 셔링 디테일 미니 원피스',       price: '69,000원'  },
+    { name: '리본 버킷백',           desc: '리본 포인트가 귀여운 데일리 버킷 숄더백',           price: '78,000원'  },
+    { name: '스트링 크롭 티',        desc: '어깨 스트링 디테일의 시원한 크롭 반팔 티셔츠',     price: '29,000원'  },
+    { name: '와이드 슬랙스',         desc: '편안하고 세련된 와이드 핏 오피스 슬랙스',           price: '62,000원'  },
+    { name: '퍼프 소매 블라우스',    desc: '볼륨감 있는 퍼프 소매의 우아한 블라우스',           price: '47,000원'  },
+    { name: '오버사이즈 맨투맨',     desc: '루즈하고 편안한 오버사이즈 스웨트셔츠',             price: '55,000원'  },
+    { name: '뷔스티에 탑',           desc: '리본 포인트의 세련된 뷔스티에 크롭 탑',             price: '42,000원'  },
+    { name: '캐시미어 롱 가디건',    desc: '고급 캐시미어 혼방 소재의 여유로운 롱 가디건',      price: '98,000원'  }
+  ];
+  document.querySelectorAll('.best_item li').forEach(function (li, i) {
+    if (!bestItems[i]) return;
+    var h4 = li.querySelector('h4'), p = li.querySelector('p'), sp = li.querySelector('span');
+    if (h4) h4.textContent = bestItems[i].name;
+    if (p)  p.textContent  = bestItems[i].desc;
+    if (sp) sp.textContent = bestItems[i].price;
+  });
+
+
+  /* =====================================================
+     4. 상품 이미지 img_box 래핑 (li 크기 유지, 이미지만 확대)
      ===================================================== */
   document.querySelectorAll('.new_item li img, .best_item li img')
     .forEach(function (img) {
