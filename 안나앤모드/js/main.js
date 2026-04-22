@@ -34,16 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '  box-sizing: border-box;',
     '}',
 
-    '.submenu li {',
-    '  width: 120px !important;',
-    '  margin: 0 !important;',          /* .gnb li margin-left:40px !important 무력화 */
-    '  padding: 0 !important;',
-    '  float: none !important;',        /* .gnb li float:left 상속 차단 */
-    '  line-height: normal !important;',/* .gnb li line-height:50px 상속 차단 */
-    '  border-bottom: 1px solid #ddd;',
-    '  box-sizing: border-box;',
-    '}',
-    '.submenu li:last-child { border-bottom: none; }',
+    /* submenu li 스타일은 JS setProperty(!important)로 직접 적용 – CSS 불필요 */
 
     '.submenu li a {',
     '  display: block;',
@@ -185,8 +176,17 @@ document.addEventListener('DOMContentLoaded', function () {
     /* 서브메뉴 ul 생성 및 추가 */
     var subUl = document.createElement('ul');
     subUl.className = 'submenu';
-    menuData[i].subs.forEach(function (name) {
+    menuData[i].subs.forEach(function (name, si) {
       var subLi = document.createElement('li');
+      /* layout.css .gnb li 의 float:left / margin-left 등을 완전히 차단 */
+      subLi.style.setProperty('float',       'none',    'important');
+      subLi.style.setProperty('margin',      '0',       'important');
+      subLi.style.setProperty('padding',     '0',       'important');
+      subLi.style.setProperty('width',       '120px',   'important');
+      subLi.style.setProperty('line-height', '40px',    'important');
+      subLi.style.setProperty('box-sizing',  'border-box', 'important');
+      subLi.style.borderBottom = (si < menuData[i].subs.length - 1) ? '1px solid #ddd' : 'none';
+
       var subA  = document.createElement('a');
       subA.href        = '#none';
       subA.textContent = name;
@@ -246,9 +246,9 @@ document.addEventListener('DOMContentLoaded', function () {
      3. 콘텐츠 텍스트 업데이트 (메뉴명 / 신상품 / 베스트)
      ===================================================== */
 
-  /* ── 메인 메뉴명 변경 ── */
+  /* ── 메인 메뉴명 변경 (직계 li만 – 서브메뉴 li 제외) ── */
   var menuNames = ['세일상품','신상품','베스트','상의','팬츠','스커트','원피스','아우터','가방','악세사리'];
-  document.querySelectorAll('.gnb li').forEach(function (li, i) {
+  document.querySelectorAll('.gnb > ul > li').forEach(function (li, i) {
     if (!menuNames[i]) return;
     var h2  = li.querySelector('h2');
     if (!h2) return;
