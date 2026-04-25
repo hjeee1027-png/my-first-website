@@ -63,7 +63,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npm install && npm run build
+        run: rm -rf node_modules && npm install && npm run build
 
       - name: Combine dist folders
         run: |
