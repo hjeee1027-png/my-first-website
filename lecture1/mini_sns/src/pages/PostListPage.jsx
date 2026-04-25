@@ -98,6 +98,7 @@ const PostListPage = () => {
                       image={thumb}
                       alt={post.title}
                       sx={{ height: 130, objectFit: 'cover' }}
+                      onError={e => { e.target.src = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&auto=format&fit=crop' }}
                     />
                     {images.length > 1 && (
                       <Chip

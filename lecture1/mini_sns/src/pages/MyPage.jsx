@@ -245,6 +245,7 @@ const MyPage = () => {
                   <CardMedia
                     component="img" image={img} alt={post.title}
                     sx={{ height: 110, objectFit: 'cover', borderRadius: 1 }}
+                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&auto=format&fit=crop' }}
                   />
                 </CardActionArea>
               )

@@ -30,7 +30,7 @@ const BANNERS = [
     id: 3,
     title: 'PS5 독점 타이틀 할인!',
     subtitle: '이번 주말만 최대 40% 할인',
-    img: 'https://images.unsplash.com/photo-1560253023-3ec59bbcc6f5?w=800&h=300&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=300&auto=format&fit=crop',
     color: 'linear-gradient(90deg, rgba(0,60,120,0.8), transparent)',
   },
 ]
@@ -98,6 +98,7 @@ const MainPage = () => {
               image={banner.img}
               alt={banner.title}
               sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={e => { e.target.src = 'https://images.unsplash.com/photo-1538481199521-2f05e9ca95d9?w=800&h=300&auto=format&fit=crop' }}
             />
             <Box sx={{
               position: 'absolute', inset: 0,
@@ -188,6 +189,7 @@ const MainPage = () => {
                     image={images[0] || `https://images.unsplash.com/photo-1538481199521-2f05e9ca95d9?w=160&h=160&auto=format&fit=crop`}
                     alt={post.title}
                     sx={{ width: 80, height: 80, objectFit: 'cover', borderRadius: '12px 0 0 12px' }}
+                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=160&h=160&auto=format&fit=crop' }}
                   />
                   <Chip
                     label={idx + 1}
