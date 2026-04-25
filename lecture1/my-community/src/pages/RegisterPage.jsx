@@ -38,7 +38,7 @@ const RegisterPage = () => {
       if (err.message.includes('unique')) {
         setError('이미 사용 중인 이메일 또는 닉네임이에요.')
       } else {
-        setError('회원가입에 실패했어요. 다시 시도해주세요.')
+        setError(`에러: ${err.message} (코드: ${err.code})`)
       }
       return
     }
