@@ -24,7 +24,9 @@ const MyPage = () => {
   const [editForm, setEditForm] = useState({ display_name: '', bio: '', phone: '' })
   const [pwForm, setPwForm] = useState({ newPw: '', confirmPw: '' })
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [snackbar, setSnackbar] = useState({ open: false, msg: '', type: 'success' })
+  const fileInputRef = React.useRef(null)
 
   useEffect(() => {
     if (user) {
@@ -105,6 +107,32 @@ const MyPage = () => {
     setSaving(false)
   }
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file || !user) return
+    if (file.size > 2 * 1024 * 1024) {
+      setSnackbar({ open: true, msg: '파일 크기는 2MB 이하여야 합니다.', type: 'error' })
+      return
+    }
+    setUploading(true)
+    const ext = file.name.split('.').pop()
+    const filePath = `${user.id}/avatar.${ext}`
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true })
+    if (uploadError) {
+      setSnackbar({ open: true, msg: '업로드 실패: ' + uploadError.message, type: 'error' })
+      setUploading(false)
+      return
+    }
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
+    const avatarUrl = data.publicUrl + '?t=' + Date.now()
+    await supabase.from('sns_users').update({ avatar_url: avatarUrl }).eq('id', user.id)
+    refreshProfile()
+    setSnackbar({ open: true, msg: '프로필 사진이 변경됐습니다!', type: 'success' })
+    setUploading(false)
+  }
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/login')
@@ -131,9 +159,17 @@ const MyPage = () => {
             >
               {profile?.display_name?.[0]?.toUpperCase() || '?'}
             </Avatar>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleAvatarUpload}
+            />
             <IconButton
               size="small"
-              onClick={() => setEditOpen(true)}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
               sx={{
                 position: 'absolute', bottom: 0, right: 0,
                 bgcolor: '#FFEF91', color: '#427AB5', width: 26, height: 26,
