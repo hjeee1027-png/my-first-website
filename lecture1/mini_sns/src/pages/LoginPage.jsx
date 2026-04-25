@@ -6,8 +6,10 @@ import {
 import { Visibility, VisibilityOff, SportsEsports } from '@mui/icons-material'
 import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const LoginPage = () => {
+  const { refreshProfile } = useAuth()
   const [tab, setTab] = useState(0)
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -89,6 +91,7 @@ const LoginPage = () => {
         setLoading(false)
         return
       }
+      await refreshProfile(data.user.id)
       navigate('/')
     }
     setLoading(false)
