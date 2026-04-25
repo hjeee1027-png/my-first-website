@@ -34,9 +34,6 @@ const Layout = ({ children }) => {
         elevation={0}
         sx={{
           background: 'linear-gradient(90deg, #427AB5, #5B93D3)',
-          maxWidth: 430,
-          left: '50%',
-          transform: 'translateX(-50%)',
           width: '100%',
         }}
       >
