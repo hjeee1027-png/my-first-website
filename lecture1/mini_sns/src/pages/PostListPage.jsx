@@ -17,11 +17,24 @@ const PostListPage = () => {
   }, [])
 
   const fetchPosts = async () => {
-    const { data } = await supabase
+    const { data: postsData, error } = await supabase
       .from('sns_posts')
-      .select('*, sns_users(display_name, avatar_url, username)')
+      .select('*')
       .order('created_at', { ascending: false })
-    setPosts(data || [])
+
+    if (error || !postsData) { setLoading(false); return }
+
+    const userIds = [...new Set(postsData.map(p => p.user_id).filter(Boolean))]
+    let usersMap = {}
+    if (userIds.length > 0) {
+      const { data: usersData } = await supabase
+        .from('sns_users')
+        .select('id, display_name, avatar_url, username')
+        .in('id', userIds)
+      usersData?.forEach(u => { usersMap[u.id] = u })
+    }
+
+    setPosts(postsData.map(p => ({ ...p, sns_users: usersMap[p.user_id] || null })))
     setLoading(false)
   }
 

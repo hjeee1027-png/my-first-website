@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   Box, Typography, TextField, Button, IconButton, CircularProgress,
-  Alert, Grid, Card, CardMedia, Chip, Snackbar,
+  Alert, Grid, CardMedia, Chip, Snackbar, LinearProgress,
 } from '@mui/material'
-import { ArrowBack, Refresh, CheckCircle } from '@mui/icons-material'
+import { ArrowBack, Refresh, AddPhotoAlternate, Close } from '@mui/icons-material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
@@ -41,10 +41,13 @@ const PostWritePage = () => {
   const [selectedImages, setSelectedImages] = useState([])
   const [imageSetIdx, setImageSetIdx] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState('')
   const [snackbar, setSnackbar] = useState(false)
   const navigate = useNavigate()
   const { user } = useAuth()
+  const fileInputRef = useRef(null)
 
   const currentImages = IMAGE_SETS[imageSetIdx]
 
@@ -54,6 +57,34 @@ const PostWritePage = () => {
       if (prev.length >= 5) return prev
       return [...prev, url]
     })
+  }
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+    const remaining = 5 - selectedImages.length
+    if (remaining <= 0) { setError('이미지는 최대 5장까지 선택할 수 있어요.'); return }
+    const toUpload = files.slice(0, remaining)
+
+    setUploading(true)
+    setError('')
+    const uploaded = []
+    for (let i = 0; i < toUpload.length; i++) {
+      const file = toUpload[i]
+      if (file.size > 5 * 1024 * 1024) { setError('파일 크기는 5MB 이하여야 합니다.'); continue }
+      const ext = file.name.split('.').pop()
+      const filePath = `${user.id}/${Date.now()}_${i}.${ext}`
+      const { error: upErr } = await supabase.storage.from('post-images').upload(filePath, file)
+      if (!upErr) {
+        const { data } = supabase.storage.from('post-images').getPublicUrl(filePath)
+        uploaded.push(data.publicUrl)
+      }
+      setUploadProgress(Math.round(((i + 1) / toUpload.length) * 100))
+    }
+    setSelectedImages(prev => [...prev, ...uploaded])
+    setUploading(false)
+    setUploadProgress(0)
+    e.target.value = ''
   }
 
   const handleSubmit = async () => {
@@ -134,11 +165,24 @@ const PostWritePage = () => {
             <IconButton
               size="small"
               onClick={() => setImageSetIdx(i => (i + 1) % IMAGE_SETS.length)}
-              sx={{ bgcolor: '#EEF4FB' }}
+              sx={{ bgcolor: '#EEF4FB', mr: 0.5 }}
             >
               <Refresh fontSize="small" />
             </IconButton>
           </Box>
+
+          {/* 내 컴퓨터에서 업로드 */}
+          <input type="file" accept="image/*" multiple ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileUpload} />
+          <Button
+            variant="outlined" startIcon={<AddPhotoAlternate />}
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading || selectedImages.length >= 5}
+            fullWidth size="small"
+            sx={{ mb: 1.5, borderRadius: 2, borderStyle: 'dashed' }}
+          >
+            {uploading ? `업로드 중... ${uploadProgress}%` : '내 컴퓨터에서 업로드'}
+          </Button>
+          {uploading && <LinearProgress variant="determinate" value={uploadProgress} sx={{ mb: 1.5, borderRadius: 1 }} />}
 
           <Grid container spacing={1}>
             {currentImages.map((url, i) => {
@@ -198,7 +242,7 @@ const PostWritePage = () => {
                       '&:hover': { bgcolor: 'error.dark' },
                     }}
                   >
-                    <Typography sx={{ fontSize: 10, lineHeight: 1 }}>✕</Typography>
+                    <Close sx={{ fontSize: 12 }} />
                   </IconButton>
                 </Box>
               ))}
