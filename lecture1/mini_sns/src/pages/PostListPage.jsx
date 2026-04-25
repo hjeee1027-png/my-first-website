@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {
   Box, Typography, Card, CardMedia, CardContent, CardActionArea,
-  Avatar, Skeleton, Fab, SpeedDial, SpeedDialAction, SpeedDialIcon,
-  Chip,
+  Avatar, Skeleton, Fab, Chip,
 } from '@mui/material'
-import { Visibility, Edit, HelpOutline, Favorite } from '@mui/icons-material'
+import { Visibility, Edit, Favorite } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
@@ -130,27 +129,16 @@ const PostListPage = () => {
       )}
 
       {/* 작성 버튼 */}
-      <SpeedDial
-        ariaLabel="게시물 작성"
-        sx={{ position: 'fixed', bottom: 24, right: 24 }}
-        icon={<SpeedDialIcon />}
-        FabProps={{ sx: { bgcolor: '#427AB5', '&:hover': { bgcolor: '#2d5f9a' } } }}
-      >
-        <SpeedDialAction
-          icon={<Edit />}
-          tooltipTitle="게시물 작성"
-          tooltipOpen
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, pr: 1 }}>
+        <Fab
+          variant="extended"
           onClick={() => navigate('/posts/write')}
-          FabProps={{ sx: { bgcolor: '#427AB5', color: 'white', '&:hover': { bgcolor: '#2d5f9a' } } }}
-        />
-        <SpeedDialAction
-          icon={<HelpOutline />}
-          tooltipTitle="작성 방법"
-          tooltipOpen
-          onClick={() => alert('제목과 내용을 입력하고\n마음에 드는 이미지를 선택해서\n게임 리뷰를 작성해보세요! 🎮')}
-          FabProps={{ sx: { bgcolor: '#FFEF91', color: '#427AB5', '&:hover': { bgcolor: '#ffe066' } } }}
-        />
-      </SpeedDial>
+          sx={{ bgcolor: '#427AB5', color: 'white', '&:hover': { bgcolor: '#2d5f9a' }, gap: 1 }}
+        >
+          <Edit />
+          게시물 작성
+        </Fab>
+      </Box>
     </Box>
   )
 }
