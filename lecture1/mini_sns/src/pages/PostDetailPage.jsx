@@ -36,15 +36,21 @@ const PostDetailPage = () => {
   }, [id])
 
   const fetchPost = async () => {
-    const { data: postData } = await supabase
+    const { data: postData, error } = await supabase
       .from('sns_posts')
-      .select('*, sns_users(id, display_name, avatar_url, username)')
+      .select('*')
       .eq('id', id)
       .single()
 
-    if (!postData) { navigate('/posts'); return }
+    if (error || !postData) { navigate('/posts'); return }
     setPost(postData)
-    setAuthor(postData.sns_users)
+
+    if (postData.user_id) {
+      const { data: authorData } = await supabase
+        .from('sns_users').select('id, display_name, avatar_url, username')
+        .eq('id', postData.user_id).single()
+      setAuthor(authorData || null)
+    }
 
     const parsed = (() => {
       if (!postData.image_url) return []
@@ -64,12 +70,19 @@ const PostDetailPage = () => {
   }
 
   const fetchComments = async () => {
-    const { data } = await supabase
-      .from('sns_comments')
-      .select('*, sns_users(id, display_name, avatar_url, username)')
-      .eq('post_id', id)
-      .order('created_at', { ascending: true })
-    setComments(data || [])
+    const { data: commentsData } = await supabase
+      .from('sns_comments').select('*').eq('post_id', id).order('created_at', { ascending: true })
+
+    if (!commentsData) { setComments([]); return }
+
+    const userIds = [...new Set(commentsData.map(c => c.user_id).filter(Boolean))]
+    let usersMap = {}
+    if (userIds.length > 0) {
+      const { data: usersData } = await supabase
+        .from('sns_users').select('id, display_name, avatar_url, username').in('id', userIds)
+      usersData?.forEach(u => { usersMap[u.id] = u })
+    }
+    setComments(commentsData.map(c => ({ ...c, sns_users: usersMap[c.user_id] || null })))
   }
 
   const handleLike = async () => {
