@@ -1,0 +1,45 @@
+name: Deploy suv_car_site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'suv_car_site/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'suv_car_site/package.json'
+
+      - name: Install dependencies
+        working-directory: suv_car_site
+        run: npm install
+
+      - name: Build
+        working-directory: suv_car_site
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm run build
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: suv_car_site/dist
+          destination_dir: suv_car_site
+          keep_files: true
