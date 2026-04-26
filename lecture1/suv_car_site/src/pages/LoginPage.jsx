@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Box, Container, Typography, TextField, Button, Divider, Link, Alert, CircularProgress } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { signIn } from '../utils/supabase'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { signIn, supabase } from '../utils/supabase'
 import GoogleIcon from '@mui/icons-material/Google'
-import AppleIcon from '@mui/icons-material/Apple'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,6 +10,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const location = useLocation()
+  const successMessage = location.state?.message || ''
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -20,9 +21,28 @@ export default function LoginPage() {
       await signIn({ email, password })
       navigate('/')
     } catch (err) {
-      setError(err.message === 'Invalid login credentials' ? '이메일 또는 비밀번호가 올바르지 않습니다.' : err.message)
+      const msg = err.message
+      if (msg === 'Invalid login credentials') {
+        setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+      } else if (msg === 'Email not confirmed') {
+        setError('이메일 인증이 완료되지 않았습니다. 받은 편지함에서 인증 메일을 확인해주세요.')
+      } else {
+        setError(msg)
+      }
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSocialLogin = async (provider) => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: `${window.location.origin}/` },
+      })
+      if (error) throw error
+    } catch {
+      setError('소셜 로그인에 실패했습니다. 잠시 후 다시 시도해주세요.')
     }
   }
 
@@ -30,7 +50,7 @@ export default function LoginPage() {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: '#0B0B0B',
+        bgcolor: '#f8f8f8',
         display: 'flex',
         flexDirection: 'column',
         pt: '72px',
@@ -40,11 +60,11 @@ export default function LoginPage() {
         {/* 로고 */}
         <Box sx={{ textAlign: 'center', mb: 5 }}>
           <Typography
-            sx={{ fontWeight: 900, letterSpacing: '0.35em', color: '#fff', fontSize: '2rem', mb: 1, fontFamily: '"Roboto", sans-serif' }}
+            sx={{ fontWeight: 900, letterSpacing: '0.35em', color: '#111', fontSize: '2rem', mb: 1, fontFamily: '"Roboto", sans-serif' }}
           >
             VANTAGE
           </Typography>
-          <Typography sx={{ color: '#4A4A4A', fontSize: '0.875rem', letterSpacing: '0.1em' }}>
+          <Typography sx={{ color: '#888', fontSize: '0.875rem', letterSpacing: '0.1em' }}>
             로그인
           </Typography>
         </Box>
@@ -53,13 +73,19 @@ export default function LoginPage() {
           component="form"
           onSubmit={handleLogin}
           sx={{
-            bgcolor: '#0c121c',
-            border: '1px solid rgba(74,74,74,0.3)',
+            bgcolor: '#fff',
+            border: '1px solid #e0e0e0',
             p: 4,
           }}
         >
+          {successMessage && (
+            <Alert severity="success" sx={{ mb: 3, borderRadius: 0 }}>
+              {successMessage}
+            </Alert>
+          )}
+
           {error && (
-            <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(200,50,50,0.1)', color: '#ff6b6b', border: '1px solid rgba(200,50,50,0.3)', borderRadius: 0 }}>
+            <Alert severity="error" sx={{ mb: 3, borderRadius: 0 }}>
               {error}
             </Alert>
           )}
@@ -88,7 +114,7 @@ export default function LoginPage() {
               component="button"
               type="button"
               onClick={() => {}}
-              sx={{ color: '#4A4A4A', fontSize: '0.8rem', '&:hover': { color: '#A68966' }, textDecoration: 'none', cursor: 'pointer' }}
+              sx={{ color: '#888', fontSize: '0.8rem', '&:hover': { color: '#A68966' }, textDecoration: 'none', cursor: 'pointer' }}
             >
               아이디/비밀번호 찾기
             </Link>
@@ -100,53 +126,96 @@ export default function LoginPage() {
             variant="contained"
             disabled={loading}
             sx={{
-              bgcolor: '#A68966', color: '#0B0B0B',
+              bgcolor: '#111', color: '#fff',
               border: 'none',
               py: 1.8,
               fontWeight: 700,
               fontSize: '0.95rem',
               letterSpacing: '0.1em',
               mb: 2,
-              '&:hover': { bgcolor: '#c4a882' },
+              '&:hover': { bgcolor: '#333' },
             }}
           >
-            {loading ? <CircularProgress size={22} sx={{ color: '#0B0B0B' }} /> : '로그인'}
+            {loading ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : '로그인'}
           </Button>
 
           <Button
             fullWidth
             variant="outlined"
             onClick={() => navigate('/register')}
-            sx={{ borderColor: 'rgba(74,74,74,0.5)', color: '#fff', py: 1.8, fontWeight: 500, letterSpacing: '0.1em', '&:hover': { borderColor: '#A68966', color: '#A68966' } }}
+            sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.8, fontWeight: 500, letterSpacing: '0.1em', '&:hover': { borderColor: '#111' } }}
           >
             회원가입
           </Button>
 
-          <Divider sx={{ my: 3, borderColor: 'rgba(74,74,74,0.3)' }}>
-            <Typography sx={{ color: '#4A4A4A', fontSize: '0.75rem', px: 1 }}>또는 소셜 로그인</Typography>
+          <Divider sx={{ my: 3, borderColor: '#e0e0e0' }}>
+            <Typography sx={{ color: '#bbb', fontSize: '0.75rem', px: 1 }}>또는 소셜 로그인</Typography>
           </Divider>
 
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
+          {/* 소셜 로그인 버튼 */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+            {/* 네이버 */}
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => handleSocialLogin('kakao')}
+              sx={{
+                bgcolor: '#03C75A', color: '#fff',
+                border: 'none',
+                py: 1.3,
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                letterSpacing: '0.05em',
+                '&:hover': { bgcolor: '#02b350' },
+                justifyContent: 'center',
+                gap: 1,
+              }}
+            >
+              <Box component="span" sx={{ fontWeight: 900, fontSize: '1rem', lineHeight: 1, fontFamily: 'sans-serif' }}>N</Box>
+              네이버로 로그인
+            </Button>
+
+            {/* 카카오 */}
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => handleSocialLogin('kakao')}
+              sx={{
+                bgcolor: '#FEE500', color: '#191919',
+                border: 'none',
+                py: 1.3,
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                letterSpacing: '0.05em',
+                '&:hover': { bgcolor: '#F5DC00' },
+                justifyContent: 'center',
+                gap: 1,
+              }}
+            >
+              <Box component="span" sx={{ fontWeight: 900, fontSize: '1.1rem', lineHeight: 1 }}>💬</Box>
+              카카오로 로그인
+            </Button>
+
+            {/* 구글 */}
             <Button
               fullWidth
               variant="outlined"
               startIcon={<GoogleIcon sx={{ fontSize: '1.1rem !important' }} />}
-              sx={{ borderColor: 'rgba(74,74,74,0.3)', color: '#969696', py: 1.3, '&:hover': { borderColor: '#A68966', color: '#A68966' }, fontSize: '0.8rem' }}
+              onClick={() => handleSocialLogin('google')}
+              sx={{
+                borderColor: '#e0e0e0', color: '#444',
+                py: 1.3,
+                fontSize: '0.85rem',
+                letterSpacing: '0.05em',
+                '&:hover': { borderColor: '#aaa', bgcolor: '#fafafa' },
+              }}
             >
-              Google
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<AppleIcon sx={{ fontSize: '1.1rem !important' }} />}
-              sx={{ borderColor: 'rgba(74,74,74,0.3)', color: '#969696', py: 1.3, '&:hover': { borderColor: '#A68966', color: '#A68966' }, fontSize: '0.8rem' }}
-            >
-              Apple
+              Google로 로그인
             </Button>
           </Box>
         </Box>
 
-        <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
+        <Typography sx={{ color: '#bbb', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
           로그인 시{' '}
           <Link href="#" sx={{ color: '#A68966', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>이용약관</Link>
           {' '}및{' '}

@@ -107,22 +107,22 @@ export default function ReservationPage() {
 
   if (done) {
     return (
-      <Box sx={{ minHeight: '100vh', bgcolor: '#0B0B0B', pt: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ minHeight: '100vh', bgcolor: '#f8f8f8', pt: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Container maxWidth="sm" sx={{ textAlign: 'center', py: 8 }}>
           <CheckCircleOutlineIcon sx={{ fontSize: '5rem', color: '#A68966', mb: 3 }} />
-          <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, mb: 2 }}>
+          <Typography variant="h4" sx={{ color: '#111', fontWeight: 700, mb: 2 }}>
             {type === 'quote' ? '견적 문의 완료!' : '시승 예약 완료!'}
           </Typography>
-          <Typography sx={{ color: '#969696', mb: 1, fontSize: '0.95rem' }}>
+          <Typography sx={{ color: '#666', mb: 1, fontSize: '0.95rem' }}>
             예약 번호: <Box component="span" sx={{ color: '#A68966', fontWeight: 600 }}>{resId}</Box>
           </Typography>
-          <Typography sx={{ color: '#969696', mb: 4, fontSize: '0.875rem', lineHeight: 1.8 }}>
+          <Typography sx={{ color: '#666', mb: 4, fontSize: '0.875rem', lineHeight: 1.8 }}>
             {form.name}님의 {type === 'quote' ? '견적 문의' : `${branch} ${date} ${timeSlot} 시승 예약`}이 접수되었습니다.<br />
             담당자가 24시간 내에 연락드릴 예정입니다.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-            <Button variant="outlined" sx={{ borderColor: '#A68966', color: '#A68966', px: 4, py: 1.5 }} onClick={() => navigate('/')}>홈으로</Button>
-            {user && <Button variant="contained" sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', px: 4, py: 1.5, '&:hover': { bgcolor: '#c4a882' } }} onClick={() => navigate('/mypage')}>예약 확인</Button>}
+            <Button variant="outlined" sx={{ borderColor: '#111', color: '#111', px: 4, py: 1.5, '&:hover': { bgcolor: '#111', color: '#fff' } }} onClick={() => navigate('/')}>홈으로</Button>
+            {user && <Button variant="contained" sx={{ bgcolor: '#A68966', color: '#fff', border: 'none', px: 4, py: 1.5, '&:hover': { bgcolor: '#96795a' } }} onClick={() => navigate('/mypage')}>예약 확인</Button>}
           </Box>
         </Container>
       </Box>
@@ -130,13 +130,13 @@ export default function ReservationPage() {
   }
 
   return (
-    <Box sx={{ bgcolor: '#0B0B0B', minHeight: '100vh', pt: '72px' }}>
+    <Box sx={{ bgcolor: '#f8f8f8', minHeight: '100vh', pt: '72px' }}>
       <Container maxWidth={false} sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
         <Box sx={{ mb: 5, textAlign: 'center' }}>
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>
             {type === 'quote' ? 'QUOTE REQUEST' : 'TEST DRIVE'}
           </Typography>
-          <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' } }}>
+          <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' } }}>
             {type === 'quote' ? '견적 문의' : '시승 예약'}
           </Typography>
         </Box>
@@ -146,8 +146,8 @@ export default function ReservationPage() {
           {STEPS.slice(0, 3).map((label) => (
             <Step key={label}>
               <StepLabel
-                StepIconProps={{ sx: { '&.Mui-active': { color: '#A68966' }, '&.Mui-completed': { color: '#A68966' }, color: '#333' } }}
-                sx={{ '.MuiStepLabel-label': { color: '#4A4A4A', '&.Mui-active': { color: '#fff' }, '&.Mui-completed': { color: '#A68966' } } }}
+                StepIconProps={{ sx: { '&.Mui-active': { color: '#A68966' }, '&.Mui-completed': { color: '#A68966' } } }}
+                sx={{ '.MuiStepLabel-label': { color: '#999', '&.Mui-active': { color: '#111' }, '&.Mui-completed': { color: '#A68966' } } }}
               >
                 {label}
               </StepLabel>
@@ -158,9 +158,9 @@ export default function ReservationPage() {
         <Grid container spacing={4}>
           {/* 메인 폼 */}
           <Grid item xs={12} md={7}>
-            <Box sx={{ bgcolor: '#0c121c', border: '1px solid rgba(74,74,74,0.3)', p: { xs: 3, md: 4 } }}>
+            <Box sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', p: { xs: 3, md: 4 } }}>
               {error && (
-                <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(200,50,50,0.1)', color: '#ff6b6b', border: '1px solid rgba(200,50,50,0.3)', borderRadius: 0 }}>
+                <Alert severity="error" sx={{ mb: 3, borderRadius: 0 }}>
                   {error}
                 </Alert>
               )}
@@ -177,17 +177,18 @@ export default function ReservationPage() {
                         key={car.id}
                         onClick={() => setSelectedCar(car)}
                         sx={{
-                          p: 2, border: `1px solid ${selectedCar.id === car.id ? '#A68966' : 'rgba(74,74,74,0.3)'}`,
+                          p: 2, border: `1px solid ${selectedCar.id === car.id ? '#A68966' : '#e0e0e0'}`,
                           cursor: 'pointer', display: 'flex', gap: 2, alignItems: 'center',
                           bgcolor: selectedCar.id === car.id ? 'rgba(166,137,102,0.05)' : 'transparent',
-                          transition: 'all 0.2s',
+                          transition: 'border-color 0.2s',
+                          userSelect: 'none',
                           '&:hover': { borderColor: 'rgba(166,137,102,0.5)' },
                         }}
                       >
                         <Box component="img" src={car.thumbnail_url} alt={car.model_name} sx={{ width: 80, height: 55, objectFit: 'cover' }} onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400' }} />
                         <Box sx={{ flex: 1 }}>
-                          <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{car.model_name}</Typography>
-                          <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem' }}>{car.fuel_type} · {car.year}</Typography>
+                          <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.9rem' }}>{car.model_name}</Typography>
+                          <Typography sx={{ color: '#888', fontSize: '0.8rem' }}>{car.fuel_type} · {car.year}</Typography>
                         </Box>
                         <Typography sx={{ color: '#A68966', fontWeight: 600, fontSize: '0.9rem' }}>
                           {formatPrice(getDiscountedPrice(car.base_price, car.discount_rate))}
@@ -196,11 +197,10 @@ export default function ReservationPage() {
                     ))}
                   </Box>
 
-                  {/* 색상/휠 옵션 */}
                   <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>색상 선택</Typography>
                   <Box sx={{ display: 'flex', gap: 1.5, mb: 3 }}>
                     {CAR_COLORS.filter(c => selectedCar.color_options.includes(c.id)).map(c => (
-                      <Box key={c.id} onClick={() => setSelectedColor(c.id)} sx={{ width: 28, height: 28, bgcolor: c.hex, border: `2px solid ${selectedColor === c.id ? '#A68966' : 'rgba(255,255,255,0.1)'}`, cursor: 'pointer', '&:hover': { border: '2px solid rgba(166,137,102,0.7)' }, transition: 'all 0.2s' }} title={c.nameKo} />
+                      <Box key={c.id} onClick={() => setSelectedColor(c.id)} sx={{ width: 28, height: 28, bgcolor: c.hex, border: `2px solid ${selectedColor === c.id ? '#A68966' : '#e0e0e0'}`, cursor: 'pointer', transition: 'border-color 0.2s', userSelect: 'none' }} title={c.nameKo} />
                     ))}
                   </Box>
 
@@ -208,8 +208,8 @@ export default function ReservationPage() {
                   <Grid container spacing={1} sx={{ mb: 2 }}>
                     {WHEEL_OPTIONS.map(w => (
                       <Grid item xs={6} key={w.id}>
-                        <Box onClick={() => setSelectedWheel(w.id)} sx={{ p: 1.5, border: `1px solid ${selectedWheel === w.id ? '#A68966' : 'rgba(74,74,74,0.3)'}`, cursor: 'pointer', bgcolor: selectedWheel === w.id ? 'rgba(166,137,102,0.05)' : 'transparent', transition: 'all 0.2s' }}>
-                          <Typography sx={{ color: '#fff', fontSize: '0.8rem', fontWeight: 500 }}>{w.name}</Typography>
+                        <Box onClick={() => setSelectedWheel(w.id)} sx={{ p: 1.5, border: `1px solid ${selectedWheel === w.id ? '#A68966' : '#e0e0e0'}`, cursor: 'pointer', bgcolor: selectedWheel === w.id ? 'rgba(166,137,102,0.05)' : 'transparent', transition: 'border-color 0.2s', userSelect: 'none' }}>
+                          <Typography sx={{ color: '#111', fontSize: '0.8rem', fontWeight: 500 }}>{w.name}</Typography>
                           <Typography sx={{ color: '#A68966', fontSize: '0.75rem' }}>+{formatPrice(w.price)}</Typography>
                         </Box>
                       </Grid>
@@ -239,11 +239,12 @@ export default function ReservationPage() {
                         label={t}
                         onClick={() => setTimeSlot(t)}
                         sx={{
-                          bgcolor: timeSlot === t ? 'rgba(166,137,102,0.15)' : 'transparent',
-                          color: timeSlot === t ? '#A68966' : '#4A4A4A',
-                          border: `1px solid ${timeSlot === t ? '#A68966' : 'rgba(74,74,74,0.3)'}`,
+                          bgcolor: timeSlot === t ? 'rgba(166,137,102,0.1)' : 'transparent',
+                          color: timeSlot === t ? '#A68966' : '#666',
+                          border: `1px solid ${timeSlot === t ? '#A68966' : '#e0e0e0'}`,
                           borderRadius: 0,
                           cursor: 'pointer',
+                          userSelect: 'none',
                         }}
                       />
                     ))}
@@ -269,7 +270,7 @@ export default function ReservationPage() {
               {/* 버튼 */}
               <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
                 {step > 0 && (
-                  <Button variant="outlined" onClick={() => { setStep(s => s - 1); setError('') }} sx={{ borderColor: '#4A4A4A', color: '#fff', py: 1.5, flex: 1, '&:hover': { borderColor: '#A68966', color: '#A68966' } }}>
+                  <Button variant="outlined" onClick={() => { setStep(s => s - 1); setError('') }} sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.5, flex: 1, '&:hover': { borderColor: '#111' } }}>
                     이전
                   </Button>
                 )}
@@ -277,9 +278,9 @@ export default function ReservationPage() {
                   variant="contained"
                   onClick={step === 2 ? handleSubmit : handleNext}
                   disabled={loading}
-                  sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', py: 1.5, flex: 2, fontWeight: 700, '&:hover': { bgcolor: '#c4a882' } }}
+                  sx={{ bgcolor: '#111', color: '#fff', border: 'none', py: 1.5, flex: 2, fontWeight: 700, '&:hover': { bgcolor: '#333' } }}
                 >
-                  {loading ? <CircularProgress size={22} sx={{ color: '#0B0B0B' }} /> : step === 2 ? '예약 완료' : '다음'}
+                  {loading ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : step === 2 ? '예약 완료' : '다음'}
                 </Button>
               </Box>
             </Box>
@@ -287,41 +288,41 @@ export default function ReservationPage() {
 
           {/* 요약 패널 */}
           <Grid item xs={12} md={5}>
-            <Box sx={{ bgcolor: '#0c121c', border: '1px solid rgba(166,137,102,0.2)', p: 3, position: { md: 'sticky' }, top: 100 }}>
+            <Box sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', p: 3 }}>
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 3 }}>선택 요약</Typography>
 
               <Box component="img" src={selectedCar.thumbnail_url} alt={selectedCar.model_name} sx={{ width: '100%', height: 160, objectFit: 'cover', mb: 3 }} onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800' }} />
 
-              <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', mb: 0.5 }}>{selectedCar.model_name}</Typography>
-              <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem', mb: 2 }}>{selectedCar.fuel_type} · {selectedCar.year}</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 700, fontSize: '1rem', mb: 0.5 }}>{selectedCar.model_name}</Typography>
+              <Typography sx={{ color: '#888', fontSize: '0.8rem', mb: 2 }}>{selectedCar.fuel_type} · {selectedCar.year}</Typography>
 
               {color && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                  <Box sx={{ width: 14, height: 14, bgcolor: color.hex, border: '1px solid rgba(255,255,255,0.15)' }} />
-                  <Typography sx={{ color: '#969696', fontSize: '0.85rem' }}>{color.nameKo}</Typography>
+                  <Box sx={{ width: 14, height: 14, bgcolor: color.hex, border: '1px solid #e0e0e0' }} />
+                  <Typography sx={{ color: '#666', fontSize: '0.85rem' }}>{color.nameKo}</Typography>
                 </Box>
               )}
               {wheel && (
-                <Typography sx={{ color: '#969696', fontSize: '0.85rem', mb: 3 }}>휠: {wheel.name}</Typography>
+                <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 3 }}>휠: {wheel.name}</Typography>
               )}
 
               {branch && (
                 <>
-                  <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 2 }} />
-                  <Typography sx={{ color: '#969696', fontSize: '0.85rem', mb: 0.5 }}>{branch}</Typography>
-                  {date && <Typography sx={{ color: '#969696', fontSize: '0.85rem', mb: 0.5 }}>{date} {timeSlot}</Typography>}
+                  <Divider sx={{ borderColor: '#e0e0e0', mb: 2 }} />
+                  <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 0.5 }}>{branch}</Typography>
+                  {date && <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 0.5 }}>{date} {timeSlot}</Typography>}
                 </>
               )}
 
-              <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', my: 2 }} />
+              <Divider sx={{ borderColor: '#e0e0e0', my: 2 }} />
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem' }}>예상 금액</Typography>
+                <Typography sx={{ color: '#888', fontSize: '0.8rem' }}>예상 금액</Typography>
                 <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: '1.3rem' }}>
                   {formatPrice(finalPrice)}
                 </Typography>
               </Box>
-              <Typography sx={{ color: '#333', fontSize: '0.75rem', textAlign: 'right', mt: 0.5 }}>
+              <Typography sx={{ color: '#bbb', fontSize: '0.75rem', textAlign: 'right', mt: 0.5 }}>
                 부가세 포함 · 최종 견적은 상담 후 확정
               </Typography>
             </Box>

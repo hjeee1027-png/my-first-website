@@ -46,14 +46,14 @@ export default function SearchPage() {
   const toggleYear = (year) => setYearFilter(y => y.includes(year) ? y.filter(v => v !== year) : [...y, year])
 
   return (
-    <Box sx={{ bgcolor: '#0B0B0B', minHeight: '100vh', pt: '72px' }}>
+    <Box sx={{ bgcolor: '#f8f8f8', minHeight: '100vh', pt: '72px' }}>
       <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
         <Box sx={{ mb: 5 }}>
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>EXPLORE</Typography>
-          <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 1 }}>
+          <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 1 }}>
             전체 모델
           </Typography>
-          <Typography sx={{ color: '#969696', fontSize: '0.9rem' }}>
+          <Typography sx={{ color: '#888', fontSize: '0.9rem' }}>
             {filtered.length}개의 차량이 검색되었습니다
           </Typography>
         </Box>
@@ -70,10 +70,10 @@ export default function SearchPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 size="small"
                 sx={{ mb: 3 }}
-                InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: '#4A4A4A', fontSize: '1.1rem' }} /></InputAdornment> }}
+                InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: '#aaa', fontSize: '1.1rem' }} /></InputAdornment> }}
               />
 
-              <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 3 }} />
+              <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>연료 타입</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 3 }}>
@@ -84,18 +84,18 @@ export default function SearchPage() {
                     onClick={() => setFuelFilter(f)}
                     size="small"
                     sx={{
-                      bgcolor: fuelFilter === f ? 'rgba(166,137,102,0.15)' : 'transparent',
-                      color: fuelFilter === f ? '#A68966' : '#4A4A4A',
-                      border: `1px solid ${fuelFilter === f ? '#A68966' : 'rgba(74,74,74,0.3)'}`,
+                      bgcolor: fuelFilter === f ? 'rgba(166,137,102,0.1)' : 'transparent',
+                      color: fuelFilter === f ? '#A68966' : '#666',
+                      border: `1px solid ${fuelFilter === f ? '#A68966' : '#e0e0e0'}`,
                       borderRadius: 0,
                       cursor: 'pointer',
-                      '&:hover': { bgcolor: 'rgba(166,137,102,0.1)' },
+                      userSelect: 'none',
                     }}
                   />
                 ))}
               </Box>
 
-              <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 3 }} />
+              <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>출시 연도</Typography>
               <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
@@ -106,17 +106,18 @@ export default function SearchPage() {
                     onClick={() => toggleYear(y)}
                     size="small"
                     sx={{
-                      bgcolor: yearFilter.includes(y) ? 'rgba(166,137,102,0.15)' : 'transparent',
-                      color: yearFilter.includes(y) ? '#A68966' : '#4A4A4A',
-                      border: `1px solid ${yearFilter.includes(y) ? '#A68966' : 'rgba(74,74,74,0.3)'}`,
+                      bgcolor: yearFilter.includes(y) ? 'rgba(166,137,102,0.1)' : 'transparent',
+                      color: yearFilter.includes(y) ? '#A68966' : '#666',
+                      border: `1px solid ${yearFilter.includes(y) ? '#A68966' : '#e0e0e0'}`,
                       borderRadius: 0,
                       cursor: 'pointer',
+                      userSelect: 'none',
                     }}
                   />
                 ))}
               </Box>
 
-              <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 3 }} />
+              <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1 }}>가격대</Typography>
               <Box sx={{ px: 1, mb: 1 }}>
@@ -126,25 +127,26 @@ export default function SearchPage() {
                   min={0}
                   max={300000000}
                   step={10000000}
-                  sx={{ color: '#A68966', '& .MuiSlider-thumb': { bgcolor: '#A68966' }, '& .MuiSlider-track': { bgcolor: '#A68966' }, '& .MuiSlider-rail': { bgcolor: '#4A4A4A' } }}
+                  sx={{ color: '#A68966', '& .MuiSlider-thumb': { bgcolor: '#A68966' }, '& .MuiSlider-track': { bgcolor: '#A68966' }, '& .MuiSlider-rail': { bgcolor: '#e0e0e0' } }}
                 />
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                <Typography sx={{ color: '#969696', fontSize: '0.75rem' }}>{formatPrice(priceRange[0])}</Typography>
-                <Typography sx={{ color: '#969696', fontSize: '0.75rem' }}>{formatPrice(priceRange[1])}</Typography>
+                <Typography sx={{ color: '#888', fontSize: '0.75rem' }}>{formatPrice(priceRange[0])}</Typography>
+                <Typography sx={{ color: '#888', fontSize: '0.75rem' }}>{formatPrice(priceRange[1])}</Typography>
               </Box>
 
-              <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 3 }} />
+              <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
               <Chip
                 label="특가 상품만 보기"
                 onClick={() => setPromotionOnly(p => !p)}
                 sx={{
-                  bgcolor: promotionOnly ? 'rgba(166,137,102,0.15)' : 'transparent',
-                  color: promotionOnly ? '#A68966' : '#4A4A4A',
-                  border: `1px solid ${promotionOnly ? '#A68966' : 'rgba(74,74,74,0.3)'}`,
+                  bgcolor: promotionOnly ? 'rgba(166,137,102,0.1)' : 'transparent',
+                  color: promotionOnly ? '#A68966' : '#666',
+                  border: `1px solid ${promotionOnly ? '#A68966' : '#e0e0e0'}`,
                   borderRadius: 0,
                   cursor: 'pointer',
+                  userSelect: 'none',
                   width: '100%',
                   '& .MuiChip-label': { width: '100%', textAlign: 'center' },
                 }}
@@ -154,7 +156,7 @@ export default function SearchPage() {
                 size="small"
                 fullWidth
                 onClick={() => { setQuery(''); setFuelFilter('전체'); setYearFilter([]); setPriceRange([0, 300000000]); setPromotionOnly(false) }}
-                sx={{ color: '#4A4A4A', mt: 2, fontSize: '0.8rem', '&:hover': { color: '#A68966' } }}
+                sx={{ color: '#888', mt: 2, fontSize: '0.8rem', '&:hover': { color: '#A68966' } }}
               >
                 필터 초기화
               </Button>
@@ -170,7 +172,7 @@ export default function SearchPage() {
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
                   displayEmpty
-                  sx={{ bgcolor: 'transparent', color: '#969696', border: '1px solid rgba(74,74,74,0.3)', borderRadius: 0, '.MuiSelect-icon': { color: '#4A4A4A' }, fontSize: '0.85rem' }}
+                  sx={{ bgcolor: '#fff', color: '#666', border: '1px solid #e0e0e0', borderRadius: 0, fontSize: '0.85rem' }}
                 >
                   {SORT_OPTIONS.map(o => (
                     <MenuItem key={o.value} value={o.value} sx={{ fontSize: '0.85rem' }}>{o.label}</MenuItem>
@@ -181,8 +183,8 @@ export default function SearchPage() {
 
             {filtered.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 10 }}>
-                <Typography sx={{ color: '#4A4A4A', fontSize: '1.1rem', mb: 2 }}>검색 결과가 없습니다</Typography>
-                <Typography sx={{ color: '#333', fontSize: '0.875rem' }}>다른 검색어나 필터를 사용해 보세요</Typography>
+                <Typography sx={{ color: '#888', fontSize: '1.1rem', mb: 2 }}>검색 결과가 없습니다</Typography>
+                <Typography sx={{ color: '#bbb', fontSize: '0.875rem' }}>다른 검색어나 필터를 사용해 보세요</Typography>
               </Box>
             ) : (
               <Grid container spacing={3}>
@@ -190,16 +192,13 @@ export default function SearchPage() {
                   <Grid item xs={12} sm={6} lg={4} key={car.id}>
                     <Card
                       sx={{
-                        bgcolor: '#0c121c',
-                        border: '1px solid rgba(74,74,74,0.2)',
+                        bgcolor: '#fff',
+                        border: '1px solid #e0e0e0',
                         borderRadius: 0,
                         cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          border: '1px solid rgba(166,137,102,0.5)',
-                          transform: 'translateY(-4px)',
-                          boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
-                        },
+                        userSelect: 'none',
+                        transition: 'border-color 0.2s',
+                        '&:hover': { borderColor: '#A68966' },
                       }}
                       onClick={() => navigate('/reservation', { state: { car } })}
                     >
@@ -209,51 +208,47 @@ export default function SearchPage() {
                           height="220"
                           image={car.thumbnail_url}
                           alt={car.model_name}
-                          sx={{ objectFit: 'cover', transition: 'transform 0.4s', '.MuiCard-root:hover &': { transform: 'scale(1.05)' } }}
+                          sx={{ objectFit: 'cover' }}
                           onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80' }}
                         />
-                        {/* 배지들 */}
                         <Box sx={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                           {car.badge && (
-                            <Chip label={car.badge} size="small" sx={{ bgcolor: '#A68966', color: '#0B0B0B', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
+                            <Chip label={car.badge} size="small" sx={{ bgcolor: '#111', color: '#fff', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
                           )}
                           {car.is_promotion && (
                             <Chip label="특가" size="small" sx={{ bgcolor: 'rgba(200,50,50,0.9)', color: '#fff', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
                           )}
                         </Box>
-                        {/* 연료 타입 */}
                         <Chip
                           label={car.fuel_type}
                           size="small"
-                          sx={{ position: 'absolute', bottom: 12, right: 12, bgcolor: 'rgba(0,0,0,0.7)', color: '#E1E1E1', borderRadius: 0, fontSize: '0.7rem' }}
+                          sx={{ position: 'absolute', bottom: 12, right: 12, bgcolor: 'rgba(0,0,0,0.55)', color: '#fff', borderRadius: 0, fontSize: '0.7rem' }}
                         />
                       </Box>
 
                       <CardContent sx={{ p: 2.5 }}>
-                        <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', mb: 0.5 }}>
+                        <Typography sx={{ color: '#111', fontWeight: 700, fontSize: '1rem', mb: 0.5 }}>
                           {car.model_name}
                         </Typography>
-                        <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem', mb: 2 }}>
+                        <Typography sx={{ color: '#888', fontSize: '0.8rem', mb: 2 }}>
                           {car.year} · {car.fuel_type} · 연비 {car.efficiency}km/kWh
                         </Typography>
 
-                        {/* 색상 옵션 */}
                         <Box sx={{ display: 'flex', gap: 0.8, mb: 2.5 }}>
                           {car.color_options.slice(0, 4).map((cid) => {
                             const c = CAR_COLORS.find(x => x.id === cid)
                             return c ? (
-                              <Box key={cid} sx={{ width: 14, height: 14, bgcolor: c.hex, border: '1px solid rgba(255,255,255,0.1)' }} title={c.nameKo} />
+                              <Box key={cid} sx={{ width: 14, height: 14, bgcolor: c.hex, border: '1px solid #e0e0e0' }} title={c.nameKo} />
                             ) : null
                           })}
                         </Box>
 
-                        <Divider sx={{ borderColor: 'rgba(74,74,74,0.2)', mb: 2 }} />
+                        <Divider sx={{ borderColor: '#e0e0e0', mb: 2 }} />
 
-                        {/* 가격 */}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                           <Box>
                             {car.discount_rate > 0 && (
-                              <Typography sx={{ color: '#4A4A4A', fontSize: '0.75rem', textDecoration: 'line-through', lineHeight: 1 }}>
+                              <Typography sx={{ color: '#bbb', fontSize: '0.75rem', textDecoration: 'line-through', lineHeight: 1 }}>
                                 {formatPrice(car.base_price)}
                               </Typography>
                             )}
@@ -264,7 +259,7 @@ export default function SearchPage() {
                           <Button
                             size="small"
                             variant="outlined"
-                            sx={{ borderColor: 'rgba(166,137,102,0.4)', color: '#A68966', fontSize: '0.75rem', px: 1.5, py: 0.5, '&:hover': { borderColor: '#A68966', bgcolor: 'rgba(166,137,102,0.1)' } }}
+                            sx={{ borderColor: '#e0e0e0', color: '#111', fontSize: '0.75rem', px: 1.5, py: 0.5, '&:hover': { borderColor: '#111' } }}
                             onClick={(e) => { e.stopPropagation(); navigate('/reservation', { state: { car } }) }}
                           >
                             시승 예약

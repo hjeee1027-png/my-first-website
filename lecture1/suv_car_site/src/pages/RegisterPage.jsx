@@ -20,6 +20,30 @@ export default function RegisterPage() {
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
   const setCheck = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.checked }))
 
+  const handleAddressSearch = () => {
+    const openPostcode = () => {
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          setForm(f => ({
+            ...f,
+            zip_code: data.zonecode,
+            address: data.roadAddress || data.jibunAddress,
+          }))
+        },
+      }).open()
+    }
+
+    if (window.daum?.Postcode) {
+      openPostcode()
+    } else {
+      const script = document.createElement('script')
+      script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'
+      script.onload = openPostcode
+      script.onerror = () => setError('주소 검색 서비스를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
+      document.head.appendChild(script)
+    }
+  }
+
   const validateStep = () => {
     if (step === 0) {
       if (!form.email) return '이메일을 입력해주세요.'
@@ -61,20 +85,25 @@ export default function RegisterPage() {
       })
       navigate('/login', { state: { message: '회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.' } })
     } catch (err) {
-      setError(err.message)
+      const msg = err.message
+      if (msg?.includes('already registered') || msg?.includes('already been registered')) {
+        setError('이미 사용 중인 이메일입니다.')
+      } else {
+        setError(msg || '회원가입 중 오류가 발생했습니다.')
+      }
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0B0B0B', display: 'flex', flexDirection: 'column', pt: '72px' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f8f8f8', display: 'flex', flexDirection: 'column', pt: '72px' }}>
       <Container maxWidth="sm" sx={{ flex: 1, py: 6 }}>
         <Box sx={{ textAlign: 'center', mb: 5 }}>
-          <Typography sx={{ fontWeight: 900, letterSpacing: '0.35em', color: '#fff', fontSize: '2rem', mb: 1 }}>
+          <Typography sx={{ fontWeight: 900, letterSpacing: '0.35em', color: '#111', fontSize: '2rem', mb: 1 }}>
             VANTAGE
           </Typography>
-          <Typography sx={{ color: '#4A4A4A', fontSize: '0.875rem', letterSpacing: '0.1em' }}>
+          <Typography sx={{ color: '#888', fontSize: '0.875rem', letterSpacing: '0.1em' }}>
             회원가입
           </Typography>
         </Box>
@@ -88,10 +117,9 @@ export default function RegisterPage() {
                   sx: {
                     '&.Mui-active': { color: '#A68966' },
                     '&.Mui-completed': { color: '#A68966' },
-                    color: '#4A4A4A',
                   }
                 }}
-                sx={{ '.MuiStepLabel-label': { color: '#4A4A4A', '&.Mui-active': { color: '#fff' }, '&.Mui-completed': { color: '#A68966' } } }}
+                sx={{ '.MuiStepLabel-label': { color: '#999', '&.Mui-active': { color: '#111' }, '&.Mui-completed': { color: '#A68966' } } }}
               >
                 {label}
               </StepLabel>
@@ -99,9 +127,9 @@ export default function RegisterPage() {
           ))}
         </Stepper>
 
-        <Box sx={{ bgcolor: '#0c121c', border: '1px solid rgba(74,74,74,0.3)', p: 4 }}>
+        <Box sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', p: 4 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(200,50,50,0.1)', color: '#ff6b6b', border: '1px solid rgba(200,50,50,0.3)', borderRadius: 0 }}>
+            <Alert severity="error" sx={{ mb: 3, borderRadius: 0 }}>
               {error}
             </Alert>
           )}
@@ -110,10 +138,10 @@ export default function RegisterPage() {
           {step === 0 && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
               <TextField fullWidth label="이메일 *" type="email" value={form.email} onChange={set('email')} />
-              <TextField fullWidth label="아이디 *" value={form.username} onChange={set('username')} helperText="영문 소문자, 숫자 6-20자" FormHelperTextProps={{ sx: { color: '#4A4A4A' } }} />
+              <TextField fullWidth label="아이디 *" value={form.username} onChange={set('username')} helperText="영문 소문자, 숫자 6-20자" />
               <TextField fullWidth label="이름(실명) *" value={form.display_name} onChange={set('display_name')} />
-              <TextField fullWidth label="비밀번호 *" type="password" value={form.password} onChange={set('password')} helperText="영문+숫자+특수문자 8자 이상" FormHelperTextProps={{ sx: { color: '#4A4A4A' } }} />
-              <TextField fullWidth label="비밀번호 확인 *" type="password" value={form.passwordConfirm} onChange={set('passwordConfirm')} error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm} helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''} FormHelperTextProps={{ sx: { color: '#ff6b6b' } }} />
+              <TextField fullWidth label="비밀번호 *" type="password" value={form.password} onChange={set('password')} helperText="영문+숫자+특수문자 8자 이상" />
+              <TextField fullWidth label="비밀번호 확인 *" type="password" value={form.passwordConfirm} onChange={set('passwordConfirm')} error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm} helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''} />
             </Box>
           )}
 
@@ -122,16 +150,17 @@ export default function RegisterPage() {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
               <TextField fullWidth label="휴대폰 번호 *" value={form.phone} onChange={set('phone')} placeholder="010-0000-0000" />
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <TextField fullWidth label="우편번호" value={form.zip_code} onChange={set('zip_code')} />
+                <TextField fullWidth label="우편번호" value={form.zip_code} onChange={set('zip_code')} InputProps={{ readOnly: true }} />
                 <Button
                   variant="outlined"
-                  sx={{ borderColor: '#4A4A4A', color: '#4A4A4A', whiteSpace: 'nowrap', px: 2, '&:hover': { borderColor: '#A68966', color: '#A68966' } }}
+                  onClick={handleAddressSearch}
+                  sx={{ borderColor: '#e0e0e0', color: '#111', whiteSpace: 'nowrap', px: 2, '&:hover': { borderColor: '#111' } }}
                 >
                   주소 검색
                 </Button>
               </Box>
-              <TextField fullWidth label="주소" value={form.address} onChange={set('address')} />
-              <TextField fullWidth label="상세 주소" value={form.address_detail} onChange={set('address_detail')} />
+              <TextField fullWidth label="주소" value={form.address} onChange={set('address')} InputProps={{ readOnly: true }} />
+              <TextField fullWidth label="상세 주소" value={form.address_detail} onChange={set('address_detail')} placeholder="동, 호수 등 상세 주소 입력" />
             </Box>
           )}
 
@@ -141,11 +170,15 @@ export default function RegisterPage() {
               <FormControlLabel
                 sx={{ mb: 1.5, display: 'flex', alignItems: 'flex-start' }}
                 control={
-                  <Checkbox checked={form.agree_terms && form.agree_privacy && form.agree_marketing} onChange={(e) => setForm(f => ({ ...f, agree_terms: e.target.checked, agree_privacy: e.target.checked, agree_marketing: e.target.checked }))} sx={{ color: '#4A4A4A', '&.Mui-checked': { color: '#A68966' }, pt: 0 }} />
+                  <Checkbox
+                    checked={form.agree_terms && form.agree_privacy && form.agree_marketing}
+                    onChange={(e) => setForm(f => ({ ...f, agree_terms: e.target.checked, agree_privacy: e.target.checked, agree_marketing: e.target.checked }))}
+                    sx={{ color: '#ccc', '&.Mui-checked': { color: '#A68966' }, pt: 0 }}
+                  />
                 }
-                label={<Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.95rem' }}>전체 동의</Typography>}
+                label={<Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.95rem' }}>전체 동의</Typography>}
               />
-              <Box sx={{ borderLeft: '2px solid rgba(74,74,74,0.3)', pl: 2, display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
+              <Box sx={{ borderLeft: '2px solid #e0e0e0', pl: 2, display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
                 {[
                   { key: 'agree_terms', label: '[필수] 이용약관 동의' },
                   { key: 'agree_privacy', label: '[필수] 개인정보 수집 및 이용 동의' },
@@ -153,10 +186,10 @@ export default function RegisterPage() {
                 ].map(item => (
                   <Box key={item.key} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <FormControlLabel
-                      control={<Checkbox checked={form[item.key]} onChange={setCheck(item.key)} size="small" sx={{ color: '#4A4A4A', '&.Mui-checked': { color: '#A68966' } }} />}
-                      label={<Typography sx={{ color: '#969696', fontSize: '0.875rem' }}>{item.label}</Typography>}
+                      control={<Checkbox checked={form[item.key]} onChange={setCheck(item.key)} size="small" sx={{ color: '#ccc', '&.Mui-checked': { color: '#A68966' } }} />}
+                      label={<Typography sx={{ color: '#666', fontSize: '0.875rem' }}>{item.label}</Typography>}
                     />
-                    <Link href="#" sx={{ color: '#4A4A4A', fontSize: '0.75rem', textDecoration: 'none', '&:hover': { color: '#A68966' } }}>보기</Link>
+                    <Link href="#" sx={{ color: '#bbb', fontSize: '0.75rem', textDecoration: 'none', '&:hover': { color: '#A68966' } }}>보기</Link>
                   </Box>
                 ))}
               </Box>
@@ -169,7 +202,7 @@ export default function RegisterPage() {
               <Button
                 variant="outlined"
                 onClick={() => { setStep(s => s - 1); setError('') }}
-                sx={{ borderColor: '#4A4A4A', color: '#fff', py: 1.5, flex: 1, '&:hover': { borderColor: '#A68966', color: '#A68966' } }}
+                sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.5, flex: 1, '&:hover': { borderColor: '#111' } }}
               >
                 이전
               </Button>
@@ -178,14 +211,14 @@ export default function RegisterPage() {
               variant="contained"
               onClick={step === STEPS.length - 1 ? handleSubmit : handleNext}
               disabled={loading}
-              sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', py: 1.5, flex: 2, fontWeight: 700, '&:hover': { bgcolor: '#c4a882' } }}
+              sx={{ bgcolor: '#111', color: '#fff', border: 'none', py: 1.5, flex: 2, fontWeight: 700, '&:hover': { bgcolor: '#333' } }}
             >
-              {loading ? <CircularProgress size={22} sx={{ color: '#0B0B0B' }} /> : step === STEPS.length - 1 ? '가입하기' : '다음'}
+              {loading ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : step === STEPS.length - 1 ? '가입하기' : '다음'}
             </Button>
           </Box>
         </Box>
 
-        <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
+        <Typography sx={{ color: '#bbb', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
           이미 계정이 있으신가요?{' '}
           <Link component="button" onClick={() => navigate('/login')} sx={{ color: '#A68966', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', '&:hover': { textDecoration: 'underline' } }}>
             로그인

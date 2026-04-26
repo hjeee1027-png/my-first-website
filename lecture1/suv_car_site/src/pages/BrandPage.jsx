@@ -16,10 +16,10 @@ const TIMELINE = [
 ]
 
 const PHILOSOPHY = [
-  { title: '인간 중심 드라이빙', icon: '👤', desc: '운전자와 탑승자 모두의 경험을 최우선으로 설계합니다. 기술은 인간을 위해 존재합니다.' },
-  { title: '미래 지향적 미학', icon: '✨', desc: '시간이 흘러도 변하지 않는 클래식함 위에 첨단의 세련미를 더합니다.' },
-  { title: '완벽한 안전', icon: '🛡️', desc: '5스타 충돌 안전, 14개 에어백, AI 긴급 제동. 가장 소중한 것을 지킵니다.' },
-  { title: '지속가능한 고급', icon: '🌿', desc: '친환경 소재와 전기 파워트레인으로 럭셔리와 환경의 공존을 증명합니다.' },
+  { title: '인간 중심 드라이빙', desc: '운전자와 탑승자 모두의 경험을 최우선으로 설계합니다. 기술은 인간을 위해 존재합니다.' },
+  { title: '미래 지향적 미학', desc: '시간이 흘러도 변하지 않는 클래식함 위에 첨단의 세련미를 더합니다.' },
+  { title: '완벽한 안전', desc: '5스타 충돌 안전, 14개 에어백, AI 긴급 제동. 가장 소중한 것을 지킵니다.' },
+  { title: '지속가능한 고급', desc: '친환경 소재와 전기 파워트레인으로 럭셔리와 환경의 공존을 증명합니다.' },
 ]
 
 const SUSTAINABILITY = [
@@ -31,23 +31,25 @@ const SUSTAINABILITY = [
 
 export default function BrandPage() {
   return (
-    <Box sx={{ bgcolor: '#0B0B0B', minHeight: '100vh', pt: '72px' }}>
+    <Box sx={{ bgcolor: '#ffffff', minHeight: '100vh', pt: '72px' }}>
       {/* 히어로 */}
       <Box
         sx={{
-          height: { xs: 400, md: 600 },
+          height: { xs: 400, md: 560 },
           position: 'relative',
           overflow: 'hidden',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'linear-gradient(135deg, #0a0e18 0%, #1a1a0a 50%, #0c121c 100%)',
+          bgcolor: '#111',
         }}
       >
         <Box
-          sx={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(ellipse at 30% 50%, rgba(166,137,102,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(12,18,28,0.5) 0%, transparent 60%)',
-          }}
+          component="img"
+          src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=85"
+          alt="VANTAGE Brand"
+          sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1920&q=85' }}
         />
+        <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.6)' }} />
         <Box sx={{ position: 'relative', textAlign: 'center', zIndex: 1, px: 3, animation: `${fadeIn} 1s ease` }}>
           <Typography sx={{ fontWeight: 900, letterSpacing: '0.5em', color: '#A68966', fontSize: { xs: '0.75rem', md: '0.9rem' }, mb: 3 }}>
             BRAND STORY
@@ -59,7 +61,7 @@ export default function BrandPage() {
             VANTAGE
           </Typography>
           <Typography
-            sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '1rem', md: '1.3rem' }, letterSpacing: '0.15em', maxWidth: 600, mx: 'auto' }}
+            sx={{ color: 'rgba(255,255,255,0.6)', fontSize: { xs: '1rem', md: '1.2rem' }, letterSpacing: '0.15em', maxWidth: 600, mx: 'auto' }}
           >
             지평선 위에서, 기준 그 너머로
           </Typography>
@@ -67,28 +69,28 @@ export default function BrandPage() {
       </Box>
 
       {/* 브랜드 스토리 */}
-      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#080c14' }}>
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#ffffff' }}>
         <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={12} md={6}>
               <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 2 }}>
                 OUR STORY
               </Typography>
-              <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 3, lineHeight: 1.3 }}>
+              <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 3, lineHeight: 1.3 }}>
                 우리는 단순히<br />이동 수단을 만들지 않습니다
               </Typography>
-              <Typography sx={{ color: '#969696', fontSize: '1rem', lineHeight: 1.9, mb: 3 }}>
+              <Typography sx={{ color: '#666', fontSize: '1rem', lineHeight: 1.9, mb: 3 }}>
                 우리는 당신이 세상을 바라보는 관점을 설계합니다.
                 성공의 길은 때로 거칠고 가파릅니다. 때로는 가족의 안녕을 위해, 때로는 자신만의 성취를 증명하기 위해,
                 또 때로는 인생의 황혼에서 만나는 진정한 여유를 위해 당신은 쉼 없이 달려왔습니다.
               </Typography>
-              <Typography sx={{ color: '#969696', fontSize: '1rem', lineHeight: 1.9, mb: 3 }}>
+              <Typography sx={{ color: '#666', fontSize: '1rem', lineHeight: 1.9, mb: 3 }}>
                 VANTAGE는 그 여정의 끝이 아닌, 새로운 시야가 시작되는 정점에 서 있습니다.
                 가장 높은 곳에서 가장 넓게 세상을 조망하는 특권.
                 기준을 넘어선 당신에게 허락된 단 하나의 자리, VANTAGE입니다.
               </Typography>
               <Box sx={{ borderLeft: '3px solid #A68966', pl: 3 }}>
-                <Typography sx={{ color: '#A68966', fontSize: '1.1rem', fontStyle: 'italic', lineHeight: 1.7 }}>
+                <Typography sx={{ color: '#A68966', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: 1.7 }}>
                   "VANTAGE — 우월한 위치에서 세상을 바라보는 자만이 알 수 있는 자유"
                 </Typography>
               </Box>
@@ -97,20 +99,20 @@ export default function BrandPage() {
               <Box
                 sx={{
                   height: { xs: 280, md: 420 },
-                  bgcolor: '#0c121c',
-                  border: '1px solid rgba(166,137,102,0.15)',
+                  bgcolor: '#f5f5f5',
+                  border: '1px solid #e0e0e0',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   position: 'relative', overflow: 'hidden',
                 }}
               >
-                <Typography sx={{ fontWeight: 900, fontSize: { xs: '6rem', md: '10rem' }, color: 'rgba(166,137,102,0.05)', letterSpacing: '0.1em', userSelect: 'none' }}>
+                <Typography sx={{ fontWeight: 900, fontSize: { xs: '6rem', md: '10rem' }, color: 'rgba(166,137,102,0.08)', letterSpacing: '0.1em', userSelect: 'none' }}>
                   V
                 </Typography>
                 <Box sx={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                   <Typography sx={{ color: '#A68966', fontWeight: 900, letterSpacing: '0.4em', fontSize: '1.5rem' }}>VANTAGE</Typography>
-                  <Typography sx={{ color: '#4A4A4A', fontSize: '0.75rem', letterSpacing: '0.2em' }}>EST. 2010</Typography>
+                  <Typography sx={{ color: '#bbb', fontSize: '0.75rem', letterSpacing: '0.2em' }}>EST. 2010</Typography>
                   <Divider sx={{ borderColor: 'rgba(166,137,102,0.3)', width: 80, my: 1 }} />
-                  <Typography sx={{ color: '#969696', fontSize: '0.85rem', textAlign: 'center', px: 4, lineHeight: 1.7 }}>
+                  <Typography sx={{ color: '#888', fontSize: '0.85rem', textAlign: 'center', px: 4, lineHeight: 1.7 }}>
                     Premium Large SUV<br />Crafted for the Visionary
                   </Typography>
                 </Box>
@@ -121,16 +123,15 @@ export default function BrandPage() {
       </Box>
 
       {/* 타임라인 */}
-      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#0B0B0B' }}>
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#f8f8f8' }}>
         <Container maxWidth={false} sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>HISTORY</Typography>
-            <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>브랜드 역사</Typography>
+            <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>브랜드 역사</Typography>
           </Box>
 
           <Box sx={{ position: 'relative' }}>
-            {/* 세로 라인 */}
-            <Box sx={{ position: 'absolute', left: { xs: 20, md: '50%' }, top: 0, bottom: 0, width: 1, bgcolor: 'rgba(166,137,102,0.2)', transform: { md: 'translateX(-50%)' } }} />
+            <Box sx={{ position: 'absolute', left: { xs: 20, md: '50%' }, top: 0, bottom: 0, width: 1, bgcolor: 'rgba(166,137,102,0.3)', transform: { md: 'translateX(-50%)' } }} />
 
             {TIMELINE.map((item, i) => (
               <Box
@@ -143,7 +144,6 @@ export default function BrandPage() {
                   animation: `${fadeIn} 0.6s ${i * 0.15}s both`,
                 }}
               >
-                {/* 연도 포인트 */}
                 <Box
                   sx={{
                     position: 'absolute',
@@ -160,8 +160,8 @@ export default function BrandPage() {
 
                 <Box sx={{ width: { md: '45%' }, pl: { xs: 8, md: i % 2 === 0 ? 0 : 4 }, pr: { md: i % 2 === 0 ? 4 : 0 }, textAlign: { md: i % 2 === 0 ? 'right' : 'left' } }}>
                   <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: '1.3rem', mb: 0.5 }}>{item.year}</Typography>
-                  <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '1rem', mb: 0.8 }}>{item.title}</Typography>
-                  <Typography sx={{ color: '#969696', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
+                  <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '1rem', mb: 0.8 }}>{item.title}</Typography>
+                  <Typography sx={{ color: '#666', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
                 </Box>
 
                 <Box sx={{ width: { md: '55%' } }} />
@@ -172,11 +172,11 @@ export default function BrandPage() {
       </Box>
 
       {/* 디자인 철학 */}
-      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#080c14' }}>
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#ffffff' }}>
         <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>PHILOSOPHY</Typography>
-            <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>디자인 철학</Typography>
+            <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>디자인 철학</Typography>
           </Box>
 
           <Grid container spacing={3}>
@@ -185,16 +185,18 @@ export default function BrandPage() {
                 <Box
                   sx={{
                     p: 4,
-                    border: '1px solid rgba(74,74,74,0.3)',
-                    textAlign: 'center',
+                    border: '1px solid #e0e0e0',
+                    borderTop: '3px solid #A68966',
                     height: '100%',
-                    transition: 'all 0.3s',
-                    '&:hover': { border: '1px solid rgba(166,137,102,0.5)', transform: 'translateY(-4px)' },
+                    transition: 'border-color 0.2s',
+                    '&:hover': { borderColor: '#A68966' },
                   }}
                 >
-                  <Typography sx={{ fontSize: '2.5rem', mb: 2 }}>{item.icon}</Typography>
-                  <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '1rem', mb: 1.5 }}>{item.title}</Typography>
-                  <Typography sx={{ color: '#969696', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
+                  <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>
+                    0{i + 1}
+                  </Typography>
+                  <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '1rem', mb: 1.5 }}>{item.title}</Typography>
+                  <Typography sx={{ color: '#666', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
                 </Box>
               </Grid>
             ))}
@@ -203,12 +205,12 @@ export default function BrandPage() {
       </Box>
 
       {/* 지속가능성 */}
-      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#0B0B0B' }}>
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#f8f8f8' }}>
         <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>SUSTAINABILITY</Typography>
-            <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 2 }}>지속가능한 미래</Typography>
-            <Typography sx={{ color: '#969696', maxWidth: 500, mx: 'auto', lineHeight: 1.8 }}>
+            <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 2 }}>지속가능한 미래</Typography>
+            <Typography sx={{ color: '#666', maxWidth: 500, mx: 'auto', lineHeight: 1.8 }}>
               VANTAGE는 럭셔리와 지속가능성이 함께할 수 있음을 증명합니다.
               더 넓은 세상을 위한 더 큰 책임.
             </Typography>
@@ -220,13 +222,13 @@ export default function BrandPage() {
                 <Box
                   sx={{
                     p: 4,
-                    bgcolor: '#0c121c',
-                    border: '1px solid rgba(74,74,74,0.2)',
+                    bgcolor: '#fff',
+                    border: '1px solid #e0e0e0',
                     borderTop: '3px solid #A68966',
                   }}
                 >
                   <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: '1.3rem', mb: 1 }}>{item.label}</Typography>
-                  <Typography sx={{ color: '#969696', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
+                  <Typography sx={{ color: '#666', fontSize: '0.875rem', lineHeight: 1.7 }}>{item.desc}</Typography>
                 </Box>
               </Grid>
             ))}

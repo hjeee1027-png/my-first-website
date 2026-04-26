@@ -14,10 +14,10 @@ import { useAuth } from '../hooks/useAuth'
 import { signOut, getProfile, getUserReservations } from '../utils/supabase'
 
 const STATUS_COLORS = {
-  '상담신청': { bg: 'rgba(0,150,255,0.1)', color: '#4fc3f7', border: 'rgba(0,150,255,0.3)' },
-  '계약완료': { bg: 'rgba(0,200,100,0.1)', color: '#66bb6a', border: 'rgba(0,200,100,0.3)' },
-  '인도대기': { bg: 'rgba(255,180,0,0.1)', color: '#ffd54f', border: 'rgba(255,180,0,0.3)' },
-  '완료': { bg: 'rgba(166,137,102,0.1)', color: '#A68966', border: 'rgba(166,137,102,0.3)' },
+  '상담신청': { bg: 'rgba(0,150,255,0.08)', color: '#1976d2', border: 'rgba(0,150,255,0.25)' },
+  '계약완료': { bg: 'rgba(0,150,80,0.08)', color: '#2e7d32', border: 'rgba(0,150,80,0.25)' },
+  '인도대기': { bg: 'rgba(200,140,0,0.08)', color: '#e65100', border: 'rgba(200,140,0,0.25)' },
+  '완료': { bg: 'rgba(166,137,102,0.08)', color: '#A68966', border: 'rgba(166,137,102,0.25)' },
 }
 
 const CONTRACT_STEPS = ['상담 신청', '계약 완료', '인도 대기', '인도 완료']
@@ -58,11 +58,11 @@ export default function MyPage() {
 
   if (!user) {
     return (
-      <Box sx={{ minHeight: '100vh', bgcolor: '#0B0B0B', pt: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ minHeight: '100vh', bgcolor: '#f8f8f8', pt: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Box sx={{ textAlign: 'center' }}>
-          <PersonIcon sx={{ fontSize: '4rem', color: '#4A4A4A', mb: 2 }} />
-          <Typography sx={{ color: '#fff', fontSize: '1.2rem', mb: 3 }}>로그인이 필요합니다</Typography>
-          <Button variant="contained" onClick={() => navigate('/login')} sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', '&:hover': { bgcolor: '#c4a882' } }}>
+          <PersonIcon sx={{ fontSize: '4rem', color: '#ccc', mb: 2 }} />
+          <Typography sx={{ color: '#111', fontSize: '1.2rem', mb: 3 }}>로그인이 필요합니다</Typography>
+          <Button variant="contained" onClick={() => navigate('/login')} sx={{ bgcolor: '#111', color: '#fff', border: 'none', '&:hover': { bgcolor: '#333' } }}>
             로그인하기
           </Button>
         </Box>
@@ -83,13 +83,13 @@ export default function MyPage() {
   }
 
   return (
-    <Box sx={{ bgcolor: '#0B0B0B', minHeight: '100vh', pt: '72px' }}>
+    <Box sx={{ bgcolor: '#f8f8f8', minHeight: '100vh', pt: '72px' }}>
       <Container maxWidth={false} sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
         {/* 프로필 헤더 */}
         <Box
           sx={{
-            bgcolor: '#0c121c',
-            border: '1px solid rgba(166,137,102,0.15)',
+            bgcolor: '#fff',
+            border: '1px solid #e0e0e0',
             p: { xs: 3, md: 4 },
             mb: 4,
             display: 'flex',
@@ -101,7 +101,7 @@ export default function MyPage() {
           <Avatar
             sx={{
               width: 72, height: 72,
-              bgcolor: 'rgba(166,137,102,0.2)',
+              bgcolor: 'rgba(166,137,102,0.12)',
               border: '2px solid rgba(166,137,102,0.3)',
               fontSize: '1.8rem',
               color: '#A68966',
@@ -110,15 +110,15 @@ export default function MyPage() {
             {displayName[0]?.toUpperCase()}
           </Avatar>
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1.3rem', mb: 0.5 }}>
+            <Typography sx={{ color: '#111', fontWeight: 700, fontSize: '1.3rem', mb: 0.5 }}>
               반갑습니다, {displayName}님!
             </Typography>
-            <Typography sx={{ color: '#4A4A4A', fontSize: '0.875rem' }}>
+            <Typography sx={{ color: '#888', fontSize: '0.875rem' }}>
               {user.email}
             </Typography>
             {activeRes.length > 0 && (
               <Typography sx={{ color: '#A68966', fontSize: '0.875rem', mt: 1 }}>
-                📅 진행 중인 시승 예약 {activeRes.length}건이 있습니다.
+                진행 중인 시승 예약 {activeRes.length}건이 있습니다.
               </Typography>
             )}
           </Box>
@@ -128,7 +128,7 @@ export default function MyPage() {
               size="small"
               startIcon={<LogoutIcon fontSize="small" />}
               onClick={async () => { await signOut(); navigate('/') }}
-              sx={{ borderColor: '#4A4A4A', color: '#4A4A4A', fontSize: '0.8rem', '&:hover': { borderColor: '#ff6b6b', color: '#ff6b6b' } }}
+              sx={{ borderColor: '#e0e0e0', color: '#888', fontSize: '0.8rem', '&:hover': { borderColor: '#f44336', color: '#f44336' } }}
             >
               로그아웃
             </Button>
@@ -139,7 +139,7 @@ export default function MyPage() {
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
-          sx={{ mb: 4, borderBottom: '1px solid rgba(74,74,74,0.3)', '.MuiTabs-indicator': { bgcolor: '#A68966' } }}
+          sx={{ mb: 4, borderBottom: '1px solid #e0e0e0', '.MuiTabs-indicator': { bgcolor: '#A68966' } }}
         >
           {[
             { label: '예약 현황', icon: <CalendarTodayIcon fontSize="small" /> },
@@ -155,7 +155,7 @@ export default function MyPage() {
                   <span>{t.label}</span>
                 </Box>
               }
-              sx={{ color: '#4A4A4A', '&.Mui-selected': { color: '#A68966' }, fontSize: '0.875rem' }}
+              sx={{ color: '#888', '&.Mui-selected': { color: '#A68966' }, fontSize: '0.875rem' }}
             />
           ))}
         </Tabs>
@@ -167,15 +167,14 @@ export default function MyPage() {
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}><CircularProgress sx={{ color: '#A68966' }} /></Box>
             ) : reservations.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 8 }}>
-                <CalendarTodayIcon sx={{ fontSize: '3rem', color: '#4A4A4A', mb: 2 }} />
-                <Typography sx={{ color: '#969696', mb: 3 }}>예약 내역이 없습니다</Typography>
-                <Button variant="contained" onClick={() => navigate('/reservation')} sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', '&:hover': { bgcolor: '#c4a882' } }}>
+                <CalendarTodayIcon sx={{ fontSize: '3rem', color: '#ccc', mb: 2 }} />
+                <Typography sx={{ color: '#888', mb: 3 }}>예약 내역이 없습니다</Typography>
+                <Button variant="contained" onClick={() => navigate('/reservation')} sx={{ bgcolor: '#111', color: '#fff', border: 'none', '&:hover': { bgcolor: '#333' } }}>
                   시승 예약하기
                 </Button>
               </Box>
             ) : (
               <Box>
-                {/* 진행 중 */}
                 {activeRes.length > 0 && (
                   <Box sx={{ mb: 4 }}>
                     <Typography sx={{ color: '#A68966', fontSize: '0.85rem', letterSpacing: '0.1em', mb: 2 }}>진행 중</Typography>
@@ -183,13 +182,13 @@ export default function MyPage() {
                       const stepIdx = getContractStep(res.status)
                       const statusStyle = STATUS_COLORS[res.status] || STATUS_COLORS['상담신청']
                       return (
-                        <Paper key={res.id} sx={{ bgcolor: '#0c121c', border: '1px solid rgba(74,74,74,0.3)', borderRadius: 0, p: 3, mb: 2 }}>
+                        <Paper key={res.id} sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', borderRadius: 0, p: 3, mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                             <Box>
-                              <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.95rem', mb: 0.5 }}>
+                              <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.95rem', mb: 0.5 }}>
                                 {res.cars_data?.model_name || res.car_id}
                               </Typography>
-                              <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem' }}>
+                              <Typography sx={{ color: '#888', fontSize: '0.8rem' }}>
                                 {res.branch_name} · {res.res_date?.split('T')[0]}
                               </Typography>
                             </Box>
@@ -207,19 +206,18 @@ export default function MyPage() {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                   <Box sx={{
                                     width: 24, height: 24, borderRadius: '50%',
-                                    bgcolor: i <= stepIdx ? '#A68966' : '#333',
-                                    border: `2px solid ${i <= stepIdx ? '#A68966' : '#4A4A4A'}`,
+                                    bgcolor: i <= stepIdx ? '#A68966' : '#e0e0e0',
+                                    border: `2px solid ${i <= stepIdx ? '#A68966' : '#e0e0e0'}`,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                   }}>
-                                    {i < stepIdx && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#0B0B0B' }} />}
-                                    {i === stepIdx && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#0B0B0B' }} />}
+                                    {(i <= stepIdx) && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#fff' }} />}
                                   </Box>
-                                  <Typography sx={{ color: i <= stepIdx ? '#A68966' : '#4A4A4A', fontSize: '0.65rem', mt: 0.5, whiteSpace: 'nowrap' }}>
+                                  <Typography sx={{ color: i <= stepIdx ? '#A68966' : '#bbb', fontSize: '0.65rem', mt: 0.5, whiteSpace: 'nowrap' }}>
                                     {s}
                                   </Typography>
                                 </Box>
                                 {i < CONTRACT_STEPS.length - 1 && (
-                                  <Box sx={{ flex: 1, height: 1, bgcolor: i < stepIdx ? '#A68966' : '#333', mx: 0.5 }} />
+                                  <Box sx={{ flex: 1, height: 1, bgcolor: i < stepIdx ? '#A68966' : '#e0e0e0', mx: 0.5 }} />
                                 )}
                               </Box>
                             ))}
@@ -230,22 +228,21 @@ export default function MyPage() {
                   </Box>
                 )}
 
-                {/* 완료된 예약 */}
                 {completedRes.length > 0 && (
                   <Box>
-                    <Typography sx={{ color: '#4A4A4A', fontSize: '0.85rem', letterSpacing: '0.1em', mb: 2 }}>완료된 예약</Typography>
+                    <Typography sx={{ color: '#888', fontSize: '0.85rem', letterSpacing: '0.1em', mb: 2 }}>완료된 예약</Typography>
                     {completedRes.map(res => (
-                      <Paper key={res.id} sx={{ bgcolor: '#0c121c', border: '1px solid rgba(74,74,74,0.2)', borderRadius: 0, p: 2.5, mb: 1.5, opacity: 0.7 }}>
+                      <Paper key={res.id} sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', borderRadius: 0, p: 2.5, mb: 1.5, opacity: 0.7 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Box>
-                            <Typography sx={{ color: '#969696', fontSize: '0.9rem', mb: 0.3 }}>
+                            <Typography sx={{ color: '#666', fontSize: '0.9rem', mb: 0.3 }}>
                               {res.cars_data?.model_name || res.car_id}
                             </Typography>
-                            <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem' }}>
+                            <Typography sx={{ color: '#aaa', fontSize: '0.8rem' }}>
                               {res.branch_name} · {res.res_date?.split('T')[0]}
                             </Typography>
                           </Box>
-                          <Chip label="완료" size="small" sx={{ bgcolor: 'rgba(166,137,102,0.1)', color: '#A68966', borderRadius: 0, fontSize: '0.7rem' }} />
+                          <Chip label="완료" size="small" sx={{ bgcolor: 'rgba(166,137,102,0.08)', color: '#A68966', borderRadius: 0, fontSize: '0.7rem' }} />
                         </Box>
                       </Paper>
                     ))}
@@ -259,9 +256,9 @@ export default function MyPage() {
         {/* 탭 1: 관심 차량 */}
         {tab === 1 && (
           <Box sx={{ textAlign: 'center', py: 8 }}>
-            <FavoriteIcon sx={{ fontSize: '3rem', color: '#4A4A4A', mb: 2 }} />
-            <Typography sx={{ color: '#969696', mb: 3 }}>관심 차량이 없습니다</Typography>
-            <Button variant="outlined" onClick={() => navigate('/search')} sx={{ borderColor: '#A68966', color: '#A68966' }}>
+            <FavoriteIcon sx={{ fontSize: '3rem', color: '#ccc', mb: 2 }} />
+            <Typography sx={{ color: '#888', mb: 3 }}>관심 차량이 없습니다</Typography>
+            <Button variant="outlined" onClick={() => navigate('/search')} sx={{ borderColor: '#111', color: '#111', '&:hover': { bgcolor: '#111', color: '#fff' } }}>
               차량 둘러보기
             </Button>
           </Box>
@@ -271,19 +268,19 @@ export default function MyPage() {
         {tab === 2 && (
           <Box sx={{ maxWidth: 600 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography sx={{ color: '#fff', fontSize: '1rem', fontWeight: 500 }}>개인정보 관리</Typography>
+              <Typography sx={{ color: '#111', fontSize: '1rem', fontWeight: 500 }}>개인정보 관리</Typography>
               <Button
                 size="small"
                 startIcon={<EditIcon fontSize="small" />}
                 onClick={() => setEditing(!editing)}
-                sx={{ color: editing ? '#A68966' : '#4A4A4A', fontSize: '0.8rem', '&:hover': { color: '#A68966' } }}
+                sx={{ color: editing ? '#A68966' : '#888', fontSize: '0.8rem', '&:hover': { color: '#A68966' } }}
               >
                 {editing ? '수정 중' : '수정'}
               </Button>
             </Box>
 
-            <Box sx={{ bgcolor: '#0c121c', border: '1px solid rgba(74,74,74,0.3)', p: 3 }}>
-              {saveMsg && <Alert severity="success" sx={{ mb: 2, bgcolor: 'rgba(0,200,100,0.1)', color: '#66bb6a', border: '1px solid rgba(0,200,100,0.3)', borderRadius: 0 }}>{saveMsg}</Alert>}
+            <Box sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', p: 3 }}>
+              {saveMsg && <Alert severity="success" sx={{ mb: 2, borderRadius: 0 }}>{saveMsg}</Alert>}
 
               <Grid container spacing={2.5}>
                 {[
@@ -302,9 +299,6 @@ export default function MyPage() {
                       value={field.value || editForm[field.key] || ''}
                       onChange={field.readOnly ? undefined : (e) => setEditForm(f => ({ ...f, [field.key]: e.target.value }))}
                       InputProps={{ readOnly: field.readOnly }}
-                      sx={{
-                        '& .MuiInputBase-input': { color: field.readOnly ? '#4A4A4A' : '#fff' },
-                      }}
                     />
                   </Grid>
                 ))}
@@ -320,22 +314,22 @@ export default function MyPage() {
                       setEditing(false)
                       setTimeout(() => setSaveMsg(''), 3000)
                     }}
-                    sx={{ bgcolor: '#A68966', color: '#0B0B0B', border: 'none', py: 1.5, '&:hover': { bgcolor: '#c4a882' } }}
+                    sx={{ bgcolor: '#111', color: '#fff', border: 'none', py: 1.5, '&:hover': { bgcolor: '#333' } }}
                   >
                     저장
                   </Button>
-                  <Button fullWidth variant="outlined" onClick={() => setEditing(false)} sx={{ borderColor: '#4A4A4A', color: '#fff', py: 1.5 }}>
+                  <Button fullWidth variant="outlined" onClick={() => setEditing(false)} sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.5 }}>
                     취소
                   </Button>
                 </Box>
               )}
             </Box>
 
-            <Divider sx={{ my: 4, borderColor: 'rgba(74,74,74,0.2)' }} />
+            <Divider sx={{ my: 4, borderColor: '#e0e0e0' }} />
 
             <Button
               variant="outlined"
-              sx={{ borderColor: 'rgba(200,50,50,0.3)', color: '#ff6b6b', fontSize: '0.8rem', '&:hover': { borderColor: '#ff6b6b', bgcolor: 'rgba(200,50,50,0.05)' } }}
+              sx={{ borderColor: 'rgba(200,50,50,0.3)', color: '#f44336', fontSize: '0.8rem', '&:hover': { borderColor: '#f44336' } }}
             >
               회원 탈퇴
             </Button>
@@ -345,12 +339,12 @@ export default function MyPage() {
         {/* 탭 3: 결제 정보 */}
         {tab === 3 && (
           <Box sx={{ maxWidth: 500 }}>
-            <Typography sx={{ color: '#4A4A4A', fontSize: '0.875rem', mb: 3 }}>
+            <Typography sx={{ color: '#888', fontSize: '0.875rem', mb: 3 }}>
               등록된 결제 수단이 없습니다.
             </Typography>
             <Button
               variant="outlined"
-              sx={{ borderColor: '#A68966', color: '#A68966', '&:hover': { bgcolor: 'rgba(166,137,102,0.1)' } }}
+              sx={{ borderColor: '#A68966', color: '#A68966', '&:hover': { bgcolor: 'rgba(166,137,102,0.08)' } }}
             >
               카드 등록
             </Button>

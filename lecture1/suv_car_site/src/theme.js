@@ -2,12 +2,12 @@ import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
-    primary: { main: '#0c121c' },
+    mode: 'light',
+    primary: { main: '#111111' },
     secondary: { main: '#A68966' },
-    background: { default: '#0B0B0B', paper: '#1a1f2e' },
-    text: { primary: '#FFFFFF', secondary: '#4A4A4A' },
-    divider: '#4A4A4A',
+    background: { default: '#ffffff', paper: '#ffffff' },
+    text: { primary: '#111111', secondary: '#666666' },
+    divider: '#e0e0e0',
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -18,7 +18,7 @@ const theme = createTheme({
     h5: { fontSize: '1.25rem', fontWeight: 500 },
     h6: { fontSize: '1.125rem', fontWeight: 500 },
     body1: { fontSize: '1rem', fontWeight: 400 },
-    body2: { fontSize: '0.875rem', fontWeight: 400, color: '#969696' },
+    body2: { fontSize: '0.875rem', fontWeight: 400, color: '#666666' },
     button: { fontSize: '0.9375rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase' },
   },
   components: {
@@ -29,18 +29,19 @@ const theme = createTheme({
           padding: '12px 32px',
           fontWeight: 500,
           letterSpacing: '0.1em',
-          transition: 'all 0.3s ease',
+          transition: 'all 0.2s ease',
+          boxShadow: 'none',
+          '&:hover': { boxShadow: 'none' },
         },
         contained: {
-          backgroundColor: '#0c121c',
-          color: '#FFFFFF',
-          border: '1px solid #A68966',
-          '&:hover': { backgroundColor: '#A68966', color: '#0B0B0B' },
+          backgroundColor: '#111111',
+          color: '#ffffff',
+          '&:hover': { backgroundColor: '#333333' },
         },
         outlined: {
-          borderColor: '#A68966',
-          color: '#A68966',
-          '&:hover': { backgroundColor: '#A68966', color: '#0B0B0B', borderColor: '#A68966' },
+          borderColor: '#111111',
+          color: '#111111',
+          '&:hover': { backgroundColor: 'transparent', borderColor: '#333333' },
         },
       },
     },
@@ -49,27 +50,27 @@ const theme = createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 0,
-            '& fieldset': { borderColor: '#4A4A4A' },
-            '&:hover fieldset': { borderColor: '#A68966' },
-            '&.Mui-focused fieldset': { borderColor: '#A68966' },
+            '& fieldset': { borderColor: '#e0e0e0' },
+            '&:hover fieldset': { borderColor: '#111111' },
+            '&.Mui-focused fieldset': { borderColor: '#111111' },
           },
-          '& .MuiInputLabel-root.Mui-focused': { color: '#A68966' },
+          '& .MuiInputLabel-root.Mui-focused': { color: '#111111' },
         },
       },
     },
     MuiTab: {
       styleOverrides: {
         root: {
-          color: '#4A4A4A',
+          color: '#999999',
           fontWeight: 500,
           letterSpacing: '0.05em',
-          '&.Mui-selected': { color: '#A68966' },
+          '&.Mui-selected': { color: '#111111' },
         },
       },
     },
     MuiTabs: {
       styleOverrides: {
-        indicator: { backgroundColor: '#A68966' },
+        indicator: { backgroundColor: '#111111' },
       },
     },
     MuiChip: {
@@ -79,7 +80,12 @@ const theme = createTheme({
     },
     MuiDivider: {
       styleOverrides: {
-        root: { borderColor: '#4A4A4A' },
+        root: { borderColor: '#e0e0e0' },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: { boxShadow: 'none' },
       },
     },
   },
