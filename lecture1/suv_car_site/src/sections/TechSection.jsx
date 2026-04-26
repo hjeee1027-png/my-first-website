@@ -16,7 +16,7 @@ export default function TechSection() {
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>
             INNOVATION
           </Typography>
-          <Typography variant="h2" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
+          <Typography variant="h2" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
             첨단 기술의 정점
           </Typography>
           <Typography sx={{ color: '#666', fontSize: '1rem', maxWidth: 600, mx: 'auto' }}>

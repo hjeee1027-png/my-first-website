@@ -73,9 +73,9 @@ export default function Header() {
                   component={Link}
                   to={item.path}
                   sx={{
-                    color: 'rgba(255,255,255,0.75)',
+                    color: '#A68966',
                     fontSize: '0.8rem',
-                    fontWeight: 400,
+                    fontWeight: 500,
                     letterSpacing: '0.08em',
                     px: 1,
                     py: 0.5,
@@ -83,7 +83,7 @@ export default function Header() {
                     borderRadius: 0,
                     '&:hover': {
                       bgcolor: 'transparent',
-                      color: '#fff',
+                      color: '#c4a882',
                     },
                   }}
                 >

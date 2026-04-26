@@ -28,7 +28,7 @@ export default function ProductSection() {
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>
             OUR MODELS
           </Typography>
-          <Typography variant="h2" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
+          <Typography variant="h2" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
             전체 라인업
           </Typography>
           <Typography sx={{ color: '#666', fontSize: '1rem', maxWidth: 500, mx: 'auto' }}>

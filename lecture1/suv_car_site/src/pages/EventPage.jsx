@@ -11,7 +11,7 @@ export default function EventPage() {
       <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
         <Box sx={{ mb: 6, textAlign: 'center' }}>
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>PROMOTIONS</Typography>
-          <Typography variant="h3" sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 2 }}>
+          <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 2 }}>
             이벤트 &amp; 프로모션
           </Typography>
           <Typography sx={{ color: '#888', fontSize: '0.9rem' }}>
