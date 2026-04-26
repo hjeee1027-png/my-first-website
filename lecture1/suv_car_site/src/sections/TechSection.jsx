@@ -72,16 +72,13 @@ export default function TechSection() {
             >
               <Box
                 component="img"
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
+                src={`${import.meta.env.BASE_URL}img/tech_display.jpeg`}
                 alt="VANTAGE 첨단 기술"
                 sx={{
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center',
-                }}
-                onError={(e) => {
-                  e.target.src = 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&q=80'
                 }}
               />
             </Box>

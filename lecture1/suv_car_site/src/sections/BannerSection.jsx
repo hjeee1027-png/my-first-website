@@ -15,11 +15,13 @@ export default function BannerSection() {
         bgcolor: '#0a0e18',
       }}
     >
-      {/* 배경 이미지 */}
+      {/* 배경 비디오 */}
       <Box
-        component="img"
-        src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1920&q=90"
-        alt="VANTAGE SUV"
+        component="video"
+        autoPlay
+        muted
+        loop
+        playsInline
         sx={{
           position: 'absolute',
           inset: 0,
@@ -28,7 +30,9 @@ export default function BannerSection() {
           objectFit: 'cover',
           objectPosition: 'center',
         }}
-      />
+      >
+        <source src={`${import.meta.env.BASE_URL}img/banner_video.mp4`} type="video/mp4" />
+      </Box>
 
       {/* 어두운 오버레이 */}
       <Box

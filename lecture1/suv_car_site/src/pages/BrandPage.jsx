@@ -44,10 +44,9 @@ export default function BrandPage() {
       >
         <Box
           component="img"
-          src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=85"
+          src={`${import.meta.env.BASE_URL}img/car1_4.jpeg`}
           alt="VANTAGE Brand"
           sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1920&q=85' }}
         />
         <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.6)' }} />
         <Box sx={{ position: 'relative', textAlign: 'center', zIndex: 1, px: 3, animation: `${fadeIn} 1s ease` }}>

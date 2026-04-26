@@ -1,3 +1,5 @@
+const B = import.meta.env.BASE_URL
+
 export const BRAND_COLORS = {
   primary: '#0c121c',
   background: '#0B0B0B',
@@ -39,12 +41,12 @@ export const CARS = [
     is_promotion: false,
     efficiency: 12.5,
     max_power: '320kW',
-    thumbnail_url: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80',
+    thumbnail_url: `${B}img/car1_thumb.jpeg`,
     images: [
-      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1200&q=80',
-      'https://images.unsplash.com/photo-1546614042-7df3c24c9e5d?w=1200&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&q=80',
+      `${B}img/car1_1.jpeg`,
+      `${B}img/car1_2.jpeg`,
+      `${B}img/car1_3.jpeg`,
+      `${B}img/car1_4.jpeg`,
     ],
     color_options: ['abyss_black', 'serenity_white', 'desert_gold', 'titanium_silver'],
     description: '궁극의 럭셔리. 피나클 VII은 경계를 허무는 존재입니다. 3.0L V6 하이브리드 파워트레인과 에어 서스펜션의 조화로 어떤 지형에서도 완벽한 주행을 실현합니다.',
@@ -64,12 +66,12 @@ export const CARS = [
     is_promotion: true,
     efficiency: 14.2,
     max_power: '250kW',
-    thumbnail_url: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80',
+    thumbnail_url: `${B}img/car2_thumb.webp`,
     images: [
-      'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80',
-      'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=1200&q=80',
-      'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=80',
+      `${B}img/car2_1.webp`,
+      `${B}img/car2_2.webp`,
+      `${B}img/car2_3.webp`,
+      `${B}img/car2_4.webp`,
     ],
     color_options: ['abyss_black', 'serenity_white', 'pacific_blue', 'titanium_silver'],
     description: '힘과 우아함의 정점. 서밋 V는 3.0L 트윈터보 디젤로 압도적인 토크와 경제적인 연비를 동시에 제공합니다. 성공한 드라이버를 위한 선택.',
@@ -89,12 +91,12 @@ export const CARS = [
     is_promotion: true,
     efficiency: 9.8,
     max_power: '200kW',
-    thumbnail_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    thumbnail_url: `${B}img/car3_thumb.jpeg`,
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&q=80',
-      'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=1200&q=80',
-      'https://images.unsplash.com/photo-1546614042-7df3c24c9e5d?w=1200&q=80',
+      `${B}img/car3_1.webp`,
+      `${B}img/car3_2.webp`,
+      `${B}img/car3_3.webp`,
+      `${B}img/car3_4.jpeg`,
     ],
     color_options: ['serenity_white', 'graphite_grey', 'abyss_black', 'desert_gold'],
     description: '세련된 입문의 시작. 에이펙스 S는 2.0L 터보 가솔린으로 도심 주행의 경쾌함과 주말 여행의 여유를 모두 담았습니다.',
@@ -114,12 +116,12 @@ export const CARS = [
     is_promotion: false,
     efficiency: 6.2,
     max_power: '239kW',
-    thumbnail_url: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80',
+    thumbnail_url: `${B}img/car4_thumb.webp`,
     images: [
-      'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=1200&q=80',
-      'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1200&q=80',
-      'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=1200&q=80',
-      'https://images.unsplash.com/photo-1518987048-93e29699e79a?w=1200&q=80',
+      `${B}img/car4_1.webp`,
+      `${B}img/car4_2.webp`,
+      `${B}img/car4_3.jpeg`,
+      `${B}img/car4_4.jpeg`,
     ],
     color_options: ['abyss_black', 'serenity_white', 'pacific_blue', 'graphite_grey'],
     description: '미래를 향한 첫 걸음. 크레스트 EV는 500km 이상의 주행거리와 초고속 충전으로 전기차의 불안을 완전히 해소합니다.',
@@ -138,8 +140,8 @@ export const SHOWROOMS = [
 ]
 
 export const EVENTS = [
-  { id: 1, title: '2025 상반기 특별 프로모션', subtitle: '최대 10% 할인 + 무이자 할부 36개월', description: '반티지 전 모델 대상 특별 프로모션. 시승 예약 후 계약 시 추가 혜택 제공.', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80', start_date: '2025-01-01', end_date: '2025-06-30', badge: '진행중' },
-  { id: 2, title: 'VANTAGE 크레스트 EV 출시 기념', subtitle: '전기차 보조금 지원 + 충전기 무상 설치', description: '크레스트 EV 출시를 기념하여 국고 보조금 전액 지원 및 홈 충전기 무상 설치 서비스를 제공합니다.', image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80', start_date: '2025-03-01', end_date: '2025-12-31', badge: '신규' },
+  { id: 1, title: '2025 상반기 특별 프로모션', subtitle: '최대 10% 할인 + 무이자 할부 36개월', description: '반티지 전 모델 대상 특별 프로모션. 시승 예약 후 계약 시 추가 혜택 제공.', image: `${B}img/car4_4.jpeg`, start_date: '2025-01-01', end_date: '2025-06-30', badge: '진행중' },
+  { id: 2, title: 'VANTAGE 크레스트 EV 출시 기념', subtitle: '전기차 보조금 지원 + 충전기 무상 설치', description: '크레스트 EV 출시를 기념하여 국고 보조금 전액 지원 및 홈 충전기 무상 설치 서비스를 제공합니다.', image: `${B}img/story_road.webp`, start_date: '2025-03-01', end_date: '2025-12-31', badge: '신규' },
 ]
 
 export const BRANCHES = [
