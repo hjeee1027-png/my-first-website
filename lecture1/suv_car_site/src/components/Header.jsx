@@ -56,9 +56,9 @@ export default function Header() {
         position="fixed"
         elevation={0}
         sx={{
-          bgcolor: scrolled ? 'rgba(11,11,11,0.92)' : '#0B0B0B',
+          bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#ffffff',
           backdropFilter: scrolled ? 'blur(10px)' : 'none',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid #e8e0d6',
           transition: 'all 0.3s ease',
           zIndex: 1300,
         }}
@@ -81,10 +81,7 @@ export default function Header() {
                     py: 0.5,
                     minWidth: 'auto',
                     borderRadius: 0,
-                    '&:hover': {
-                      bgcolor: 'transparent',
-                      color: '#c4a882',
-                    },
+                    '&:hover': { bgcolor: 'transparent', color: '#96795a' },
                   }}
                 >
                   {item.label}
@@ -93,7 +90,7 @@ export default function Header() {
             </Box>
           )}
 
-          {/* 가운데 로고 - absolute로 완전 중앙 정렬 */}
+          {/* 가운데 로고 */}
           <Box
             sx={{
               position: 'absolute',
@@ -107,7 +104,7 @@ export default function Header() {
               component={Link}
               to="/"
               sx={{
-                color: '#fff',
+                color: '#0c121c',
                 fontWeight: 900,
                 letterSpacing: '0.35em',
                 textDecoration: 'none',
@@ -125,21 +122,21 @@ export default function Header() {
           {/* 오른쪽 아이콘 */}
           <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: { xs: 0.5, md: 1.5 } }}>
             {searchOpen ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.3)', px: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ccc', px: 1 }}>
                 <InputBase
                   autoFocus
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearch}
                   placeholder="차량명 검색..."
-                  sx={{ color: '#fff', fontSize: '0.875rem', width: 150 }}
+                  sx={{ color: '#111', fontSize: '0.875rem', width: 150 }}
                 />
-                <IconButton size="small" onClick={() => setSearchOpen(false)} sx={{ color: 'rgba(255,255,255,0.5)', p: 0.5 }}>
+                <IconButton size="small" onClick={() => setSearchOpen(false)} sx={{ color: '#999', p: 0.5 }}>
                   <CloseIcon fontSize="small" />
                 </IconButton>
               </Box>
             ) : (
-              <IconButton onClick={() => setSearchOpen(true)} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#fff' } }}>
+              <IconButton onClick={() => setSearchOpen(true)} sx={{ color: '#555', '&:hover': { color: '#0c121c' } }}>
                 <SearchIcon fontSize="small" />
               </IconButton>
             )}
@@ -151,10 +148,10 @@ export default function Header() {
                 variant="standard"
                 disableUnderline
                 sx={{
-                  color: 'rgba(255,255,255,0.7)',
+                  color: '#666',
                   fontSize: '0.75rem',
-                  '.MuiSelect-icon': { color: 'rgba(255,255,255,0.5)' },
-                  '&:hover .MuiSelect-select': { color: '#fff' },
+                  '.MuiSelect-icon': { color: '#999' },
+                  '&:hover .MuiSelect-select': { color: '#0c121c' },
                 }}
               >
                 <MenuItem value="KR">KR</MenuItem>
@@ -167,7 +164,7 @@ export default function Header() {
             <IconButton
               component={Link}
               to={user ? '/mypage' : '/login'}
-              sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#fff' } }}
+              sx={{ color: '#555', '&:hover': { color: '#0c121c' } }}
             >
               <PersonOutlineIcon fontSize="small" />
             </IconButton>
@@ -175,14 +172,14 @@ export default function Header() {
             {user && !isMobile && (
               <Button
                 onClick={handleLogout}
-                sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', minWidth: 'auto', px: 1, '&:hover': { color: '#fff', bgcolor: 'transparent' } }}
+                sx={{ color: '#999', fontSize: '0.75rem', minWidth: 'auto', px: 1, '&:hover': { color: '#0c121c', bgcolor: 'transparent' } }}
               >
                 로그아웃
               </Button>
             )}
 
             {isMobile && (
-              <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: 'rgba(255,255,255,0.7)' }}>
+              <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#555' }}>
                 <MenuIcon />
               </IconButton>
             )}
@@ -195,15 +192,15 @@ export default function Header() {
         anchor="right"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { width: 260, bgcolor: '#0B0B0B', color: '#fff' } }}
+        PaperProps={{ sx: { width: 260, bgcolor: '#fff', color: '#111' } }}
       >
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography sx={{ fontWeight: 900, letterSpacing: '0.3em', color: '#fff', fontSize: '1rem' }}>VANTAGE</Typography>
-          <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#fff' }}>
+          <Typography sx={{ fontWeight: 900, letterSpacing: '0.3em', color: '#0c121c', fontSize: '1rem' }}>VANTAGE</Typography>
+          <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#666' }}>
             <CloseIcon />
           </IconButton>
         </Box>
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+        <Divider sx={{ borderColor: '#e0e0e0' }} />
         <List>
           {NAV_ITEMS.map((item) => (
             <ListItem key={item.label} disablePadding>
@@ -211,16 +208,16 @@ export default function Header() {
                 component={Link}
                 to={item.path}
                 onClick={() => setDrawerOpen(false)}
-                sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' } }}
+                sx={{ '&:hover': { bgcolor: 'rgba(0,0,0,0.04)' } }}
               >
-                <ListItemText primary={item.label} primaryTypographyProps={{ sx: { color: 'rgba(255,255,255,0.8)', letterSpacing: '0.08em', fontSize: '0.9rem' } }} />
+                <ListItemText primary={item.label} primaryTypographyProps={{ sx: { color: '#A68966', letterSpacing: '0.08em', fontSize: '0.9rem' } }} />
               </ListItemButton>
             </ListItem>
           ))}
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', my: 1 }} />
+          <Divider sx={{ borderColor: '#e0e0e0', my: 1 }} />
           <ListItem disablePadding>
-            <ListItemButton component={Link} to={user ? '/mypage' : '/login'} onClick={() => setDrawerOpen(false)} sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' } }}>
-              <ListItemText primary={user ? '마이페이지' : '로그인'} primaryTypographyProps={{ sx: { color: '#A68966', letterSpacing: '0.08em' } }} />
+            <ListItemButton component={Link} to={user ? '/mypage' : '/login'} onClick={() => setDrawerOpen(false)} sx={{ '&:hover': { bgcolor: 'rgba(0,0,0,0.04)' } }}>
+              <ListItemText primary={user ? '마이페이지' : '로그인'} primaryTypographyProps={{ sx: { color: '#0c121c', fontWeight: 600, letterSpacing: '0.08em' } }} />
             </ListItemButton>
           </ListItem>
         </List>

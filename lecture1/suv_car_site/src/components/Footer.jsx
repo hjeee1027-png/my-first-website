@@ -12,7 +12,7 @@ const FOOTER_LINKS = {
 
 export default function Footer() {
   return (
-    <Box component="footer" sx={{ bgcolor: '#111111', borderTop: '1px solid rgba(166,137,102,0.2)', mt: 'auto' }}>
+    <Box component="footer" sx={{ bgcolor: '#0c121c', borderTop: '1px solid rgba(166,137,102,0.2)', mt: 'auto' }}>
       <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 6 }, py: { xs: 5, md: 8 } }}>
         <Grid container spacing={4}>
           {/* 브랜드 섹션 */}
