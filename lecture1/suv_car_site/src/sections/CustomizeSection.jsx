@@ -1,9 +1,11 @@
-import { useState, useRef } from 'react'
-import { Box, Container, Typography, Grid, Button, TextField, Tooltip, Chip, IconButton } from '@mui/material'
+import { useState, Suspense, lazy } from 'react'
+import { Box, Container, Typography, Grid, Button, TextField, Tooltip, Chip, IconButton, CircularProgress } from '@mui/material'
 import ShareIcon from '@mui/icons-material/Share'
 import CheckIcon from '@mui/icons-material/Check'
 import { CARS, CAR_COLORS, WHEEL_OPTIONS, formatPrice, getDiscountedPrice } from '../data/mockData'
 import { useNavigate } from 'react-router-dom'
+
+const Car3DViewer = lazy(() => import('../components/Car3DViewer'))
 
 const MODELS = CARS.map(c => ({
   id: c.id, name: c.model_name,
@@ -405,7 +407,6 @@ export default function CustomizeSection() {
   const [selectedColor, setSelectedColor] = useState('abyss_black')
   const [selectedWheel, setSelectedWheel] = useState('w22_sport')
   const [monogram, setMonogram]           = useState('')
-  const [view, setView]                   = useState('side')
   const [shareMsg, setShareMsg]           = useState('')
   const navigate  = useNavigate()
 
@@ -413,7 +414,6 @@ export default function CustomizeSection() {
   const color     = CAR_COLORS.find(c => c.id === selectedColor)
   const wheel     = WHEEL_OPTIONS.find(w => w.id === selectedWheel)
   const finalPrice = getDiscountedPrice(model.basePrice, model.discountRate) + (wheel?.price||0)
-  const shape     = SIDE_SHAPES[selectedModel]
 
   const handleShare = () => {
     const text = `VANTAGE ${model.name} / ${color.nameKo} / ${wheel.name} — 나만의 VANTAGE를 구성했습니다!`
@@ -445,7 +445,7 @@ export default function CustomizeSection() {
             <Box sx={{ mb: 4 }}>
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>01. 모델 선택</Typography>
               {MODELS.map((m, i) => (
-                <Box key={m.id} onClick={() => { setSelectedModel(i); setView('side') }}
+                <Box key={m.id} onClick={() => setSelectedModel(i)}
                   sx={{ p:2, mb:1, border:`1px solid ${selectedModel===i?'#A68966':'#e0e0e0'}`, cursor:'pointer',
                     display:'flex', justifyContent:'space-between', alignItems:'center',
                     bgcolor: selectedModel===i?'rgba(166,137,102,0.06)':'transparent',
@@ -511,75 +511,38 @@ export default function CustomizeSection() {
 
           {/* ── 오른쪽 3D 프리뷰 ── */}
           <Grid item xs={12} md={8.4}>
-            {/* Studio canvas */}
-            <Box sx={{ background: 'linear-gradient(180deg, #1a1e28 0%, #0e1018 55%, #080a10 100%)', border:'1px solid rgba(255,255,255,0.08)', p:{ xs:2, md:3 } }}>
-              {/* View selector — slide style */}
-              <Box sx={{ display:'flex', justifyContent:'center', mb:3, position:'relative' }}>
-                <Box sx={{ display:'flex', border:'1px solid rgba(255,255,255,0.12)', position:'relative' }}>
-                  {VIEWS.map(({ key, ko }) => (
-                    <Box key={key} onClick={() => setView(key)}
-                      sx={{
-                        px:{ xs:2.5, md:4 }, py:1.2, cursor:'pointer', userSelect:'none', position:'relative', zIndex:1,
-                        transition:'all 0.25s',
-                      }}>
-                      <Typography sx={{
-                        fontSize:'0.78rem', letterSpacing:'0.15em', fontWeight: view===key?600:400,
-                        color: view===key?'#fff':'rgba(255,255,255,0.4)',
-                        transition:'color 0.25s',
-                      }}>{ko}</Typography>
-                      {/* Active underline indicator */}
-                      <Box sx={{
-                        position:'absolute', bottom:0, left:'10%', right:'10%', height:'2px',
-                        bgcolor: view===key?'#A68966':'transparent', transition:'all 0.3s',
-                      }}/>
-                    </Box>
-                  ))}
-                </Box>
+            {/* 3D 뷰어 */}
+            <Box sx={{ background:'linear-gradient(180deg,#1a1e28 0%,#0e1018 100%)', border:'1px solid rgba(255,255,255,0.08)' }}>
+              {/* 안내 텍스트 */}
+              <Box sx={{ textAlign:'center', pt:2, pb:0.5 }}>
+                <Typography sx={{ color:'rgba(255,255,255,0.3)', fontSize:'0.72rem', letterSpacing:'0.15em' }}>
+                  드래그로 회전 · 자동 회전 중
+                </Typography>
               </Box>
 
-              {/* Car viewport */}
-              <Box sx={{ position:'relative', mb:2 }}>
-                {/* Studio spotlight */}
-                <Box sx={{
-                  position:'absolute', inset:0, pointerEvents:'none',
-                  background:'radial-gradient(ellipse at 50% 25%, rgba(255,255,255,0.04) 0%, transparent 65%)',
-                }}/>
-
-                {/* Ground gradient */}
-                <Box sx={{
-                  position:'absolute', bottom:0, left:0, right:0, height:'30%', pointerEvents:'none',
-                  background:'linear-gradient(to top, rgba(8,10,16,0.6) 0%, transparent 100%)',
-                }}/>
-
-                {/* Colored ground glow */}
-                <Box sx={{
-                  position:'absolute', bottom:'8%', left:'50%', transform:'translateX(-50%)',
-                  width:'60%', height:28,
-                  background:`radial-gradient(ellipse, ${color?.hex}30 0%, transparent 70%)`,
-                  filter:'blur(10px)', pointerEvents:'none',
-                }}/>
-
-                {/* Car SVG */}
-                <Box sx={{ px:{ xs:1, md:2 }, py:1, textAlign:'center' }}>
-                  {view==='side'&&<SideView shape={shape} c={color?.hex} wid={selectedWheel} mono={monogram}/>}
-                  {view==='front'&&<FrontView mi={selectedModel} c={color?.hex} wid={selectedWheel} mono={monogram}/>}
-                  {view==='rear'&&<RearView mi={selectedModel} c={color?.hex} mono={monogram}/>}
-                </Box>
-
-                {/* Reflection strip */}
-                <Box sx={{
-                  position:'absolute', bottom:0, left:0, right:0, height:20, pointerEvents:'none',
-                  background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.015))',
-                }}/>
+              {/* Three.js 캔버스 */}
+              <Box sx={{ height:{ xs:300, md:420 }, position:'relative' }}>
+                <Suspense fallback={
+                  <Box sx={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%' }}>
+                    <CircularProgress sx={{ color:'#A68966' }} size={32}/>
+                  </Box>
+                }>
+                  <Car3DViewer
+                    modelIndex={selectedModel}
+                    colorHex={color?.hex || '#0c121c'}
+                    wheelId={selectedWheel}
+                    monogram={monogram}
+                  />
+                </Suspense>
               </Box>
 
-              {/* Color indicator strip */}
-              <Box sx={{ display:'flex', gap:1, justifyContent:'center', mb:2.5 }}>
+              {/* 색상 빠른 선택 */}
+              <Box sx={{ display:'flex', gap:1, justifyContent:'center', py:2 }}>
                 {CAR_COLORS.map(c => (
                   <Box key={c.id} onClick={() => setSelectedColor(c.id)}
                     title={c.nameKo}
-                    sx={{ width: selectedColor===c.id?22:14, height: selectedColor===c.id?22:14,
-                      bgcolor:c.hex, border:`2px solid ${selectedColor===c.id?'#A68966':'rgba(255,255,255,0.15)'}`,
+                    sx={{ width:selectedColor===c.id?22:14, height:selectedColor===c.id?22:14,
+                      bgcolor:c.hex, border:`2px solid ${selectedColor===c.id?'#A68966':'rgba(255,255,255,0.18)'}`,
                       cursor:'pointer', transition:'all 0.2s', userSelect:'none' }}/>
                 ))}
               </Box>
