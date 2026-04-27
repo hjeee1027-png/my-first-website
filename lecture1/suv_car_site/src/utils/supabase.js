@@ -7,10 +7,15 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.en
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const signUp = async ({ email, password, username, phone, display_name }) => {
+  const base = import.meta.env.BASE_URL || '/'
+  const redirectTo = `${window.location.origin}${base}auth/callback`
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username, phone, display_name } }
+    options: {
+      data: { username, phone, display_name },
+      emailRedirectTo: redirectTo,
+    }
   })
   if (error) throw error
   return data

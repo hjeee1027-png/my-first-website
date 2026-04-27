@@ -12,6 +12,7 @@ import ShowroomPage from './pages/ShowroomPage'
 import MyPage from './pages/MyPage'
 import BrandPage from './pages/BrandPage'
 import EventPage from './pages/EventPage'
+import AuthCallbackPage from './pages/AuthCallbackPage'
 import { Box } from '@mui/material'
 
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/brand" element={<BrandPage />} />
             <Route path="/events" element={<EventPage />} />
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
           </Routes>
         </Box>
         <Footer />
