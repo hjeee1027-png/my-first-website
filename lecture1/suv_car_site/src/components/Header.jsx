@@ -56,8 +56,8 @@ export default function Header() {
         position="fixed"
         elevation={0}
         sx={{
-          bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#ffffff',
-          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          bgcolor: scrolled ? 'rgba(255,255,255,0.60)' : '#ffffff',
+          backdropFilter: scrolled ? 'blur(14px)' : 'none',
           borderBottom: '1px solid #e8e0d6',
           transition: 'all 0.3s ease',
           zIndex: 1300,
@@ -73,8 +73,8 @@ export default function Header() {
                   component={Link}
                   to={item.path}
                   sx={{
-                    color: '#A68966',
-                    fontSize: '0.8rem',
+                    color: '#0c121c',
+                    fontSize: '17px',
                     fontWeight: 500,
                     letterSpacing: '0.08em',
                     px: 1,

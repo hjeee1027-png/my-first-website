@@ -83,7 +83,7 @@ export default function BannerSection() {
             }}
           >
             세상의 기준을<br />
-            <Box component="span" sx={{ color: '#0c121c' }}>뛰어넘다</Box>
+            <Box component="span" sx={{ color: '#A68966' }}>뛰어넘다</Box>
           </Typography>
           <Typography
             sx={{

@@ -1,4 +1,5 @@
-import { Box, Container, Typography, Button, Grid } from '@mui/material'
+import { useState } from 'react'
+import { Box, Container, Typography, Grid } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import DirectionsCarOutlinedIcon from '@mui/icons-material/DirectionsCarOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
@@ -7,8 +8,59 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 
+function CTACard({ icon: Icon, title, desc, link, onClick, hovered, onMouseEnter, onMouseLeave }) {
+  return (
+    <Box
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      sx={{
+        p: { xs: 4, md: 5 },
+        bgcolor: hovered ? '#0c121c' : '#fff',
+        border: `1px solid ${hovered ? '#0c121c' : '#e0e0e0'}`,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        height: '100%',
+        userSelect: 'none',
+        transition: 'all 0.28s ease',
+      }}
+    >
+      <Icon sx={{ fontSize: '2.5rem', color: hovered ? '#A68966' : '#111', transition: 'color 0.28s' }} />
+      <Box>
+        <Typography sx={{
+          color: hovered ? '#fff' : '#111',
+          fontWeight: 700,
+          fontSize: { xs: '1.4rem', md: '1.75rem' },
+          letterSpacing: '0.03em', lineHeight: 1.2, mb: 1,
+          transition: 'color 0.28s',
+        }}>
+          {title}
+        </Typography>
+        <Typography sx={{
+          color: hovered ? 'rgba(255,255,255,0.58)' : '#666',
+          fontSize: { xs: '0.9rem', md: '1rem' }, lineHeight: 1.7,
+          transition: 'color 0.28s',
+        }}>
+          {desc}
+        </Typography>
+      </Box>
+      <Typography sx={{
+        color: hovered ? '#A68966' : '#111',
+        fontWeight: 500, fontSize: '0.85rem', letterSpacing: '0.1em',
+        transition: 'color 0.28s',
+      }}>
+        {link}
+      </Typography>
+    </Box>
+  )
+}
+
 export default function ReservationCTASection() {
   const navigate = useNavigate()
+  const [driveHover, setDriveHover] = useState(false)
+  const [quoteHover, setQuoteHover] = useState(false)
 
   return (
     <Box sx={{ bgcolor: '#f8f8f8', py: { xs: 8, md: 12 }, borderTop: '1px solid #e0e0e0' }}>
@@ -26,70 +78,31 @@ export default function ReservationCTASection() {
           </Typography>
         </Box>
 
-        {/* 메인 CTA 버튼들 */}
+        {/* 메인 CTA */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          {/* 시승 예약 */}
           <Grid item xs={12} md={6}>
-            <Box
+            <CTACard
+              icon={DirectionsCarOutlinedIcon}
+              title="시승 예약"
+              desc={<>원하는 날짜와 지점을 선택하고<br />VANTAGE를 직접 경험해 보세요</>}
+              link="예약하기 →"
               onClick={() => navigate('/reservation')}
-              sx={{
-                p: { xs: 4, md: 5 },
-                bgcolor: '#0c121c',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                userSelect: 'none',
-                transition: 'opacity 0.2s',
-                '&:hover': { opacity: 0.88 },
-              }}
-            >
-              <DirectionsCarOutlinedIcon sx={{ fontSize: '2.5rem', color: '#A68966' }} />
-              <Box>
-                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1.4rem', md: '1.75rem' }, letterSpacing: '0.03em', lineHeight: 1.2, mb: 1 }}>
-                  시승 예약
-                </Typography>
-                <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: { xs: '0.9rem', md: '1rem' }, lineHeight: 1.7 }}>
-                  원하는 날짜와 지점을 선택하고<br />VANTAGE를 직접 경험해 보세요
-                </Typography>
-              </Box>
-              <Typography sx={{ color: '#A68966', fontWeight: 500, fontSize: '0.85rem', letterSpacing: '0.1em' }}>
-                예약하기 →
-              </Typography>
-            </Box>
+              hovered={driveHover}
+              onMouseEnter={() => setDriveHover(true)}
+              onMouseLeave={() => setDriveHover(false)}
+            />
           </Grid>
-
-          {/* 견적 문의 */}
           <Grid item xs={12} md={6}>
-            <Box
+            <CTACard
+              icon={DescriptionOutlinedIcon}
+              title="견적 문의"
+              desc={<>선택한 옵션과 희망 사양을 기반으로<br />맞춤형 견적을 받아보세요</>}
+              link="문의하기 →"
               onClick={() => navigate('/reservation', { state: { type: 'quote' } })}
-              sx={{
-                p: { xs: 4, md: 5 },
-                bgcolor: '#fff',
-                border: '1px solid #e0e0e0',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                height: '100%',
-                userSelect: 'none',
-                transition: 'border-color 0.2s',
-                '&:hover': { borderColor: '#111' },
-              }}
-            >
-              <DescriptionOutlinedIcon sx={{ fontSize: '2.5rem', color: '#111' }} />
-              <Box>
-                <Typography sx={{ color: '#111', fontWeight: 700, fontSize: { xs: '1.4rem', md: '1.75rem' }, letterSpacing: '0.03em', lineHeight: 1.2, mb: 1 }}>
-                  견적 문의
-                </Typography>
-                <Typography sx={{ color: '#666', fontSize: { xs: '0.9rem', md: '1rem' }, lineHeight: 1.7 }}>
-                  선택한 옵션과 희망 사양을 기반으로<br />맞춤형 견적을 받아보세요
-                </Typography>
-              </Box>
-              <Typography sx={{ color: '#111', fontWeight: 500, fontSize: '0.85rem', letterSpacing: '0.1em' }}>
-                문의하기 →
-              </Typography>
-            </Box>
+              hovered={quoteHover}
+              onMouseEnter={() => setQuoteHover(true)}
+              onMouseLeave={() => setQuoteHover(false)}
+            />
           </Grid>
         </Grid>
 
@@ -113,8 +126,8 @@ export default function ReservationCTASection() {
                   alignItems: 'center',
                   gap: 2,
                   userSelect: 'none',
-                  transition: 'border-color 0.2s',
-                  '&:hover': { borderColor: '#111' },
+                  transition: 'all 0.25s',
+                  '&:hover': { borderColor: '#0c121c', bgcolor: '#f8f8f8' },
                 }}
               >
                 <Icon sx={{ color: '#666', fontSize: '1.6rem', flexShrink: 0 }} />
