@@ -133,7 +133,7 @@ export default function CustomizeSection() {
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>
             CONFIGURE
           </Typography>
-          <Typography variant="h2" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
+          <Typography variant="h2" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
             나만의 VANTAGE
           </Typography>
           <Typography sx={{ color: '#666', fontSize: '1rem', maxWidth: 500, mx: 'auto' }}>
@@ -375,7 +375,7 @@ export default function CustomizeSection() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 3 }}>
                   <Box>
                     <Typography sx={{ color: '#666', fontSize: '0.75rem', letterSpacing: '0.1em', mb: 0.5 }}>예상 금액</Typography>
-                    <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.8rem' } }}>
+                    <Typography sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.8rem' } }}>
                       {formatPrice(finalPrice)}
                     </Typography>
                     <Typography sx={{ color: '#999', fontSize: '0.75rem' }}>부가세 포함 · 옵션 추가 금액 별도</Typography>

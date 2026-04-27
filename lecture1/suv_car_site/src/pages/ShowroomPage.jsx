@@ -47,7 +47,7 @@ export default function ShowroomPage() {
       <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
         <Box sx={{ mb: 5, textAlign: 'center' }}>
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>SHOWROOM</Typography>
-          <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 2 }}>
+          <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 2 }}>
             전시장 안내
           </Typography>
           <Typography sx={{ color: '#888', fontSize: '0.9rem' }}>

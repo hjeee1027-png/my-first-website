@@ -75,7 +75,7 @@ export default function BrandPage() {
               <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 2 }}>
                 OUR STORY
               </Typography>
-              <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 3, lineHeight: 1.3 }}>
+              <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 3, lineHeight: 1.3 }}>
                 우리는 단순히<br />이동 수단을 만들지 않습니다
               </Typography>
               <Typography sx={{ color: '#666', fontSize: '1rem', lineHeight: 1.9, mb: 3 }}>
@@ -126,7 +126,7 @@ export default function BrandPage() {
         <Container maxWidth={false} sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>HISTORY</Typography>
-            <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>브랜드 역사</Typography>
+            <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>브랜드 역사</Typography>
           </Box>
 
           <Box sx={{ position: 'relative' }}>
@@ -175,7 +175,7 @@ export default function BrandPage() {
         <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>PHILOSOPHY</Typography>
-            <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>디자인 철학</Typography>
+            <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' } }}>디자인 철학</Typography>
           </Box>
 
           <Grid container spacing={3}>
@@ -208,7 +208,7 @@ export default function BrandPage() {
         <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 3, md: 8 } }}>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
             <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>SUSTAINABILITY</Typography>
-            <Typography variant="h3" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 2 }}>지속가능한 미래</Typography>
+            <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2rem' }, mb: 2 }}>지속가능한 미래</Typography>
             <Typography sx={{ color: '#666', maxWidth: 500, mx: 'auto', lineHeight: 1.8 }}>
               VANTAGE는 럭셔리와 지속가능성이 함께할 수 있음을 증명합니다.
               더 넓은 세상을 위한 더 큰 책임.

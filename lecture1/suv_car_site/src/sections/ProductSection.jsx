@@ -28,7 +28,7 @@ export default function ProductSection() {
           <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>
             OUR MODELS
           </Typography>
-          <Typography variant="h2" sx={{ color: '#A68966', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
+          <Typography variant="h2" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.25rem' }, mb: 2 }}>
             전체 라인업
           </Typography>
           <Typography sx={{ color: '#666', fontSize: '1rem', maxWidth: 500, mx: 'auto' }}>
@@ -36,7 +36,7 @@ export default function ProductSection() {
           </Typography>
         </Box>
 
-        <Grid container spacing={0} sx={{ minHeight: 560 }}>
+        <Grid container spacing={0} alignItems="stretch" sx={{ minHeight: 560 }}>
           {/* 왼쪽 탭 + 정보 */}
           <Grid item xs={12} md={3.6}>
             <Box sx={{ borderRight: { md: '1px solid #e0e0e0' }, pr: { md: 4 }, pb: { xs: 3, md: 0 } }}>
@@ -155,14 +155,15 @@ export default function ProductSection() {
           </Grid>
 
           {/* 오른쪽 이미지 슬라이드 */}
-          <Grid item xs={12} md={8.4}>
-            <Box sx={{ pl: { md: 4 }, position: 'relative' }}>
+          <Grid item xs={12} md={8.4} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ pl: { md: 4 }, position: 'relative', display: 'flex', flexDirection: 'column', flex: 1 }}>
               <Box
                 sx={{
                   position: 'relative',
                   overflow: 'hidden',
                   bgcolor: '#f5f5f5',
-                  height: { xs: 240, sm: 360, md: 440 },
+                  flex: 1,
+                  minHeight: { xs: 240, sm: 360 },
                   mb: 2,
                 }}
               >
