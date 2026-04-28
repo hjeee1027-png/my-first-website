@@ -27,7 +27,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -169,7 +169,7 @@ export default function Header() {
               <PersonOutlineIcon fontSize="small" />
             </IconButton>
 
-            {user && !isMobile && (
+            {!loading && user && !isMobile && (
               <Button
                 onClick={handleLogout}
                 sx={{ color: '#999', fontSize: '0.75rem', minWidth: 'auto', px: 1, '&:hover': { color: '#0c121c', bgcolor: 'transparent' } }}

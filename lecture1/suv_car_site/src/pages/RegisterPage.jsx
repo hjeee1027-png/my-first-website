@@ -97,6 +97,10 @@ export default function RegisterPage() {
         setError('이미 사용 중인 이메일입니다.')
         return
       }
+      // 이메일 미인증 상태에서 생성된 세션은 즉시 제거 (헤더에 로그아웃 버튼 노출 방지)
+      if (!data.user.email_confirmed_at) {
+        await supabase.auth.signOut()
+      }
       localStorage.setItem('vantage_reg_pending', 'true')
       localStorage.setItem('vantage_reg_form', JSON.stringify({ username: form.username, email: form.email }))
       setEmailSent(true)
@@ -253,22 +257,39 @@ export default function RegisterPage() {
                 </Button>
               </Box>
 
-              {/* 비밀번호 — 이메일 인증 완료 후 숨김 (이미 설정됨) */}
-              {!emailVerified && (
-                <>
-                  <TextField
-                    fullWidth label="비밀번호 *" type="password"
-                    value={form.password} onChange={set('password')}
-                    helperText="영문+숫자+특수문자 8자 이상"
-                  />
-                  <TextField
-                    fullWidth label="비밀번호 확인 *" type="password"
-                    value={form.passwordConfirm} onChange={set('passwordConfirm')}
-                    error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
-                    helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
-                  />
-                </>
-              )}
+              {/* 비밀번호 */}
+              <TextField
+                fullWidth label="비밀번호 *" type="password"
+                value={emailVerified ? '••••••••' : form.password}
+                onChange={emailVerified ? undefined : set('password')}
+                disabled={emailVerified}
+                helperText={emailVerified ? '비밀번호가 설정되었습니다 ✓' : '영문+숫자+특수문자 8자 이상'}
+                FormHelperTextProps={{ sx: emailVerified ? { color: '#2e7d32' } : {} }}
+                InputProps={emailVerified ? {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <CheckCircleIcon sx={{ color: '#2e7d32', fontSize: '1.2rem' }} />
+                    </InputAdornment>
+                  ),
+                } : undefined}
+              />
+              <TextField
+                fullWidth label="비밀번호 확인 *" type="password"
+                value={emailVerified ? '••••••••' : form.passwordConfirm}
+                onChange={emailVerified ? undefined : set('passwordConfirm')}
+                disabled={emailVerified}
+                error={!emailVerified && form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
+                helperText={emailVerified ? '비밀번호가 확인되었습니다 ✓'
+                  : form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
+                FormHelperTextProps={{ sx: emailVerified ? { color: '#2e7d32' } : {} }}
+                InputProps={emailVerified ? {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <CheckCircleIcon sx={{ color: '#2e7d32', fontSize: '1.2rem' }} />
+                    </InputAdornment>
+                  ),
+                } : undefined}
+              />
 
               {/* 이메일 + 인증 버튼 */}
               <Box>
