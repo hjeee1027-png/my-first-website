@@ -54,11 +54,11 @@ export default function BannerSection() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          px: { xs: 3, md: 8 },
+          px: { xs: 2, md: 6 },
           zIndex: 2,
         }}
       >
-        <Box sx={{ maxWidth: 620 }}>
+        <Box sx={{ maxWidth: 620, textAlign: 'left' }}>
           <Typography
             variant="overline"
             sx={{
