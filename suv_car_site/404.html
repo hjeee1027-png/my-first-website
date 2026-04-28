@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    // GitHub Pages SPA 라우팅 처리
+    // 404가 뜬 경로(+ 쿼리스트링)를 sessionStorage에 저장 후 루트로 리디렉션
+    sessionStorage.setItem(
+      'ghpages_redirect',
+      window.location.pathname + window.location.search + window.location.hash
+    );
+    window.location.replace('/my-first-website/suv_car_site/');
+  </script>
+</head>
+<body></body>
+</html>
