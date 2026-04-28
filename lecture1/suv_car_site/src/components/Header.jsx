@@ -74,8 +74,8 @@ export default function Header() {
                   to={item.path}
                   sx={{
                     color: '#0c121c',
-                    fontSize: '17px',
-                    fontWeight: 500,
+                    fontSize: '15px',
+                    fontWeight: 800,
                     letterSpacing: '0.08em',
                     px: 1,
                     py: 0.5,

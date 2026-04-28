@@ -29,9 +29,8 @@ export default function AuthCallbackPage() {
         await new Promise(r => setTimeout(r, 500))
       }
 
-      // ?next=register이면 회원가입 페이지로 복귀 (이메일 인증 완료 감지용)
-      const next = params.get('next')
-      if (next === 'register') {
+      // 회원가입 도중 인증한 경우 회원가입 페이지로 복귀
+      if (localStorage.getItem('vantage_reg_pending')) {
         navigate('/register', { replace: true })
       } else {
         navigate('/', { replace: true })

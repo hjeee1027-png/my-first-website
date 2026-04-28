@@ -12,7 +12,7 @@ import { useAuth } from '../hooks/useAuth'
 const STEPS = ['기본 정보', '연락처', '약관 동의']
 
 const base = import.meta.env.BASE_URL || '/'
-const REDIRECT_URL = `${window.location.origin}${base}auth/callback?next=register`
+const REDIRECT_URL = `${window.location.origin}${base}auth/callback`
 
 export default function RegisterPage() {
   const [step, setStep] = useState(0)
@@ -204,7 +204,8 @@ export default function RegisterPage() {
                     disabled={emailSending || emailVerified}
                     sx={{
                       whiteSpace: 'nowrap',
-                      minWidth: 110,
+                      width: 120,
+                      flexShrink: 0,
                       borderColor: emailVerified ? '#2e7d32' : '#e0e0e0',
                       color: emailVerified ? '#2e7d32' : '#111',
                       fontWeight: 600,
