@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Car3DViewer = lazy(() => import('../components/Car3DViewer'))
 
-const MODELS = CARS.map(c => ({
+const MODELS = CARS.slice(0, 4).map(c => ({
   id: c.id, name: c.model_name,
   shortName: c.model_name.replace('VANTAGE ', ''),
   basePrice: c.base_price, discountRate: c.discount_rate,
@@ -443,7 +443,7 @@ export default function CustomizeSection() {
           <Grid item xs={12} md={3.6}>
             {/* 01. 모델 */}
             <Box sx={{ mb: 4 }}>
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>01. 모델 선택</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>01. 모델 선택</Typography>
               {MODELS.map((m, i) => (
                 <Box key={m.id} onClick={() => setSelectedModel(i)}
                   sx={{ p:2, mb:1, border:`1px solid ${selectedModel===i?'#A68966':'#e0e0e0'}`, cursor:'pointer',
@@ -458,7 +458,7 @@ export default function CustomizeSection() {
 
             {/* 02. 색상 */}
             <Box sx={{ mb: 4 }}>
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>02. 색상 선택</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>02. 색상 선택</Typography>
               <Box sx={{ display:'flex', flexWrap:'wrap', gap:1.5, mb:1 }}>
                 {CAR_COLORS.map((c) => (
                   <Tooltip key={c.id} title={c.nameKo} placement="top">
@@ -479,7 +479,7 @@ export default function CustomizeSection() {
 
             {/* 03. 휠 */}
             <Box sx={{ mb: 4 }}>
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>03. 휠 선택</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>03. 휠 선택</Typography>
               {WHEEL_OPTIONS.map((w) => (
                 <Box key={w.id} onClick={() => setSelectedWheel(w.id)}
                   sx={{ p:1.5, mb:1, border:`1px solid ${selectedWheel===w.id?'#A68966':'#e0e0e0'}`, cursor:'pointer',
@@ -497,7 +497,7 @@ export default function CustomizeSection() {
 
             {/* 04. 이니셜 — 실시간 반영 */}
             <Box sx={{ mb: 4 }}>
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 0.8 }}>04. 이니셜 각인</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 0.8 }}>04. 이니셜 각인</Typography>
               <Typography sx={{ color: '#bbb', fontSize: '0.72rem', mb: 1.5 }}>입력 즉시 차량에 반영됩니다</Typography>
               <TextField fullWidth placeholder="이니셜 입력 (최대 4자)" value={monogram}
                 onChange={(e) => { if (e.target.value.length<=4) setMonogram(e.target.value.toUpperCase()) }}
