@@ -209,14 +209,11 @@ export default function SearchPage() {
                           sx={{ objectFit: 'cover' }}
                           onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80' }}
                         />
-                        <Box sx={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                          {car.badge && (
+                        {car.badge && (
+                          <Box sx={{ position: 'absolute', top: 12, left: 12 }}>
                             <Chip label={car.badge} size="small" sx={{ bgcolor: '#111', color: '#fff', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
-                          )}
-                          {car.is_promotion && (
-                            <Chip label="특가" size="small" sx={{ bgcolor: 'rgba(200,50,50,0.9)', color: '#fff', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
-                          )}
-                        </Box>
+                          </Box>
+                        )}
                         <Chip
                           label={car.fuel_type}
                           size="small"
@@ -250,7 +247,7 @@ export default function SearchPage() {
                                 {formatPrice(car.base_price)}
                               </Typography>
                             )}
-                            <Typography sx={{ color: '#A68966', fontWeight: 700, fontSize: '1.1rem' }}>
+                            <Typography sx={{ color: '#111', fontWeight: 700, fontSize: '1.1rem' }}>
                               {formatPrice(getDiscountedPrice(car.base_price, car.discount_rate))}
                             </Typography>
                           </Box>
