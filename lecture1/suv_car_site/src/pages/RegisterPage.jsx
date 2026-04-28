@@ -1,9 +1,18 @@
-import { useState } from 'react'
-import { Box, Container, Typography, TextField, Button, Alert, CircularProgress, Stepper, Step, StepLabel, Checkbox, FormControlLabel, Link } from '@mui/material'
+import { useState, useEffect } from 'react'
+import {
+  Box, Container, Typography, TextField, Button, Alert,
+  CircularProgress, Stepper, Step, StepLabel, Checkbox,
+  FormControlLabel, Link, InputAdornment,
+} from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useNavigate } from 'react-router-dom'
-import { signUp } from '../utils/supabase'
+import { supabase } from '../utils/supabase'
+import { useAuth } from '../hooks/useAuth'
 
 const STEPS = ['기본 정보', '연락처', '약관 동의']
+
+const base = import.meta.env.BASE_URL || '/'
+const REDIRECT_URL = `${window.location.origin}${base}auth/callback?next=register`
 
 export default function RegisterPage() {
   const [step, setStep] = useState(0)
@@ -14,43 +23,82 @@ export default function RegisterPage() {
     agree_terms: false, agree_privacy: false, agree_marketing: false,
   })
   const [loading, setLoading] = useState(false)
+  const [emailSending, setEmailSending] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  // 이메일 인증 완료 감지 (이메일 클릭 후 돌아왔을 때)
+  useEffect(() => {
+    if (user && user.email_confirmed_at && localStorage.getItem('vantage_reg_pending')) {
+      localStorage.removeItem('vantage_reg_pending')
+      setEmailVerified(true)
+      setEmailSent(true)
+      setForm(f => ({ ...f, email: user.email || f.email }))
+    }
+  }, [user])
 
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
   const setCheck = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.checked }))
 
+  // 인증 메일 발송
+  const handleSendVerification = async () => {
+    if (!form.email || !form.email.includes('@')) {
+      setError('올바른 이메일을 먼저 입력해주세요.')
+      return
+    }
+    if (!form.password || form.password.length < 8) {
+      setError('비밀번호를 먼저 입력해주세요. (8자 이상)')
+      return
+    }
+    setEmailSending(true)
+    setError('')
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+        options: { emailRedirectTo: REDIRECT_URL },
+      })
+      if (error) throw error
+      localStorage.setItem('vantage_reg_pending', 'true')
+      localStorage.setItem('vantage_reg_email', form.email)
+      setEmailSent(true)
+    } catch (err) {
+      const msg = err.message
+      if (msg?.includes('already registered') || msg?.includes('already been registered')) {
+        setError('이미 사용 중인 이메일입니다.')
+      } else {
+        setError(msg || '메일 발송 중 오류가 발생했습니다.')
+      }
+    } finally {
+      setEmailSending(false)
+    }
+  }
+
   const handleAddressSearch = () => {
-    const openPostcode = () => {
+    const open = () => {
       new window.daum.Postcode({
         oncomplete: (data) => {
-          setForm(f => ({
-            ...f,
-            zip_code: data.zonecode,
-            address: data.roadAddress || data.jibunAddress,
-          }))
+          setForm(f => ({ ...f, zip_code: data.zonecode, address: data.roadAddress || data.jibunAddress }))
         },
       }).open()
     }
-
     if (window.daum?.Postcode) {
-      openPostcode()
+      open()
     } else {
-      const script = document.createElement('script')
-      script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'
-      script.onload = openPostcode
-      script.onerror = () => setError('주소 검색 서비스를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
-      document.head.appendChild(script)
+      const s = document.createElement('script')
+      s.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'
+      s.onload = open
+      document.head.appendChild(s)
     }
   }
 
   const validateStep = () => {
     if (step === 0) {
-      if (!form.email) return '이메일을 입력해주세요.'
-      if (!form.email.includes('@')) return '올바른 이메일 형식을 입력해주세요.'
-      if (!form.password) return '비밀번호를 입력해주세요.'
-      if (form.password.length < 8) return '비밀번호는 8자 이상이어야 합니다.'
-      if (form.password !== form.passwordConfirm) return '비밀번호가 일치하지 않습니다.'
+      if (!form.email || !form.email.includes('@')) return '이메일을 올바르게 입력해주세요.'
+      if (!emailVerified) return '이메일 인증을 완료해주세요.'
       if (!form.username) return '아이디를 입력해주세요.'
       if (!form.display_name) return '이름을 입력해주세요.'
     }
@@ -71,26 +119,32 @@ export default function RegisterPage() {
     setStep(s => s + 1)
   }
 
+  // 최종 제출 — 이미 signUp 완료됐으므로 메타데이터만 업데이트
   const handleSubmit = async () => {
     const err = validateStep()
     if (err) { setError(err); return }
-    setLoading(true); setError('')
+    setLoading(true)
+    setError('')
     try {
-      await signUp({
-        email: form.email,
-        password: form.password,
-        username: form.username,
-        phone: form.phone,
-        display_name: form.display_name,
+      await supabase.auth.updateUser({
+        data: {
+          username: form.username,
+          display_name: form.display_name,
+          phone: form.phone,
+        },
       })
-      navigate('/login', { state: { message: '회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.' } })
-    } catch (err) {
-      const msg = err.message
-      if (msg?.includes('already registered') || msg?.includes('already been registered')) {
-        setError('이미 사용 중인 이메일입니다.')
-      } else {
-        setError(msg || '회원가입 중 오류가 발생했습니다.')
+      // 프로필 테이블에도 저장
+      if (user) {
+        await supabase.from('profiles').upsert({
+          user_id: user.id,
+          username: form.username,
+          display_name: form.display_name,
+          phone: form.phone,
+        })
       }
+      navigate('/', { replace: true })
+    } catch (err) {
+      setError(err.message || '오류가 발생했습니다.')
     } finally {
       setLoading(false)
     }
@@ -103,22 +157,14 @@ export default function RegisterPage() {
           <Typography sx={{ fontWeight: 900, letterSpacing: '0.35em', color: '#111', fontSize: '2rem', mb: 1 }}>
             VANTAGE
           </Typography>
-          <Typography sx={{ color: '#888', fontSize: '0.875rem', letterSpacing: '0.1em' }}>
-            회원가입
-          </Typography>
+          <Typography sx={{ color: '#888', fontSize: '0.875rem', letterSpacing: '0.1em' }}>회원가입</Typography>
         </Box>
 
-        {/* 스텝 인디케이터 */}
         <Stepper activeStep={step} sx={{ mb: 5 }}>
           {STEPS.map((label) => (
             <Step key={label}>
               <StepLabel
-                StepIconProps={{
-                  sx: {
-                    '&.Mui-active': { color: '#A68966' },
-                    '&.Mui-completed': { color: '#A68966' },
-                  }
-                }}
+                StepIconProps={{ sx: { '&.Mui-active': { color: '#A68966' }, '&.Mui-completed': { color: '#A68966' } } }}
                 sx={{ '.MuiStepLabel-label': { color: '#999', '&.Mui-active': { color: '#111' }, '&.Mui-completed': { color: '#A68966' } } }}
               >
                 {label}
@@ -128,20 +174,91 @@ export default function RegisterPage() {
         </Stepper>
 
         <Box sx={{ bgcolor: '#fff', border: '1px solid #e0e0e0', p: 4 }}>
-          {error && (
-            <Alert severity="error" sx={{ mb: 3, borderRadius: 0 }}>
-              {error}
-            </Alert>
-          )}
+          {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 0 }}>{error}</Alert>}
 
           {/* 스텝 0: 기본 정보 */}
           {step === 0 && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-              <TextField fullWidth label="이메일 *" type="email" value={form.email} onChange={set('email')} />
-              <TextField fullWidth label="아이디 *" value={form.username} onChange={set('username')} helperText="영문 소문자, 숫자 6-20자" />
-              <TextField fullWidth label="이름(실명) *" value={form.display_name} onChange={set('display_name')} />
-              <TextField fullWidth label="비밀번호 *" type="password" value={form.password} onChange={set('password')} helperText="영문+숫자+특수문자 8자 이상" />
-              <TextField fullWidth label="비밀번호 확인 *" type="password" value={form.passwordConfirm} onChange={set('passwordConfirm')} error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm} helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''} />
+
+              {/* 이메일 + 인증 버튼 */}
+              <Box>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <TextField
+                    fullWidth
+                    label="이메일 *"
+                    type="email"
+                    value={form.email}
+                    onChange={set('email')}
+                    disabled={emailVerified}
+                    InputProps={emailVerified ? {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <CheckCircleIcon sx={{ color: '#2e7d32', fontSize: '1.2rem' }} />
+                        </InputAdornment>
+                      ),
+                    } : undefined}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={handleSendVerification}
+                    disabled={emailSending || emailVerified}
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      minWidth: 110,
+                      borderColor: emailVerified ? '#2e7d32' : '#e0e0e0',
+                      color: emailVerified ? '#2e7d32' : '#111',
+                      fontWeight: 600,
+                      fontSize: '0.8rem',
+                      '&:hover': { borderColor: emailVerified ? '#2e7d32' : '#111' },
+                      '&.Mui-disabled': { borderColor: emailVerified ? '#2e7d32' : undefined, color: emailVerified ? '#2e7d32' : undefined },
+                    }}
+                  >
+                    {emailSending ? <CircularProgress size={18} sx={{ color: '#111' }} />
+                      : emailVerified ? '인증완료 ✓'
+                      : '인증메일 발송'}
+                  </Button>
+                </Box>
+
+                {/* 발송 안내 메시지 */}
+                {emailSent && !emailVerified && (
+                  <Alert severity="info" sx={{ mt: 1, borderRadius: 0, fontSize: '0.8rem' }}>
+                    인증메일을 발송하였습니다. 받은 편지함에서 인증하기를 클릭해주세요.
+                  </Alert>
+                )}
+                {emailVerified && (
+                  <Alert severity="success" sx={{ mt: 1, borderRadius: 0, fontSize: '0.8rem' }}>
+                    이메일 인증이 완료되었습니다.
+                  </Alert>
+                )}
+              </Box>
+
+              {/* 비밀번호는 이메일 인증 전에 입력 (인증 발송에 필요) */}
+              <TextField
+                fullWidth label="비밀번호 *" type="password"
+                value={form.password} onChange={set('password')}
+                disabled={emailVerified}
+                helperText="영문+숫자+특수문자 8자 이상"
+              />
+              <TextField
+                fullWidth label="비밀번호 확인 *" type="password"
+                value={form.passwordConfirm} onChange={set('passwordConfirm')}
+                disabled={emailVerified}
+                error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
+                helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
+              />
+
+              {/* 이름/아이디는 인증 후에 입력 가능 */}
+              <TextField
+                fullWidth label="아이디 *"
+                value={form.username} onChange={set('username')}
+                disabled={!emailVerified}
+                helperText="영문 소문자, 숫자 6-20자"
+              />
+              <TextField
+                fullWidth label="이름(실명) *"
+                value={form.display_name} onChange={set('display_name')}
+                disabled={!emailVerified}
+              />
             </Box>
           )}
 
@@ -151,11 +268,8 @@ export default function RegisterPage() {
               <TextField fullWidth label="휴대폰 번호 *" value={form.phone} onChange={set('phone')} placeholder="010-0000-0000" />
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <TextField fullWidth label="우편번호" value={form.zip_code} onChange={set('zip_code')} InputProps={{ readOnly: true }} />
-                <Button
-                  variant="outlined"
-                  onClick={handleAddressSearch}
-                  sx={{ borderColor: '#e0e0e0', color: '#111', whiteSpace: 'nowrap', px: 2, '&:hover': { borderColor: '#111' } }}
-                >
+                <Button variant="outlined" onClick={handleAddressSearch}
+                  sx={{ borderColor: '#e0e0e0', color: '#111', whiteSpace: 'nowrap', px: 2, '&:hover': { borderColor: '#111' } }}>
                   주소 검색
                 </Button>
               </Box>
@@ -199,11 +313,8 @@ export default function RegisterPage() {
           {/* 버튼 */}
           <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
             {step > 0 && (
-              <Button
-                variant="outlined"
-                onClick={() => { setStep(s => s - 1); setError('') }}
-                sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.5, flex: 1, '&:hover': { borderColor: '#111' } }}
-              >
+              <Button variant="outlined" onClick={() => { setStep(s => s - 1); setError('') }}
+                sx={{ borderColor: '#e0e0e0', color: '#111', py: 1.5, flex: 1, '&:hover': { borderColor: '#111' } }}>
                 이전
               </Button>
             )}
@@ -213,14 +324,16 @@ export default function RegisterPage() {
               disabled={loading}
               sx={{ bgcolor: '#111', color: '#fff', border: 'none', py: 1.5, flex: 2, fontWeight: 700, '&:hover': { bgcolor: '#333' } }}
             >
-              {loading ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : step === STEPS.length - 1 ? '가입하기' : '다음'}
+              {loading ? <CircularProgress size={22} sx={{ color: '#fff' }} />
+                : step === STEPS.length - 1 ? '가입 완료' : '다음'}
             </Button>
           </Box>
         </Box>
 
         <Typography sx={{ color: '#bbb', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
           이미 계정이 있으신가요?{' '}
-          <Link component="button" onClick={() => navigate('/login')} sx={{ color: '#A68966', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', '&:hover': { textDecoration: 'underline' } }}>
+          <Link component="button" onClick={() => navigate('/login')}
+            sx={{ color: '#A68966', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', '&:hover': { textDecoration: 'underline' } }}>
             로그인
           </Link>
         </Typography>

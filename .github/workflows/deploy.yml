@@ -104,6 +104,23 @@ jobs:
           cp -r lecture1/my-community/dist/. combined/my-community/
           cp -r lecture1/mini_sns/dist/. combined/mini_sns/
           cp -r lecture1/suv_car_site/dist/. combined/suv_car_site/
+          # GitHub Pages SPA 라우팅용 루트 404.html 생성
+          cat > combined/404.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8">
+<script>
+  var p = window.location.pathname;
+  var s = window.location.search;
+  var h = window.location.hash;
+  if (p.indexOf('/my-first-website/suv_car_site/') === 0) {
+    sessionStorage.setItem('ghpages_redirect', p + s + h);
+    window.location.replace('/my-first-website/suv_car_site/');
+  }
+</script>
+</head><body></body>
+</html>
+HTMLEOF
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

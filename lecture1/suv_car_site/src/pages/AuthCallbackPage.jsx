@@ -29,7 +29,13 @@ export default function AuthCallbackPage() {
         await new Promise(r => setTimeout(r, 500))
       }
 
-      navigate('/', { replace: true })
+      // ?next=register이면 회원가입 페이지로 복귀 (이메일 인증 완료 감지용)
+      const next = params.get('next')
+      if (next === 'register') {
+        navigate('/register', { replace: true })
+      } else {
+        navigate('/', { replace: true })
+      }
     }
 
     handleCallback()
