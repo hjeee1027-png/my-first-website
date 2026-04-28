@@ -56,19 +56,28 @@ export default function RegisterPage() {
     setEmailSending(true)
     setError('')
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
         options: { emailRedirectTo: REDIRECT_URL },
       })
       if (error) throw error
+      if (!data?.user) {
+        setError('이미 사용 중인 이메일입니다.')
+        return
+      }
       localStorage.setItem('vantage_reg_pending', 'true')
-      localStorage.setItem('vantage_reg_email', form.email)
       setEmailSent(true)
+      // Supabase에서 이메일 인증을 비활성화한 경우 즉시 인증 완료 처리
+      if (data.user.email_confirmed_at) {
+        setEmailVerified(true)
+      }
     } catch (err) {
       const msg = err.message
       if (msg?.includes('already registered') || msg?.includes('already been registered')) {
         setError('이미 사용 중인 이메일입니다.')
+      } else if (msg?.includes('rate limit') || msg?.includes('too many')) {
+        setError('잠시 후 다시 시도해주세요. (발송 횟수 초과)')
       } else {
         setError(msg || '메일 발송 중 오류가 발생했습니다.')
       }

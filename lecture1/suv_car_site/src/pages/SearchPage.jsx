@@ -61,7 +61,7 @@ export default function SearchPage() {
         <Grid container spacing={4}>
           {/* 필터 패널 */}
           <Grid item xs={12} md={2.5}>
-            <Box sx={{ position: { md: 'sticky' }, top: 100 }}>
+            <Box>
               <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>검색</Typography>
               <TextField
                 fullWidth

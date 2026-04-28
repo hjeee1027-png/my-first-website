@@ -75,7 +75,7 @@ export default function Header() {
                   sx={{
                     color: '#0c121c',
                     fontSize: '15px',
-                    fontWeight: 800,
+                    fontWeight: 600,
                     letterSpacing: '0.08em',
                     px: 1,
                     py: 0.5,
