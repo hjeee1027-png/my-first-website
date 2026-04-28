@@ -209,16 +209,12 @@ export default function SearchPage() {
                           sx={{ objectFit: 'cover' }}
                           onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80' }}
                         />
-                        {car.badge && (
-                          <Box sx={{ position: 'absolute', top: 12, left: 12 }}>
+                        <Box sx={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                          <Chip label={car.fuel_type} size="small" sx={{ bgcolor: 'rgba(0,0,0,0.55)', color: '#fff', borderRadius: 0, fontSize: '0.7rem' }} />
+                          {car.badge && (
                             <Chip label={car.badge} size="small" sx={{ bgcolor: '#111', color: '#fff', fontWeight: 600, fontSize: '0.7rem', borderRadius: 0 }} />
-                          </Box>
-                        )}
-                        <Chip
-                          label={car.fuel_type}
-                          size="small"
-                          sx={{ position: 'absolute', bottom: 12, right: 12, bgcolor: 'rgba(0,0,0,0.55)', color: '#fff', borderRadius: 0, fontSize: '0.7rem' }}
-                        />
+                          )}
+                        </Box>
                       </Box>
 
                       <CardContent sx={{ p: 2.5 }}>
