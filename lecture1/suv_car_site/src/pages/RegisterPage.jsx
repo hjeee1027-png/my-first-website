@@ -26,11 +26,12 @@ export default function RegisterPage() {
   const [emailSending, setEmailSending] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
+  const [usernameChecked, setUsernameChecked] = useState(false)
+  const [usernameChecking, setUsernameChecking] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  // 이메일 인증 완료 감지 (이메일 클릭 후 돌아왔을 때)
   useEffect(() => {
     if (user && user.email_confirmed_at && localStorage.getItem('vantage_reg_pending')) {
       localStorage.removeItem('vantage_reg_pending')
@@ -43,14 +44,37 @@ export default function RegisterPage() {
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
   const setCheck = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.checked }))
 
-  // 인증 메일 발송
-  const handleSendVerification = async () => {
-    if (!form.email || !form.email.includes('@')) {
-      setError('올바른 이메일을 먼저 입력해주세요.')
+  // 아이디 중복 확인
+  const handleCheckUsername = async () => {
+    if (!form.username || form.username.length < 4) {
+      setError('아이디를 4자 이상 입력해주세요.')
       return
     }
-    if (!form.password || form.password.length < 8) {
-      setError('비밀번호를 먼저 입력해주세요. (8자 이상)')
+    setUsernameChecking(true)
+    setError('')
+    try {
+      const { data } = await supabase.from('profiles').select('username').eq('username', form.username).maybeSingle()
+      if (data) {
+        setError('이미 사용 중인 아이디입니다.')
+        setUsernameChecked(false)
+      } else {
+        setUsernameChecked(true)
+      }
+    } catch {
+      setError('중복 확인 중 오류가 발생했습니다.')
+    } finally {
+      setUsernameChecking(false)
+    }
+  }
+
+  // 인증 메일 발송
+  const handleSendVerification = async () => {
+    if (!form.username || !usernameChecked || !form.password || form.password.length < 8 || !form.email || !form.email.includes('@')) {
+      setError('아이디 중복확인, 비밀번호, 이메일을 먼저 입력해주세요.')
+      return
+    }
+    if (form.password !== form.passwordConfirm) {
+      setError('비밀번호가 일치하지 않습니다.')
       return
     }
     setEmailSending(true)
@@ -68,7 +92,6 @@ export default function RegisterPage() {
       }
       localStorage.setItem('vantage_reg_pending', 'true')
       setEmailSent(true)
-      // Supabase에서 이메일 인증을 비활성화한 경우 즉시 인증 완료 처리
       if (data.user.email_confirmed_at) {
         setEmailVerified(true)
       }
@@ -106,9 +129,10 @@ export default function RegisterPage() {
 
   const validateStep = () => {
     if (step === 0) {
+      if (!form.username) return '아이디를 입력해주세요.'
+      if (!usernameChecked) return '아이디 중복확인을 완료해주세요.'
       if (!form.email || !form.email.includes('@')) return '이메일을 올바르게 입력해주세요.'
       if (!emailVerified) return '이메일 인증을 완료해주세요.'
-      if (!form.username) return '아이디를 입력해주세요.'
       if (!form.display_name) return '이름을 입력해주세요.'
     }
     if (step === 1) {
@@ -128,7 +152,6 @@ export default function RegisterPage() {
     setStep(s => s + 1)
   }
 
-  // 최종 제출 — 이미 signUp 완료됐으므로 메타데이터만 업데이트
   const handleSubmit = async () => {
     const err = validateStep()
     if (err) { setError(err); return }
@@ -136,13 +159,8 @@ export default function RegisterPage() {
     setError('')
     try {
       await supabase.auth.updateUser({
-        data: {
-          username: form.username,
-          display_name: form.display_name,
-          phone: form.phone,
-        },
+        data: { username: form.username, display_name: form.display_name, phone: form.phone },
       })
-      // 프로필 테이블에도 저장
       if (user) {
         await supabase.from('profiles').upsert({
           user_id: user.id,
@@ -189,15 +207,65 @@ export default function RegisterPage() {
           {step === 0 && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
 
+              {/* 아이디 + 중복확인 */}
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+                <TextField
+                  fullWidth label="아이디 *"
+                  value={form.username}
+                  onChange={(e) => { set('username')(e); setUsernameChecked(false) }}
+                  helperText="영문 소문자, 숫자 4-20자"
+                  InputProps={usernameChecked ? {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CheckCircleIcon sx={{ color: '#2e7d32', fontSize: '1.2rem' }} />
+                      </InputAdornment>
+                    ),
+                  } : undefined}
+                />
+                <Button
+                  variant="outlined"
+                  onClick={handleCheckUsername}
+                  disabled={usernameChecking || usernameChecked}
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    width: 100,
+                    flexShrink: 0,
+                    height: 56,
+                    borderColor: usernameChecked ? '#2e7d32' : '#e0e0e0',
+                    color: usernameChecked ? '#2e7d32' : '#111',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    '&:hover': { borderColor: usernameChecked ? '#2e7d32' : '#111' },
+                    '&.Mui-disabled': { borderColor: usernameChecked ? '#2e7d32' : undefined, color: usernameChecked ? '#2e7d32' : undefined },
+                  }}
+                >
+                  {usernameChecking ? <CircularProgress size={18} sx={{ color: '#111' }} />
+                    : usernameChecked ? '확인완료 ✓'
+                    : '중복확인'}
+                </Button>
+              </Box>
+
+              {/* 비밀번호 */}
+              <TextField
+                fullWidth label="비밀번호 *" type="password"
+                value={form.password} onChange={set('password')}
+                disabled={emailVerified}
+                helperText="영문+숫자+특수문자 8자 이상"
+              />
+              <TextField
+                fullWidth label="비밀번호 확인 *" type="password"
+                value={form.passwordConfirm} onChange={set('passwordConfirm')}
+                disabled={emailVerified}
+                error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
+                helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
+              />
+
               {/* 이메일 + 인증 버튼 */}
               <Box>
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   <TextField
-                    fullWidth
-                    label="이메일 *"
-                    type="email"
-                    value={form.email}
-                    onChange={set('email')}
+                    fullWidth label="이메일 *" type="email"
+                    value={form.email} onChange={set('email')}
                     disabled={emailVerified}
                     InputProps={emailVerified ? {
                       endAdornment: (
@@ -228,8 +296,6 @@ export default function RegisterPage() {
                       : '인증메일 발송'}
                   </Button>
                 </Box>
-
-                {/* 발송 안내 메시지 */}
                 {emailSent && !emailVerified && (
                   <Alert severity="info" sx={{ mt: 1, borderRadius: 0, fontSize: '0.8rem' }}>
                     인증메일을 발송하였습니다. 받은 편지함에서 인증하기를 클릭해주세요.
@@ -242,28 +308,7 @@ export default function RegisterPage() {
                 )}
               </Box>
 
-              {/* 비밀번호는 이메일 인증 전에 입력 (인증 발송에 필요) */}
-              <TextField
-                fullWidth label="비밀번호 *" type="password"
-                value={form.password} onChange={set('password')}
-                disabled={emailVerified}
-                helperText="영문+숫자+특수문자 8자 이상"
-              />
-              <TextField
-                fullWidth label="비밀번호 확인 *" type="password"
-                value={form.passwordConfirm} onChange={set('passwordConfirm')}
-                disabled={emailVerified}
-                error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
-                helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
-              />
-
-              {/* 이름/아이디는 인증 후에 입력 가능 */}
-              <TextField
-                fullWidth label="아이디 *"
-                value={form.username} onChange={set('username')}
-                disabled={!emailVerified}
-                helperText="영문 소문자, 숫자 6-20자"
-              />
+              {/* 실명 — 이메일 인증 후 활성화 */}
               <TextField
                 fullWidth label="이름(실명) *"
                 value={form.display_name} onChange={set('display_name')}
@@ -320,7 +365,6 @@ export default function RegisterPage() {
             </Box>
           )}
 
-          {/* 버튼 */}
           <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
             {step > 0 && (
               <Button variant="outlined" onClick={() => { setStep(s => s - 1); setError('') }}

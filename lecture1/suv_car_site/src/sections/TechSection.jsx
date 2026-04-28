@@ -62,8 +62,6 @@ export default function TechSection() {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'border-color 0.2s',
-                  '&:hover': { borderColor: '#A68966' },
                 }}
               >
                 {/* 이미지 */}

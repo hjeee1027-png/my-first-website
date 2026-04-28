@@ -76,7 +76,7 @@ export default function SearchPage() {
           {/* 필터 패널 */}
           <Grid item xs={12} md={2.5}>
             <Box>
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>검색</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 500, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 2 }}>검색</Typography>
               <TextField
                 fullWidth
                 placeholder="차량명, 색상 등"
@@ -89,7 +89,7 @@ export default function SearchPage() {
 
               <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>연료 타입</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 500, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>연료 타입</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 3 }}>
                 {FUEL_TYPES.map(f => (
                   <Chip
@@ -98,9 +98,9 @@ export default function SearchPage() {
                     onClick={() => setFuelFilter(f)}
                     size="small"
                     sx={{
-                      bgcolor: fuelFilter === f ? 'rgba(166,137,102,0.1)' : 'transparent',
-                      color: fuelFilter === f ? '#A68966' : '#666',
-                      border: `1px solid ${fuelFilter === f ? '#A68966' : '#e0e0e0'}`,
+                      bgcolor: fuelFilter === f ? '#0c121c' : 'transparent',
+                      color: fuelFilter === f ? '#fff' : '#666',
+                      border: fuelFilter === f ? 'none' : '1px solid #e0e0e0',
                       borderRadius: 0,
                       cursor: 'pointer',
                       userSelect: 'none',
@@ -111,7 +111,7 @@ export default function SearchPage() {
 
               <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>출시 연도</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 500, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1.5 }}>출시 연도</Typography>
               <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
                 {YEARS.map(y => (
                   <Chip
@@ -120,9 +120,9 @@ export default function SearchPage() {
                     onClick={() => toggleYear(y)}
                     size="small"
                     sx={{
-                      bgcolor: yearFilter.includes(y) ? 'rgba(166,137,102,0.1)' : 'transparent',
-                      color: yearFilter.includes(y) ? '#A68966' : '#666',
-                      border: `1px solid ${yearFilter.includes(y) ? '#A68966' : '#e0e0e0'}`,
+                      bgcolor: yearFilter.includes(y) ? '#0c121c' : 'transparent',
+                      color: yearFilter.includes(y) ? '#fff' : '#666',
+                      border: yearFilter.includes(y) ? 'none' : '1px solid #e0e0e0',
                       borderRadius: 0,
                       cursor: 'pointer',
                       userSelect: 'none',
@@ -133,7 +133,7 @@ export default function SearchPage() {
 
               <Divider sx={{ borderColor: '#e0e0e0', mb: 3 }} />
 
-              <Typography sx={{ color: '#A68966', fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1 }}>가격대</Typography>
+              <Typography sx={{ color: '#111', fontWeight: 500, fontSize: '0.75rem', letterSpacing: '0.15em', mb: 1 }}>가격대</Typography>
               <Box sx={{ px: 1, mb: 1 }}>
                 <Slider
                   value={priceRange}
@@ -195,8 +195,6 @@ export default function SearchPage() {
                         borderRadius: 0,
                         cursor: 'pointer',
                         userSelect: 'none',
-                        transition: 'border-color 0.2s',
-                        '&:hover': { borderColor: '#A68966' },
                       }}
                       onClick={() => navigate('/reservation', { state: { car } })}
                     >
