@@ -42,7 +42,7 @@ export default function RegisterPage() {
       setUsernameChecked(true)
       setForm(f => ({
         ...f,
-        email: user.email || f.email,
+        email: user.email || saved.email || f.email,
         username: saved.username || f.username,
       }))
     }
@@ -98,7 +98,7 @@ export default function RegisterPage() {
         return
       }
       localStorage.setItem('vantage_reg_pending', 'true')
-      localStorage.setItem('vantage_reg_form', JSON.stringify({ username: form.username }))
+      localStorage.setItem('vantage_reg_form', JSON.stringify({ username: form.username, email: form.email }))
       setEmailSent(true)
       if (data.user.email_confirmed_at) {
         setEmailVerified(true)
@@ -253,20 +253,22 @@ export default function RegisterPage() {
                 </Button>
               </Box>
 
-              {/* 비밀번호 */}
-              <TextField
-                fullWidth label="비밀번호 *" type="password"
-                value={form.password} onChange={set('password')}
-                disabled={emailVerified}
-                helperText="영문+숫자+특수문자 8자 이상"
-              />
-              <TextField
-                fullWidth label="비밀번호 확인 *" type="password"
-                value={form.passwordConfirm} onChange={set('passwordConfirm')}
-                disabled={emailVerified}
-                error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
-                helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
-              />
+              {/* 비밀번호 — 이메일 인증 완료 후 숨김 (이미 설정됨) */}
+              {!emailVerified && (
+                <>
+                  <TextField
+                    fullWidth label="비밀번호 *" type="password"
+                    value={form.password} onChange={set('password')}
+                    helperText="영문+숫자+특수문자 8자 이상"
+                  />
+                  <TextField
+                    fullWidth label="비밀번호 확인 *" type="password"
+                    value={form.passwordConfirm} onChange={set('passwordConfirm')}
+                    error={form.passwordConfirm !== '' && form.password !== form.passwordConfirm}
+                    helperText={form.passwordConfirm !== '' && form.password !== form.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''}
+                  />
+                </>
+              )}
 
               {/* 이메일 + 인증 버튼 */}
               <Box>

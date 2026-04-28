@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography, Button } from '@mui/material'
 import { supabase } from '../utils/supabase'
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
+  const [showClose, setShowClose] = useState(false)
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -13,7 +14,6 @@ export default function AuthCallbackPage() {
       const code = params.get('code')
 
       if (code) {
-        // PKCE flow: code를 세션으로 교환
         const { error } = await supabase.auth.exchangeCodeForSession(code)
         if (error) {
           setError('인증에 실패했습니다. 다시 시도해주세요.')
@@ -22,16 +22,19 @@ export default function AuthCallbackPage() {
         }
       }
 
-      // 해시 기반 토큰 처리 (implicit flow fallback)
       const hash = window.location.hash
       if (hash && hash.includes('access_token')) {
-        // onAuthStateChange가 자동으로 처리함
         await new Promise(r => setTimeout(r, 500))
       }
 
-      // 회원가입 도중 인증한 경우 회원가입 페이지로 복귀
       if (localStorage.getItem('vantage_reg_pending')) {
-        navigate('/register', { replace: true })
+        // 새 탭 닫기 시도 (이메일 클라이언트가 새 탭으로 열었을 때)
+        window.close()
+        // window.close()가 안 될 경우 안내 표시 후 /register로 이동
+        setTimeout(() => {
+          setShowClose(true)
+          setTimeout(() => navigate('/register', { replace: true }), 2000)
+        }, 300)
       } else {
         navigate('/', { replace: true })
       }
@@ -45,6 +48,21 @@ export default function AuthCallbackPage() {
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#f8f8f8', gap: 2 }}>
         <Typography sx={{ color: '#c00', fontSize: '1rem' }}>{error}</Typography>
         <Typography sx={{ color: '#888', fontSize: '0.875rem' }}>로그인 페이지로 이동합니다...</Typography>
+      </Box>
+    )
+  }
+
+  if (showClose) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#f8f8f8', gap: 3 }}>
+        <Typography sx={{ color: '#2e7d32', fontWeight: 700, fontSize: '1.1rem' }}>✓ 이메일 인증이 완료되었습니다</Typography>
+        <Typography sx={{ color: '#888', fontSize: '0.875rem', textAlign: 'center' }}>
+          이 창을 닫고 원래 회원가입 창으로 돌아가주세요.<br />잠시 후 자동으로 이동합니다.
+        </Typography>
+        <Button onClick={() => navigate('/register', { replace: true })}
+          sx={{ bgcolor: '#111', color: '#fff', px: 4, py: 1.2, '&:hover': { bgcolor: '#333' } }}>
+          회원가입 계속하기
+        </Button>
       </Box>
     )
   }

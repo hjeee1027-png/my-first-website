@@ -153,22 +153,24 @@ export default function LoginPage() {
             <Typography sx={{ color: '#bbb', fontSize: '0.75rem', px: 1 }}>또는 소셜 로그인</Typography>
           </Divider>
 
-          {/* 구글 로그인 */}
-          <Button
-            fullWidth
-            variant="outlined"
-            startIcon={<GoogleIcon sx={{ fontSize: '1.1rem !important' }} />}
-            onClick={handleGoogleLogin}
-            sx={{
-              borderColor: '#e0e0e0', color: '#444',
-              py: 1.3,
-              fontSize: '0.85rem',
-              letterSpacing: '0.05em',
-              '&:hover': { borderColor: '#aaa', bgcolor: '#fafafa' },
-            }}
-          >
-            Google로 로그인
-          </Button>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+            <Button fullWidth variant="contained"
+              sx={{ bgcolor: '#03C75A', color: '#fff', border: 'none', py: 1.3, fontWeight: 600, fontSize: '0.85rem', gap: 1, '&:hover': { bgcolor: '#02b350' } }}>
+              <Box component="span" sx={{ fontWeight: 900, fontSize: '1rem', lineHeight: 1 }}>N</Box>
+              네이버로 로그인
+            </Button>
+            <Button fullWidth variant="contained"
+              sx={{ bgcolor: '#FEE500', color: '#191919', border: 'none', py: 1.3, fontWeight: 600, fontSize: '0.85rem', gap: 1, '&:hover': { bgcolor: '#F5DC00' } }}>
+              <Box component="span" sx={{ fontWeight: 900, fontSize: '1.1rem', lineHeight: 1 }}>💬</Box>
+              카카오로 로그인
+            </Button>
+            <Button fullWidth variant="outlined"
+              startIcon={<GoogleIcon sx={{ fontSize: '1.1rem !important' }} />}
+              onClick={handleGoogleLogin}
+              sx={{ borderColor: '#e0e0e0', color: '#444', py: 1.3, fontSize: '0.85rem', '&:hover': { borderColor: '#aaa', bgcolor: '#fafafa' } }}>
+              Google로 로그인
+            </Button>
+          </Box>
         </Box>
 
         <Typography sx={{ color: '#bbb', fontSize: '0.8rem', textAlign: 'center', mt: 3 }}>
