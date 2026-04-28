@@ -48,14 +48,28 @@ export default function SearchPage() {
   return (
     <Box sx={{ bgcolor: '#f8f8f8', minHeight: '100vh', pt: '72px' }}>
       <Container maxWidth={false} sx={{ maxWidth: 1440, mx: 'auto', px: { xs: 2, md: 6 }, py: 6 }}>
-        <Box sx={{ mb: 5 }}>
-          <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>EXPLORE</Typography>
-          <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 1 }}>
-            전체 모델
-          </Typography>
-          <Typography sx={{ color: '#888', fontSize: '0.9rem' }}>
-            {filtered.length}개의 차량이 검색되었습니다
-          </Typography>
+        <Box sx={{ mb: 5, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+          <Box>
+            <Typography variant="overline" sx={{ color: '#A68966', letterSpacing: '0.3em', display: 'block', mb: 1 }}>EXPLORE</Typography>
+            <Typography variant="h3" sx={{ color: '#0c121c', fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.875rem' }, mb: 1 }}>
+              전체 모델
+            </Typography>
+            <Typography sx={{ color: '#888', fontSize: '0.9rem' }}>
+              {filtered.length}개의 차량이 검색되었습니다
+            </Typography>
+          </Box>
+          <FormControl size="small" sx={{ minWidth: 160 }}>
+            <Select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              displayEmpty
+              sx={{ bgcolor: '#fff', color: '#666', border: '1px solid #e0e0e0', borderRadius: 0, fontSize: '0.85rem' }}
+            >
+              {SORT_OPTIONS.map(o => (
+                <MenuItem key={o.value} value={o.value} sx={{ fontSize: '0.85rem' }}>{o.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
 
         <Grid container spacing={4}>
@@ -165,22 +179,6 @@ export default function SearchPage() {
 
           {/* 결과 목록 */}
           <Grid item xs={12} md={9.5}>
-            {/* 정렬 */}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
-              <FormControl size="small" sx={{ minWidth: 160 }}>
-                <Select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  displayEmpty
-                  sx={{ bgcolor: '#fff', color: '#666', border: '1px solid #e0e0e0', borderRadius: 0, fontSize: '0.85rem' }}
-                >
-                  {SORT_OPTIONS.map(o => (
-                    <MenuItem key={o.value} value={o.value} sx={{ fontSize: '0.85rem' }}>{o.label}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-
             {filtered.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 10 }}>
                 <Typography sx={{ color: '#888', fontSize: '1.1rem', mb: 2 }}>검색 결과가 없습니다</Typography>

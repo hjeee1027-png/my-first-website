@@ -5,12 +5,14 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { useNavigate } from 'react-router-dom'
 import { CARS, CAR_COLORS, formatPrice, getDiscountedPrice } from '../data/mockData'
 
+const MAIN_CARS = CARS.slice(0, 4)
+
 export default function ProductSection() {
   const [activeTab, setActiveTab] = useState(0)
   const [imgIdx, setImgIdx] = useState(0)
   const navigate = useNavigate()
 
-  const car = CARS[activeTab]
+  const car = MAIN_CARS[activeTab]
   const images = car.images
 
   const handleTabChange = (_, v) => {
@@ -49,7 +51,7 @@ export default function ProductSection() {
                   '.MuiTabs-indicator': { left: 0, right: 'auto', bgcolor: '#111', width: 2 },
                 }}
               >
-                {CARS.map((c, i) => (
+                {MAIN_CARS.map((c, i) => (
                   <Tab
                     key={c.id}
                     label={
