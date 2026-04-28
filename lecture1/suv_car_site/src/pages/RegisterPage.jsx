@@ -35,9 +35,16 @@ export default function RegisterPage() {
   useEffect(() => {
     if (user && user.email_confirmed_at && localStorage.getItem('vantage_reg_pending')) {
       localStorage.removeItem('vantage_reg_pending')
+      const saved = JSON.parse(localStorage.getItem('vantage_reg_form') || '{}')
+      localStorage.removeItem('vantage_reg_form')
       setEmailVerified(true)
       setEmailSent(true)
-      setForm(f => ({ ...f, email: user.email || f.email }))
+      setUsernameChecked(true)
+      setForm(f => ({
+        ...f,
+        email: user.email || f.email,
+        username: saved.username || f.username,
+      }))
     }
   }, [user])
 
@@ -91,6 +98,7 @@ export default function RegisterPage() {
         return
       }
       localStorage.setItem('vantage_reg_pending', 'true')
+      localStorage.setItem('vantage_reg_form', JSON.stringify({ username: form.username }))
       setEmailSent(true)
       if (data.user.email_confirmed_at) {
         setEmailVerified(true)
