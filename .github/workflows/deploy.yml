@@ -54,9 +54,6 @@ jobs:
         working-directory: lecture1/lesson-final
         run: npm install && npm run build
 
-      - name: Install & Build car-site
-        working-directory: lecture1/car-site
-        run: npm install && npm run build
 
       - name: Install & Build my-community
         working-directory: lecture1/my-community
@@ -87,7 +84,7 @@ jobs:
           mkdir -p combined/lesson-content3
           mkdir -p combined/lesson-header
           mkdir -p combined/lesson-final
-          mkdir -p combined/car-site
+
           mkdir -p combined/안나앤모드
           mkdir -p combined/my-community
           mkdir -p combined/mini_sns
@@ -99,7 +96,7 @@ jobs:
           cp -r lecture1/lesson-content3/dist/. combined/lesson-content3/
           cp -r lecture1/lesson-header/dist/. combined/lesson-header/
           cp -r lecture1/lesson-final/dist/. combined/lesson-final/
-          cp -r lecture1/car-site/dist/. combined/car-site/
+
           cp -r 안나앤모드/. combined/안나앤모드/
           cp -r lecture1/my-community/dist/. combined/my-community/
           cp -r lecture1/mini_sns/dist/. combined/mini_sns/
