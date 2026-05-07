@@ -1,0 +1,122 @@
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useApp } from '../App'
+import { supabase } from '../supabaseClient'
+import styles from './OrderPage.module.css'
+
+const statusLabels = ['결제완료', '상품준비중', '배송준비중', '배송중', '배송완료']
+const statusIcons = ['fa-credit-card', 'fa-box', 'fa-warehouse', 'fa-truck', 'fa-circle-check']
+
+const periodFilters = ['전체', '3개월', '6개월']
+
+export default function OrderPage() {
+  const { user } = useApp()
+  const navigate = useNavigate()
+  const [orders, setOrders] = useState([])
+  const [period, setPeriod] = useState('전체')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user) return
+    setLoading(true)
+    let query = supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+
+    const now = new Date()
+    if (period === '3개월') {
+      const d = new Date(now); d.setMonth(d.getMonth() - 3)
+      query = query.gte('created_at', d.toISOString())
+    } else if (period === '6개월') {
+      const d = new Date(now); d.setMonth(d.getMonth() - 6)
+      query = query.gte('created_at', d.toISOString())
+    }
+
+    query.then(({ data }) => {
+      if (data) setOrders(data)
+      setLoading(false)
+    })
+  }, [user, period])
+
+  if (!user) {
+    return (
+      <div className={styles.loginRequired}>
+        <p>로그인이 필요합니다.</p>
+        <Link to="/login" className={styles.loginBtn}>로그인</Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.inner}>
+        <div className={styles.pageHeader}>
+          <h1 className={styles.title}>주문/배송 조회</h1>
+          <div className={styles.periodFilters}>
+            {periodFilters.map(p => (
+              <button
+                key={p}
+                className={`${styles.periodBtn} ${period === p ? styles.periodActive : ''}`}
+                onClick={() => setPeriod(p)}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {loading ? (
+          <div className={styles.loading}>
+            <i className="fa-solid fa-spinner fa-spin"></i>
+            <p>주문 내역을 불러오는 중...</p>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className={styles.empty}>
+            <i className="fa-solid fa-box-open"></i>
+            <p>주문 내역이 없습니다.</p>
+            <Link to="/products" className={styles.shopBtn}>쇼핑하러 가기</Link>
+          </div>
+        ) : (
+          <div className={styles.orderList}>
+            {orders.map(order => (
+              <div key={order.id} className={styles.orderCard}>
+                <div className={styles.orderMeta}>
+                  <div className={styles.orderMetaLeft}>
+                    <span className={styles.orderDate}>
+                      {new Date(order.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </span>
+                    <span className={styles.orderId}>주문번호: {order.tracking_number}</span>
+                  </div>
+                  <span className={styles.orderPrice}>{order.total_price?.toLocaleString()}원</span>
+                </div>
+
+                {/* Step Bar */}
+                <div className={styles.stepBar}>
+                  {statusLabels.map((label, i) => (
+                    <React.Fragment key={label}>
+                      <div className={`${styles.step} ${i <= order.delivery_status ? styles.stepDone : ''} ${i === order.delivery_status ? styles.stepCurrent : ''}`}>
+                        <div className={styles.stepIcon}>
+                          <i className={`fa-solid ${statusIcons[i]}`}></i>
+                        </div>
+                        <p className={styles.stepLabel}>{label}</p>
+                      </div>
+                      {i < statusLabels.length - 1 && (
+                        <div className={`${styles.stepLine} ${i < order.delivery_status ? styles.stepLineDone : ''}`}></div>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                {order.tracking_number && (
+                  <div className={styles.trackingInfo}>
+                    <i className="fa-solid fa-truck-fast"></i>
+                    <span>송장번호: <strong>{order.tracking_number}</strong></span>
+                    <button className={styles.trackBtn}>배송조회</button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

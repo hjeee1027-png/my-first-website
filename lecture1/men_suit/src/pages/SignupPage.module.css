@@ -1,0 +1,142 @@
+.page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+.container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.logo { margin-bottom: 4px; }
+.title { font-size: 26px; font-weight: 700; color: #111; align-self: flex-start; }
+
+.stepBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.stepCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #bbb;
+  flex-shrink: 0;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.stepActive .stepCircle { border-color: #111; color: #fff; background: #111; }
+.stepLabel { font-size: 13px; color: #bbb; transition: color 0.3s; }
+.stepActive .stepLabel { color: #111; font-weight: 600; }
+.stepLine { flex: 1; height: 1px; background: #eee; margin: 0 4px; }
+
+.form { width: 100%; display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 13px; font-weight: 600; color: #333; }
+.input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input:focus { border-color: #111; }
+.mt8 { margin-top: 8px; }
+
+.withBtn { display: flex; gap: 8px; }
+.withBtn .input { flex: 1; }
+.checkBtn {
+  padding: 0 16px;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  white-space: nowrap;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.checkBtn:hover { background: #333; }
+
+.ok { font-size: 12px; color: #27ae60; }
+.err { font-size: 12px; color: #c0392b; }
+
+.agreeWrap { display: flex; flex-direction: column; gap: 4px; }
+.agreeLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+.agreeLabel input { width: 16px; height: 16px; accent-color: #111; }
+
+.btnRow { width: 100%; display: flex; gap: 10px; }
+.prevBtn {
+  flex: 1;
+  padding: 14px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  color: #555;
+  border-radius: 3px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.prevBtn:hover { border-color: #111; color: #111; }
+.nextBtn {
+  flex: 2;
+  padding: 14px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.nextBtn:hover:not(:disabled) { background: #333; }
+.nextBtn:disabled { background: #999; cursor: not-allowed; }
+
+.loginPrompt { font-size: 14px; color: #666; }
+.loginLink { color: #111; font-weight: 700; text-decoration: underline; }
+
+.successWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 20px 0;
+}
+.successIcon { font-size: 60px; color: #27ae60; }
+.successTitle { font-size: 22px; font-weight: 700; color: #111; }
+.successDesc { font-size: 15px; color: #666; line-height: 1.7; }
+.loginBtn {
+  margin-top: 8px;
+  display: inline-block;
+  padding: 14px 48px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.loginBtn:hover { background: #333; }

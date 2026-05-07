@@ -1,0 +1,66 @@
+.page { padding: 40px 0 80px; }
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #111;
+}
+.title { font-size: 28px; font-weight: 700; color: #111; }
+.count { font-size: 14px; color: #999; }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filterBtn {
+  padding: 7px 16px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  color: #666;
+  border-radius: 20px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.filterBtn:hover { border-color: #111; color: #111; }
+.filterActive { border-color: #111 !important; color: #fff !important; background: #111 !important; }
+
+.sortSelect {
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  row-gap: 40px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 0;
+  gap: 12px;
+  color: #ccc;
+}
+.empty i { font-size: 48px; margin-bottom: 8px; }
+.empty p { font-size: 18px; color: #999; }
+.emptySub { font-size: 14px; color: #bbb !important; }

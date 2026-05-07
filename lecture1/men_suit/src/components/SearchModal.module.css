@@ -1,0 +1,121 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  width: 800px;
+  background: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  animation: slideDown 0.25s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-family: inherit;
+  color: #111;
+}
+
+.searchBtn {
+  font-size: 18px;
+  color: #111;
+  padding: 4px;
+}
+.closeBtn { padding: 4px; }
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  height: 400px;
+  overflow: hidden;
+}
+
+.divider { background: #f0f0f0; }
+
+.col {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.colHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.colHeader h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.05em;
+}
+
+.clearBtn {
+  font-size: 12px;
+  color: #999;
+  text-decoration: underline;
+}
+.clearBtn:hover { color: #111; }
+
+.empty {
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.list { display: flex; flex-direction: column; gap: 0; }
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+.listItem:hover { background: #f8f8f8; }
+.listItem > span:nth-child(2) {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+.listItem i { color: #bbb; font-size: 13px; }
+
+.delBtn { padding: 2px; opacity: 0.4; }
+.delBtn:hover { opacity: 1; }
+
+.rank {
+  width: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #bbb;
+  flex-shrink: 0;
+}
+.rankTop { color: #D1A784; }

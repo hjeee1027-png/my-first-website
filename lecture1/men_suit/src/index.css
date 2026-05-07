@@ -1,0 +1,85 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-primary: #111111;
+  --color-secondary: #F4F4F4;
+  --color-point: #D1A784;
+  --color-footer-bg: #f8f8f8;
+  --color-text-main: #111111;
+  --color-text-sub: #666666;
+  --color-white: #ffffff;
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  --layout-max: 1440px;
+  --section-gap: 120px;
+  --card-gap: 24px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-primary);
+  background-color: var(--color-white);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+.inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.section-gap {
+  margin-bottom: var(--section-gap);
+}
+
+/* Swiper 커스텀 */
+.swiper-pagination-bullet {
+  width: 30px !important;
+  height: 3px !important;
+  border-radius: 0 !important;
+  background: rgba(255,255,255,0.5) !important;
+  opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+  background: #ffffff !important;
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #999; }
