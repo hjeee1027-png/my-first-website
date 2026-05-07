@@ -32,8 +32,8 @@
 }
 .tab:hover { color: #111; }
 .tabActive { color: #111 !important; border-bottom-color: #111 !important; }
-.tabFirst { color: #D1A784 !important; }
-.tabFirst.tabActive { border-bottom-color: #D1A784 !important; }
+.tabFirst { color: #006BFF !important; }
+.tabFirst.tabActive { border-bottom-color: #006BFF !important; }
 
 .grid {
   display: grid;

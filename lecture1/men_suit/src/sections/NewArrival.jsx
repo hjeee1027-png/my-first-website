@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import { newArrivalProducts } from '../data/products'
 import styles from './NewArrival.module.css'
@@ -16,8 +17,8 @@ const categoryMap = {
 }
 
 export default function NewArrival() {
-  const [activeTab, setActiveTab] = useState('ALL')
   const [activeFilter, setActiveFilter] = useState('ALL')
+  const navigate = useNavigate()
 
   const getFiltered = () => {
     const cat = categoryMap[activeFilter]
@@ -52,11 +53,9 @@ export default function NewArrival() {
           ))}
         </div>
 
-        {filtered.length > 8 && (
-          <div className={styles.moreWrap}>
-            <button className={styles.moreBtn}>더보기 +</button>
-          </div>
-        )}
+        <div className={styles.moreWrap}>
+          <button className={styles.moreBtn} onClick={() => navigate('/products')}>더보기 +</button>
+        </div>
       </div>
     </section>
   )

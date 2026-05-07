@@ -1,4 +1,4 @@
-*, *::before, *::after {
+﻿*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,7 +7,7 @@
 :root {
   --color-primary: #111111;
   --color-secondary: #F4F4F4;
-  --color-point: #D1A784;
+  --color-point: #006BFF;
   --color-footer-bg: #f8f8f8;
   --color-text-main: #111111;
   --color-text-sub: #666666;

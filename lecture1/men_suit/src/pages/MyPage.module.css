@@ -7,30 +7,29 @@
   justify-content: space-between;
   align-items: center;
   padding: 32px 40px;
-  background: #111;
-  color: #fff;
+  background: #f5f5f5;
 }
 .profileLeft { display: flex; align-items: center; gap: 20px; }
-.avatar { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #D1A784; }
+.avatar { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #ddd; }
 .profileInfo { display: flex; flex-direction: column; gap: 4px; }
 .levelBadge {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: rgba(209,167,132,0.2);
-  border: 1px solid #D1A784;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
   padding: 2px 8px;
   width: fit-content;
   border-radius: 2px;
 }
-.levelBadge span { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #D1A784; }
-.profileName { font-size: 20px; font-weight: 700; }
-.profileEmail { font-size: 13px; color: #999; }
+.levelBadge span { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #555; }
+.profileName { font-size: 20px; font-weight: 700; color: #111; }
+.profileEmail { font-size: 13px; color: #666; }
 
 .profileStats { display: flex; gap: 40px; }
 .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.statVal { font-size: 18px; font-weight: 700; }
-.statLabel { font-size: 12px; color: #999; }
+.statVal { font-size: 18px; font-weight: 700; color: #333; }
+.statLabel { font-size: 12px; color: #666; }
 
 /* Order Status */
 .orderStatus { padding: 28px; border: 1px solid #eee; background: #fff; }
@@ -66,7 +65,7 @@
   right: -4px;
   width: 18px;
   height: 18px;
-  background: #D1A784;
+  background: #006BFF;
   color: #fff;
   font-size: 10px;
   font-weight: 700;

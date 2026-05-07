@@ -1,4 +1,4 @@
-.header {
+﻿.header {
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +73,7 @@
   transition: right 0.25s ease;
 }
 .gnbItem:hover::after { right: 0; }
-.gnbFirst { color: #D1A784 !important; }
+.gnbFirst { color: #006BFF !important; }
 
 .utils {
   display: flex;
@@ -93,7 +93,7 @@
   position: absolute;
   top: -6px;
   right: -8px;
-  background: #D1A784;
+  background: #006BFF;
   color: #fff;
   font-size: 10px;
   font-weight: 700;

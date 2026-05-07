@@ -9,16 +9,16 @@ export default function CategoryNav() {
     <section className={styles.section}>
       <div className={styles.inner}>
         <ul className={styles.list}>
-          {categoryIcons.map((cat, i) => (
+          {categoryIcons.map((cat) => (
             <li
               key={cat.id}
               className={styles.item}
               onClick={() => navigate(`/products?category=${cat.id}`)}
             >
-              <div className={`${styles.iconWrap} ${i === 0 ? styles.first : ''}`}>
+              <div className={styles.iconWrap}>
                 <img src={cat.img} alt={cat.label} className={styles.icon} />
               </div>
-              <span className={`${styles.label} ${i === 0 ? styles.labelFirst : ''}`}>{cat.label}</span>
+              <span className={styles.label}>{cat.label}</span>
             </li>
           ))}
         </ul>

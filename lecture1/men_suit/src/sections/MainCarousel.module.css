@@ -2,9 +2,9 @@
   position: relative;
   width: 100%;
   max-width: 1920px;
-  margin: 0 auto 120px;
+  margin: 0 auto;
   overflow: hidden;
-  height: 680px;
+  height: 700px;
   background: #111;
 }
 
@@ -18,20 +18,10 @@
 
 .slide {
   position: absolute;
-  width: 50%;
-  height: 90%;
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s;
+  left: 50%;
+  width: 430px;
+  height: 650px;
   cursor: pointer;
-}
-
-.slideCenter {
-  width: 52%;
-  height: 100%;
-}
-
-.slideHidden {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .imgWrap {
@@ -50,15 +40,14 @@
 .dimOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
-  transition: background 0.5s;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .caption {
   position: absolute;
-  bottom: 60px;
-  left: 40px;
-  right: 40px;
+  bottom: 48px;
+  left: 32px;
+  right: 32px;
   color: #fff;
   text-align: left;
 }
@@ -66,17 +55,15 @@
 .captionTitle {
   font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin-bottom: 10px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .captionSub {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   opacity: 0.85;
-  letter-spacing: 0.05em;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  letter-spacing: 0.04em;
 }
 
 .arrow {
@@ -86,39 +73,41 @@
   z-index: 20;
   width: 48px;
   height: 48px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
+  background: transparent;
+  border: none;
   color: #fff;
-  font-size: 18px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-  backdrop-filter: blur(4px);
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
-.arrow:hover { background: rgba(255,255,255,0.3); }
+.arrow:hover { opacity: 1; }
 .arrowPrev { left: 24px; }
 .arrowNext { right: 24px; }
 
-.indicator {
+.indicatorWrap {
   position: absolute;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
+  width: 80%;
   z-index: 20;
 }
 
-.dot {
-  width: 32px;
+.indicatorBg {
+  width: 100%;
   height: 3px;
-  background: rgba(255,255,255,0.4);
-  border-radius: 0;
-  transition: background 0.3s, width 0.3s;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+  overflow: hidden;
 }
-.dotActive {
-  background: #fff;
-  width: 48px;
+
+.indicatorFill {
+  height: 100%;
+  background: #111;
+  border-radius: 2px;
+  transition: width 0.4s linear;
 }

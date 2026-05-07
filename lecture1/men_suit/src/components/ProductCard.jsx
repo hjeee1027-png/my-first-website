@@ -6,11 +6,17 @@ import styles from './ProductCard.module.css'
 export default function ProductCard({ product, showFitGuide = true }) {
   const { toggleWishlist, isWished, addToCart } = useApp()
   const [hovered, setHovered] = useState(false)
+  const [wishCount, setWishCount] = useState(product.wish_count || 0)
   const wished = isWished(product.id)
 
   const handleWish = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    if (wished) {
+      setWishCount(prev => prev - 1)
+    } else {
+      setWishCount(prev => prev + 1)
+    }
     toggleWishlist(product)
   }
 
@@ -19,6 +25,8 @@ export default function ProductCard({ product, showFitGuide = true }) {
     e.stopPropagation()
     addToCart(product, { color: '블랙', size: 'M' })
   }
+
+  const modelText = product.model || '173cm / 76kg / 보통'
 
   return (
     <div
@@ -32,7 +40,7 @@ export default function ProductCard({ product, showFitGuide = true }) {
         {hovered && showFitGuide && (
           <div className={styles.overlay}>
             <div className={styles.fitGuide}>
-              <p className={styles.fitModel}>{product.model || '173cm / 76kg / 보통'}</p>
+              <p className={styles.fitModel}>{modelText} 추천</p>
               <Link
                 to={`/products/${product.id}`}
                 className={styles.detailBtn}
@@ -65,11 +73,9 @@ export default function ProductCard({ product, showFitGuide = true }) {
             <span className={styles.original}>{product.originalPrice.toLocaleString()}원</span>
           )}
         </div>
-        {product.wish_count > 0 && (
-          <p className={styles.wishCount}>
-            <i className="fa-solid fa-heart"></i> {product.wish_count}
-          </p>
-        )}
+        <p className={styles.wishCount}>
+          <i className="fa-solid fa-heart"></i> {wishCount}
+        </p>
       </div>
     </div>
   )

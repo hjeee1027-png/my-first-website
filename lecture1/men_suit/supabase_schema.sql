@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.ms_orders (
   payment_status TEXT DEFAULT 'paid' CHECK (payment_status IN ('pending', 'paid', 'failed', 'refunded')),
   delivery_status INTEGER DEFAULT 0 CHECK (delivery_status BETWEEN 0 AND 4),
   tracking_number TEXT,
+  items JSONB DEFAULT '[]',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -145,6 +146,58 @@ VALUES
   ('투버튼 슬림 수트', 359000, 469000, 'SUIT', 23, true, '/images/new-arrival/ABG2PP1101DNV_M.jpeg', '175cm / 76kg / 슬림탄탄'),
   ('코튼 옥스포드 셔츠', 59000, 79000, 'SHIRT', 25, true, '/images/new-arrival/ABF2ET1104GR_M.jpeg', '173cm / 72kg / 슬림'),
   ('더블 브레스티드 블레이저', 289000, 389000, 'SUIT', 26, false, '/images/new-arrival/AEG2PP1101BE_M.jpeg', '176cm / 80kg / 탄탄')
+ON CONFLICT DO NOTHING;
+
+-- =====================================================
+-- ms_inventory 테이블 (재고 관리)
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS public.ms_inventory (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  product_id INTEGER REFERENCES public.ms_products(id) ON DELETE CASCADE,
+  color TEXT NOT NULL,
+  size TEXT NOT NULL,
+  stock INTEGER NOT NULL DEFAULT 10,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(product_id, color, size)
+);
+
+ALTER TABLE public.ms_inventory ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "ms_inventory_public_read" ON public.ms_inventory
+  FOR SELECT USING (true);
+
+-- 원자적 재고 차감 함수
+CREATE OR REPLACE FUNCTION ms_decrease_inventory(
+  p_product_id INTEGER,
+  p_color TEXT,
+  p_size TEXT
+) RETURNS INTEGER AS $$
+DECLARE
+  affected INTEGER;
+BEGIN
+  UPDATE public.ms_inventory
+  SET stock = stock - 1, updated_at = NOW()
+  WHERE product_id = p_product_id
+    AND color = p_color
+    AND size = p_size
+    AND stock > 0;
+
+  GET DIAGNOSTICS affected = ROW_COUNT;
+  RETURN affected; -- 0이면 재고 없음, 1이면 성공
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 샘플 재고 데이터 (상품 ID 1~8 기준)
+INSERT INTO public.ms_inventory (product_id, color, size, stock)
+SELECT
+  p.id,
+  c.color,
+  s.size,
+  floor(random() * 15 + 1)::INTEGER
+FROM ms_products p
+CROSS JOIN (VALUES ('블랙'),('네이비'),('그레이'),('베이지'),('카멜')) AS c(color)
+CROSS JOIN (VALUES ('M'),('L'),('XL'),('XXL')) AS s(size)
 ON CONFLICT DO NOTHING;
 
 -- =====================================================

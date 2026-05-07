@@ -4,25 +4,25 @@ import { tpoGridData } from '../data/products'
 import { useApp } from '../App'
 import styles from './TPOGrid.module.css'
 
+const interviewLabels = [
+  '패션 마케터의 출근룩 스타일링 인터뷰',
+  '20대 크리에이터의 미니멀 캐주얼 룩',
+  '30대 직장인의 비즈니스 캐주얼 가이드',
+]
+
 export default function TPOGrid() {
   const { addToCart } = useApp()
 
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <div className={styles.header}>
-          <p className={styles.sub}>TPO STYLING GUIDE</p>
-          <h2 className={styles.title}>상황별 스타일링 추천</h2>
-          <p className={styles.desc}>당신의 순간에 맞는 완벽한 코디를 제안합니다</p>
-        </div>
-
         <div className={styles.grid}>
-          {tpoGridData.map(col => (
+          {tpoGridData.map((col, colIdx) => (
             <div key={col.id} className={styles.col}>
               <div className={styles.mainImg}>
                 <img src={col.img} alt={col.title} />
                 <div className={styles.imgLabel}>
-                  <p className={styles.persona}>{col.persona}</p>
+                  <p className={styles.persona}>{interviewLabels[colIdx]}</p>
                   <h3 className={styles.colTitle}>{col.title}</h3>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../App'
 import { allProducts, newArrivalProducts } from '../data/products'
 import ProductCard from '../components/ProductCard'
+import PaymentModal from '../components/PaymentModal'
 import { supabase } from '../supabaseClient'
 import styles from './CartPage.module.css'
 
@@ -12,7 +13,7 @@ export default function CartPage() {
   const { cart, removeFromCart, updateCartQty, user, showToast, recentViewed, toggleWishlist, isWished } = useApp()
   const navigate = useNavigate()
   const [selected, setSelected] = useState(() => cart.map(i => i.cartId))
-  const [checking, setChecking] = useState(false)
+  const [showPayment, setShowPayment] = useState(false)
 
   const totalPrice = cart
     .filter(i => selected.includes(i.cartId))
@@ -31,22 +32,36 @@ export default function CartPage() {
     else setSelected(cart.map(i => i.cartId))
   }
 
-  const handleCheckout = async () => {
+  const handleCheckoutOpen = () => {
     if (selected.length === 0) { showToast('상품을 선택해주세요.', 'error'); return }
     if (!user) { showToast('로그인이 필요합니다.', 'error'); navigate('/login'); return }
+    setShowPayment(true)
+  }
 
-    setChecking(true)
-    const items = cart.filter(i => selected.includes(i.cartId))
+  const handlePaymentSuccess = async () => {
+    const selectedItems = cart.filter(i => selected.includes(i.cartId))
     const { error } = await supabase.from('ms_orders').insert({
       user_id: user.id,
       total_price: totalPrice + delivery,
       payment_status: 'paid',
       delivery_status: 0,
       tracking_number: 'ZZ' + Date.now(),
+      items: selectedItems.map(i => ({
+        id: i.id,
+        name: i.name,
+        qty: i.qty,
+        price: i.price,
+        color: i.color,
+        size: i.size,
+        img: i.img,
+      })),
     })
-    setChecking(false)
-    if (error) { showToast('결제 중 오류가 발생했습니다.', 'error'); return }
+    if (error) {
+      showToast('주문 저장 중 오류가 발생했습니다.', 'error')
+      return
+    }
     selected.forEach(id => removeFromCart(id))
+    setShowPayment(false)
     showToast('결제가 완료되었습니다!')
     navigate('/orders')
   }
@@ -123,9 +138,9 @@ export default function CartPage() {
                       컬러: {item.color || '-'} / 사이즈: {item.size || '-'}
                     </p>
                     <div className={styles.qtyWrap}>
-                      <button onClick={() => updateCartQty(item.cartId, Math.max(1, item.qty-1))} className={styles.qtyBtn}>−</button>
+                      <button onClick={() => updateCartQty(item.cartId, Math.max(1, item.qty - 1))} className={styles.qtyBtn}>−</button>
                       <span className={styles.qty}>{item.qty}</span>
-                      <button onClick={() => updateCartQty(item.cartId, item.qty+1)} className={styles.qtyBtn}>+</button>
+                      <button onClick={() => updateCartQty(item.cartId, item.qty + 1)} className={styles.qtyBtn}>+</button>
                     </div>
                   </div>
                   <div className={styles.itemPrice}>
@@ -158,8 +173,8 @@ export default function CartPage() {
               <span>결제 금액</span>
               <span>{(totalPrice + delivery).toLocaleString()}원</span>
             </div>
-            <button onClick={handleCheckout} className={styles.checkoutBtn} disabled={checking}>
-              {checking ? '처리 중...' : `결제하기 (${selected.length}개)`}
+            <button onClick={handleCheckoutOpen} className={styles.checkoutBtn}>
+              결제하기 ({selected.length}개)
             </button>
             <Link to="/products" className={styles.continueShopping}>쇼핑 계속하기</Link>
           </div>
@@ -174,6 +189,15 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      {showPayment && (
+        <PaymentModal
+          totalAmount={totalPrice + delivery}
+          itemCount={selected.length}
+          onClose={() => setShowPayment(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
     </div>
   )
 }

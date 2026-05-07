@@ -9,6 +9,8 @@ const statusIcons = ['fa-credit-card', 'fa-box', 'fa-warehouse', 'fa-truck', 'fa
 
 const periodFilters = ['전체', '3개월', '6개월']
 
+const BASE = '/my-first-website/men_suit/images'
+
 export default function OrderPage() {
   const { user } = useApp()
   const navigate = useNavigate()
@@ -16,6 +18,7 @@ export default function OrderPage() {
   const [period, setPeriod] = useState('전체')
   const [loading, setLoading] = useState(true)
 
+  // 주문 목록 조회
   useEffect(() => {
     if (!user) return
     setLoading(true)
@@ -36,6 +39,27 @@ export default function OrderPage() {
     })
   }, [user, period])
 
+  // 실시간 구독: ms_orders 변경 구독
+  useEffect(() => {
+    if (!user) return
+    const channel = supabase
+      .channel('ms_orders_changes')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'ms_orders',
+        filter: `user_id=eq.${user.id}`,
+      }, (payload) => {
+        setOrders(prev => prev.map(o => o.id === payload.new.id ? payload.new : o))
+      })
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [user])
+
+  const handleReturnExchange = () => {
+    alert('고객센터(1544-0000)로 문의해주세요.')
+  }
+
   if (!user) {
     return (
       <div className={styles.loginRequired}>
@@ -49,7 +73,12 @@ export default function OrderPage() {
     <div className={styles.page}>
       <div className={styles.inner}>
         <div className={styles.pageHeader}>
-          <h1 className={styles.title}>주문/배송 조회</h1>
+          <div className={styles.titleWrap}>
+            <h1 className={styles.title}>주문/배송 조회</h1>
+            {!loading && (
+              <span className={styles.orderCount}>총 {orders.length}건</span>
+            )}
+          </div>
           <div className={styles.periodFilters}>
             {periodFilters.map(p => (
               <button
@@ -88,6 +117,27 @@ export default function OrderPage() {
                   <span className={styles.orderPrice}>{order.total_price?.toLocaleString()}원</span>
                 </div>
 
+                {/* 주문 상품 정보 */}
+                {order.items && Array.isArray(order.items) && order.items.length > 0 && (
+                  <div className={styles.orderItemList}>
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className={styles.orderItem}>
+                        {item.img && (
+                          <img
+                            src={item.img}
+                            alt={item.name}
+                            className={styles.orderItemImg}
+                          />
+                        )}
+                        <span>{item.name}</span>
+                        {item.color && <span className={styles.orderItemOption}>{item.color}</span>}
+                        {item.size && <span className={styles.orderItemOption}>{item.size}</span>}
+                        <span className={styles.orderItemQty}>×{item.qty}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {/* Step Bar */}
                 <div className={styles.stepBar}>
                   {statusLabels.map((label, i) => (
@@ -105,11 +155,30 @@ export default function OrderPage() {
                   ))}
                 </div>
 
-                {order.tracking_number && (
+                {/* 배송중: 운송장 번호 강조 표시 */}
+                {order.delivery_status === 3 && order.tracking_number && (
+                  <div className={styles.trackingInfo}>
+                    <i className="fa-solid fa-truck-fast"></i>
+                    <span>송장번호: <strong className={styles.trackingHighlight}>{order.tracking_number}</strong></span>
+                    <button className={styles.trackBtn}>배송조회</button>
+                  </div>
+                )}
+
+                {/* 배송중이 아닌 경우 일반 운송장 표시 */}
+                {order.delivery_status !== 3 && order.tracking_number && order.delivery_status > 0 && (
                   <div className={styles.trackingInfo}>
                     <i className="fa-solid fa-truck-fast"></i>
                     <span>송장번호: <strong>{order.tracking_number}</strong></span>
                     <button className={styles.trackBtn}>배송조회</button>
+                  </div>
+                )}
+
+                {/* 배송완료: 반품/교환 버튼 */}
+                {order.delivery_status === 4 && (
+                  <div className={styles.returnWrap}>
+                    <button className={styles.returnBtn} onClick={handleReturnExchange}>
+                      반품/교환 신청
+                    </button>
                   </div>
                 )}
               </div>
