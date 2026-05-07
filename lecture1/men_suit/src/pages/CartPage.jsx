@@ -45,7 +45,7 @@ export default function CartPage() {
     )
 
     const selectedItems = cart.filter(i => selected.includes(i.cartId))
-    const trackingNumber = 'ZZ' + Date.now()
+    const trackingNumber = 'ZZ' + Date.now().toString().slice(-10)
     const orderData = {
       user_id: user.id,
       total_price: totalPrice + delivery,

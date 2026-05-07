@@ -132,6 +132,11 @@ export default function App() {
     } catch (_) {}
   }
 
+  // 페이지 이동 시 스크롤 최상단으로
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
   const noHeaderFooterPaths = []
   const hideFooter = noHeaderFooterPaths.includes(location.pathname)
 

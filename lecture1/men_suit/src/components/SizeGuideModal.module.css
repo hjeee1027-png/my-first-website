@@ -29,6 +29,7 @@
   overflow-x: hidden;
   flex: 1;
   min-height: 0;
+  width: 100%;
 }
 
 .closeBtn {
@@ -54,17 +55,17 @@
 /* 본문 2단 레이아웃 */
 .body {
   display: flex;
+  width: 100%;
 }
 
-/* 좌측 50% - overflow:hidden으로 테이블 넘침 차단 */
+/* 좌측 50% */
 .left {
   flex: 0 0 50%;
-  max-width: 50%;
+  min-width: 0;
   box-sizing: border-box;
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .leftImgWrap {
@@ -92,7 +93,6 @@
 
 .sizeTable {
   width: 100%;
-  min-width: 360px;
   border-collapse: collapse;
   font-size: 12px;
   white-space: nowrap;
@@ -120,7 +120,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto;
 }
 
 .rightTitle {
