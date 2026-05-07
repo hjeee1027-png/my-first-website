@@ -2,22 +2,18 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 2000;
+  overflow-y: auto;
   padding: 40px 20px;
 }
 
-/* 모달: flex row로 좌우 직접 배치 */
 .modal {
   position: relative;
   background: #fff;
   width: min(960px, calc(100vw - 40px));
-  height: min(680px, calc(100vh - 80px));
+  margin: 0 auto;
   border-radius: 4px;
   display: flex;
-  overflow: hidden;
 }
 
 .closeBtn {
@@ -40,7 +36,7 @@
 }
 .closeBtn:hover { background: #f5f5f5; }
 
-/* 좌측: 고정 50%, 독립 스크롤 */
+/* 좌측 50% */
 .left {
   flex: 0 0 50%;
   min-width: 0;
@@ -48,17 +44,14 @@
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .leftImgWrap {
   width: 100%;
-  flex-shrink: 0;
 }
 .leftImg {
   width: 100%;
-  height: 300px;
+  height: 280px;
   object-fit: cover;
   display: block;
 }
@@ -66,7 +59,6 @@
 .tableWrap {
   padding: 24px;
   overflow-x: auto;
-  flex-shrink: 0;
 }
 .tableTitle {
   font-size: 15px;
@@ -95,16 +87,15 @@
 }
 .sizeTable tbody tr:hover td { background: #fafafa; }
 
-/* 우측: 나머지 너비 전부, 독립 스크롤 */
+/* 우측 나머지 공간 */
 .right {
   flex: 1;
   min-width: 0;
   box-sizing: border-box;
-  padding: 40px 32px;
+  padding: 48px 32px 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto;
 }
 
 .rightTitle {
