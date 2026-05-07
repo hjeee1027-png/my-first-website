@@ -39,6 +39,12 @@ export default function CartPage() {
   }
 
   const handlePaymentSuccess = async () => {
+    // ms_orders FK(user_id → ms_users.id) 보장: 결제 전 사용자 행 확보
+    await supabase.from('ms_users').upsert(
+      { id: user.id, email: user.email, name: user.user_metadata?.name || null },
+      { onConflict: 'id' }
+    )
+
     const selectedItems = cart.filter(i => selected.includes(i.cartId))
     const trackingNumber = 'ZZ' + Date.now()
     const orderData = {
@@ -52,16 +58,12 @@ export default function CartPage() {
         color: i.color, size: i.size, img: i.img,
       })),
     }
-    // items 컬럼 포함해서 시도 → 실패 시 items 없이 재시도
     let { error } = await supabase.from('ms_orders').insert(orderData)
     if (error) {
       const { items, ...fallback } = orderData
       const res2 = await supabase.from('ms_orders').insert(fallback)
-      if (res2.error) {
-        console.warn('주문 DB 저장 실패:', res2.error.message)
-      }
+      if (res2.error) console.warn('주문 DB 저장 실패:', res2.error.message)
     }
-    // DB 저장 성공 여부와 무관하게 결제 완료 처리
     selected.forEach(id => removeFromCart(id))
     setShowPayment(false)
     showToast('결제가 완료되었습니다!')

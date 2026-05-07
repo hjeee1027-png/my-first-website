@@ -26,6 +26,7 @@
 /* 스크롤 가능한 본문 영역 */
 .scrollBody {
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
   min-height: 0;
 }
@@ -58,10 +59,11 @@
 /* 좌측 50% */
 .left {
   width: 50%;
+  box-sizing: border-box;
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  min-width: 0;
 }
 
 .leftImgWrap {
@@ -78,6 +80,7 @@
 .tableWrap {
   padding: 24px;
   flex: 1;
+  overflow-x: auto;
 }
 .tableTitle {
   font-size: 15px;
@@ -108,10 +111,12 @@
 /* 우측 50% */
 .right {
   width: 50%;
-  padding: 48px 40px 48px;
+  box-sizing: border-box;
+  padding: 48px 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
 }
 
 .rightTitle {

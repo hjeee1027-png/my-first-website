@@ -128,7 +128,7 @@ export default function MainCarousel() {
               className={styles.slide}
               style={{
                 transform: `translateX(calc(-50% + ${translateX}px))`,
-                transition: isTransition ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+                transition: isTransition ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease' : 'none',
                 zIndex: isCenter ? 10 : 10 - Math.abs(offset),
                 opacity: isVisible ? 1 : 0,
                 pointerEvents: isVisible ? 'auto' : 'none',
