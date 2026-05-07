@@ -1,4 +1,4 @@
-.section { margin-bottom: 120px; position: relative; z-index: 2; background: #fff; }
+.section { margin-bottom: 120px; margin-top: 80px; position: relative; z-index: 2; background: #fff; }
 .inner {
   max-width: 1440px;
   margin: 0 auto;

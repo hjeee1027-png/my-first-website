@@ -120,6 +120,8 @@ export default function MainCarousel() {
           const isVisible = Math.abs(offset) <= 2
           const translateX = offset * (CARD_WIDTH + CARD_GAP)
 
+          const isBright = Math.abs(offset) <= 1 // 중앙 + 양쪽 1개 밝게 + 텍스트
+
           return (
             <div
               key={i}
@@ -141,10 +143,10 @@ export default function MainCarousel() {
             >
               <div className={styles.imgWrap}>
                 <img src={slide.img} alt={slide.title} className={styles.img} />
-                {!isCenter && <div className={styles.dimOverlay} />}
+                {!isBright && <div className={styles.dimOverlay} />}
               </div>
-              {isCenter && (
-                <div className={styles.caption}>
+              {isBright && (
+                <div className={`${styles.caption} ${!isCenter ? styles.captionSide : ''}`}>
                   <h2 className={styles.captionTitle}>{slide.title}</h2>
                   <p className={styles.captionSub}>{slide.sub}</p>
                 </div>

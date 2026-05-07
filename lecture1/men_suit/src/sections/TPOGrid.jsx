@@ -16,6 +16,10 @@ export default function TPOGrid() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>STYLING CONTENTS</h2>
+          <p className={styles.sectionSub}>비주얼 중심의 캐주얼 및 정장 스타일링</p>
+        </div>
         <div className={styles.grid}>
           {tpoGridData.map((col, colIdx) => (
             <div key={col.id} className={styles.col}>

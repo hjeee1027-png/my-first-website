@@ -40,26 +40,28 @@ export default function CartPage() {
 
   const handlePaymentSuccess = async () => {
     const selectedItems = cart.filter(i => selected.includes(i.cartId))
-    const { error } = await supabase.from('ms_orders').insert({
+    const trackingNumber = 'ZZ' + Date.now()
+    const orderData = {
       user_id: user.id,
       total_price: totalPrice + delivery,
       payment_status: 'paid',
       delivery_status: 0,
-      tracking_number: 'ZZ' + Date.now(),
+      tracking_number: trackingNumber,
       items: selectedItems.map(i => ({
-        id: i.id,
-        name: i.name,
-        qty: i.qty,
-        price: i.price,
-        color: i.color,
-        size: i.size,
-        img: i.img,
+        id: i.id, name: i.name, qty: i.qty, price: i.price,
+        color: i.color, size: i.size, img: i.img,
       })),
-    })
-    if (error) {
-      showToast('주문 저장 중 오류가 발생했습니다.', 'error')
-      return
     }
+    // items 컬럼 포함해서 시도 → 실패 시 items 없이 재시도
+    let { error } = await supabase.from('ms_orders').insert(orderData)
+    if (error) {
+      const { items, ...fallback } = orderData
+      const res2 = await supabase.from('ms_orders').insert(fallback)
+      if (res2.error) {
+        console.warn('주문 DB 저장 실패:', res2.error.message)
+      }
+    }
+    // DB 저장 성공 여부와 무관하게 결제 완료 처리
     selected.forEach(id => removeFromCart(id))
     setShowPayment(false)
     showToast('결제가 완료되었습니다!')

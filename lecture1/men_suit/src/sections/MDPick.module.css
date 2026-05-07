@@ -5,6 +5,22 @@
   padding: 0 40px;
 }
 
+/* 섹션 헤더 */
+.sectionHeader {
+  margin-bottom: 40px;
+}
+.sectionTitle {
+  font-size: 38px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.sectionSub {
+  font-size: 16px;
+  color: #666;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 620px 1fr;

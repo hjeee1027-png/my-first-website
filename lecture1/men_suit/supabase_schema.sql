@@ -201,6 +201,24 @@ CROSS JOIN (VALUES ('M'),('L'),('XL'),('XXL')) AS s(size)
 ON CONFLICT DO NOTHING;
 
 -- =====================================================
+-- 일부 상품 품절 처리 (랜덤 품절 시뮬레이션)
+-- Supabase SQL Editor에서 별도 실행하세요
+-- =====================================================
+/*
+UPDATE public.ms_inventory SET stock = 0
+WHERE (product_id = 1 AND color = '그레이' AND size = 'M')
+   OR (product_id = 1 AND color = '카멜' AND size = 'XXL')
+   OR (product_id = 3 AND color = '네이비' AND size = 'L')
+   OR (product_id = 4 AND color = '베이지' AND size = 'XL')
+   OR (product_id = 5 AND color = '블랙' AND size = 'M')
+   OR (product_id = 6 AND color = '그레이' AND size = 'XXL')
+   OR (product_id = 7 AND color = '카멜' AND size = 'L')
+   OR (product_id = 8 AND color = '네이비' AND size = 'XL')
+   OR (product_id = 10 AND color = '블랙' AND size = 'M')
+   OR (product_id = 12 AND color = '베이지' AND size = 'XXL');
+*/
+
+-- =====================================================
 -- 완료! GitHub Secrets에 아래 값을 등록하세요:
 -- 기존 VITE_SUPABASE_URL 시크릿 재활용 가능 (동일 프로젝트 공유)
 -- deploy.yml의 men_suit 빌드 스텝:

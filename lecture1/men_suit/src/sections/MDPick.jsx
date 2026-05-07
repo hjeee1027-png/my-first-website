@@ -115,6 +115,10 @@ export default function MDPick() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>MD's PICK</h2>
+          <p className={styles.sectionSub}>에디터가 직접 선택한 이번 시즌 베스트 스타일</p>
+        </div>
         <div className={styles.grid}>
           {/* 좌측 큰 이미지 */}
           <div className={styles.mainImgWrap}>
