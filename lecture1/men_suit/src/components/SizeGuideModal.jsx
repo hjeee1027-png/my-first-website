@@ -4,33 +4,34 @@ import styles from './SizeGuideModal.module.css'
 const BASE = '/my-first-website/men_suit/images'
 
 const sizeTable = [
-  { size: 'M(95)',   shoulder: '45cm',  chest: '98cm',  waist: '82cm',  hip: '96cm',  sleeve: '62cm' },
-  { size: 'L(100)',  shoulder: '46.5cm', chest: '102cm', waist: '86cm',  hip: '100cm', sleeve: '63cm' },
-  { size: 'XL(105)', shoulder: '48cm',  chest: '106cm', waist: '90cm',  hip: '104cm', sleeve: '64cm' },
-  { size: 'XXL(110)',shoulder: '50cm',  chest: '110cm', waist: '94cm',  hip: '108cm', sleeve: '65cm' },
+  { size: 'M(95)',    shoulder: '45cm',   chest: '98cm',  waist: '82cm', hip: '96cm',  sleeve: '62cm' },
+  { size: 'L(100)',   shoulder: '46.5cm', chest: '102cm', waist: '86cm', hip: '100cm', sleeve: '63cm' },
+  { size: 'XL(105)',  shoulder: '48cm',   chest: '106cm', waist: '90cm', hip: '104cm', sleeve: '64cm' },
+  { size: 'XXL(110)', shoulder: '50cm',   chest: '110cm', waist: '94cm', hip: '108cm', sleeve: '65cm' },
 ]
-
-const feedbackMap = {
-  M:   '100% 딱 맞아요',
-  L:   '85% 딱 맞아요, 15% 약간 여유있어요',
-  XL:  '90% 딱 맞아요',
-  XXL: '한 치수 Up 해주세요 / 100% 여유있게 맞아요',
-}
 
 function recommend(height, weight) {
   const bmi = weight / ((height / 100) ** 2)
+
   if (height <= 170) {
-    if (bmi < 21) return 'M'
-    if (bmi < 24) return 'L'
-    return 'XL'
+    if (bmi < 20)   return { size: 'M',   fit: 'exact' }
+    if (bmi < 22)   return { size: 'M',   fit: 'up' }
+    if (bmi < 24)   return { size: 'L',   fit: 'exact' }
+    return            { size: 'L',   fit: 'up' }
   } else if (height <= 175) {
-    if (bmi < 21) return 'L'
-    if (bmi < 24) return 'XL'
-    return 'XXL'
+    if (bmi < 20)   return { size: 'L',   fit: 'exact' }
+    if (bmi < 22)   return { size: 'L',   fit: 'up' }
+    if (bmi < 24)   return { size: 'XL',  fit: 'exact' }
+    return            { size: 'XL',  fit: 'up' }
+  } else if (height <= 180) {
+    if (bmi < 20)   return { size: 'L',   fit: 'exact' }
+    if (bmi < 22)   return { size: 'XL',  fit: 'exact' }
+    if (bmi < 24)   return { size: 'XL',  fit: 'up' }
+    return            { size: 'XXL', fit: 'exact' }
   } else {
-    if (bmi < 21) return 'L'
-    if (bmi < 23) return 'XL'
-    return 'XXL'
+    if (bmi < 21)   return { size: 'XL',  fit: 'exact' }
+    if (bmi < 23)   return { size: 'XL',  fit: 'up' }
+    return            { size: 'XXL', fit: 'exact' }
   }
 }
 
@@ -48,24 +49,32 @@ export default function SizeGuideModal({ onClose, user }) {
       alert('올바른 키와 몸무게를 입력해주세요.')
       return
     }
-    const size = recommend(h, w)
-    setResult(size)
+    setResult(recommend(h, w))
   }
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose()
   }
 
+  const feedbackText = result
+    ? (result.fit === 'exact' ? '100% 여유있게 맞아요' : '한 치수 up 해주세요')
+    : ''
+
+  const aiDesc = result
+    ? (result.fit === 'exact'
+      ? `${result.size} 사이즈가 체형 데이터에 딱 맞습니다. 슬림핏 제품도 부담 없이 선택하실 수 있어요. 실측 사이즈 표를 참고해 최종 확인 후 구매하세요.`
+      : `체형 분석 결과 ${result.size} 사이즈를 권장드립니다. 체형 분포상 한 사이즈 업이 더 편안한 착용감을 드립니다. 여유로운 핏을 선호하신다면 ${result.size === 'M' ? 'L' : result.size === 'L' ? 'XL' : 'XXL'} 사이즈도 고려해보세요.`)
+    : ''
+
   return (
     <div className={styles.backdrop} onClick={handleBackdropClick}>
       <div className={styles.modal}>
-        {/* 닫기 버튼 */}
         <button className={styles.closeBtn} onClick={onClose}>
           <i className="fa-solid fa-xmark"></i>
         </button>
 
         <div className={styles.body}>
-          {/* 좌측 */}
+          {/* 좌측: 이미지 + 사이즈 표 */}
           <div className={styles.left}>
             <div className={styles.leftImgWrap}>
               <img
@@ -90,7 +99,7 @@ export default function SizeGuideModal({ onClose, user }) {
                 <tbody>
                   {sizeTable.map(row => (
                     <tr key={row.size}>
-                      <td>{row.size}</td>
+                      <td><strong>{row.size}</strong></td>
                       <td>{row.shoulder}</td>
                       <td>{row.chest}</td>
                       <td>{row.waist}</td>
@@ -103,7 +112,7 @@ export default function SizeGuideModal({ onClose, user }) {
             </div>
           </div>
 
-          {/* 우측 */}
+          {/* 우측: 입력 + 결과 */}
           <div className={styles.right}>
             <h2 className={styles.rightTitle}>나에게 맞는 사이즈 찾기</h2>
             <p className={styles.rightSub}>{userName}님의 체형에 딱 맞는 사이즈를 추천해드립니다</p>
@@ -136,14 +145,15 @@ export default function SizeGuideModal({ onClose, user }) {
             {result && (
               <div className={styles.resultWrap}>
                 <p className={styles.resultSize}>
-                  내 사이즈는 <span className={styles.resultHighlight}>{result}</span>
+                  내 사이즈는 <span className={styles.resultHighlight}>{result.size}</span>
                 </p>
                 <p className={styles.resultDesc}>
-                  비슷한 체형을 가진 사람들이 구매한 사이즈와 사이즈 피드백 데이터를 분석한 결과입니다
+                  비슷한 체형을 가진 고객님들의 구매 데이터 및 사이즈 피드백을 AI가 분석한 결과입니다.
                 </p>
-                <button className={styles.feedbackBtn}>
-                  {feedbackMap[result]}
-                </button>
+                <div className={styles.feedbackBtn}>
+                  {feedbackText}
+                </div>
+                <p className={styles.aiDesc}>{aiDesc}</p>
               </div>
             )}
           </div>

@@ -54,6 +54,16 @@ export default function ProductDetailPage() {
     logEvent('view', product.id, { product_name: product.name })
   }, [id])
 
+  // 사이즈 가이드 모달 열릴 때 body 스크롤 잠금
+  useEffect(() => {
+    if (showSizeGuide) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [showSizeGuide])
+
   // 재고 조회
   useEffect(() => {
     if (!product || !selColor || !selSize) {

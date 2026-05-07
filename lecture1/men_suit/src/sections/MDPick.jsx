@@ -9,7 +9,7 @@ const mdPickSlides = [
     headText1: '부드럽게 닿는 감촉',
     headText1Size: '24px',
     headText2: '체형 맞춤형 정장 30% 쿠폰',
-    headText2Size: '18px',
+    headText2Size: '16px',
     items: [
       { id: 101, name: '비스코스 스트라이프 수트', price: 359000, originalPrice: 469000, discount: 23, desc: '슬림핏 / 울 혼방', img: '/my-first-website/men_suit/images/mdpick/NTSXB04RSI_m0.jpeg', wish_count: 142 },
       { id: 102, name: '스트레치 슬림 팬츠', price: 89000, originalPrice: 119000, discount: 25, desc: '4방향 스트레치', img: '/my-first-website/men_suit/images/mdpick/SDSXA61OCI_m0.jpeg', wish_count: 87 },
@@ -21,7 +21,7 @@ const mdPickSlides = [
     headText1: '셔츠로 완성하는 품격',
     headText1Size: '24px',
     headText2: '신상 셔츠 전품목 15% 할인',
-    headText2Size: '18px',
+    headText2Size: '16px',
     items: [
       { id: 104, name: '옥스포드 드레스 셔츠', price: 69000, originalPrice: 89000, discount: 22, desc: '레귤러핏 / 코튼 100%', img: '/my-first-website/men_suit/images/mdpick/26SS_main_BN_PC_16.jpeg', wish_count: 56 },
       { id: 105, name: '리넨 체크 셔츠', price: 79000, originalPrice: null, discount: 0, desc: '오버핏 / 린넨 혼방', img: '/my-first-website/men_suit/images/mdpick/SEJVB31NSN_m0.jpeg', wish_count: 34 },
@@ -33,7 +33,7 @@ const mdPickSlides = [
     headText1: '여유로운 일상의 한 벌',
     headText1Size: '24px',
     headText2: '캐주얼 컬렉션 무료 배송',
-    headText2Size: '18px',
+    headText2Size: '16px',
     items: [
       { id: 107, name: '워시드 치노 팬츠', price: 89000, originalPrice: 119000, discount: 25, desc: '레귤러핏 / 면 100%', img: '/my-first-website/men_suit/images/mdpick/STCO_26SS_MINT_568750.jpeg', wish_count: 178 },
       { id: 108, name: '코튼 오버핏 재킷', price: 189000, originalPrice: null, discount: 0, desc: '오버핏 / 코튼 혼방', img: '/my-first-website/men_suit/images/mdpick/260427_main_big_dm_w.jpeg', wish_count: 95 },
@@ -50,11 +50,7 @@ function MDPickItem({ item }) {
   const handleWish = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if (wished) {
-      setWishCount(prev => prev - 1)
-    } else {
-      setWishCount(prev => prev + 1)
-    }
+    setWishCount(prev => wished ? prev - 1 : prev + 1)
     toggleWishlist(item)
   }
 
@@ -66,9 +62,17 @@ function MDPickItem({ item }) {
 
   return (
     <div className={styles.itemCard}>
-      <Link to={`/products/${item.id}`} className={styles.itemImgWrap}>
-        <img src={item.img} alt={item.name} className={styles.itemImg} />
-      </Link>
+      <div className={styles.itemImgContainer}>
+        <Link to={`/products/${item.id}`} className={styles.itemImgWrap}>
+          <img src={item.img} alt={item.name} className={styles.itemImg} />
+        </Link>
+        <button
+          onClick={handleWish}
+          className={`${styles.heartOverlay} ${wished ? styles.wished : ''}`}
+        >
+          <i className={`${wished ? 'fa-solid' : 'fa-regular'} fa-heart`}></i>
+        </button>
+      </div>
       <div className={styles.itemInfo}>
         <p className={styles.itemName}>{item.name}</p>
         <p className={styles.itemDesc}>{item.desc}</p>
@@ -81,14 +85,10 @@ function MDPickItem({ item }) {
             <span className={styles.itemOriginal}>{item.originalPrice.toLocaleString()}원</span>
           )}
         </div>
-        <div className={styles.itemActions}>
-          <button
-            onClick={handleWish}
-            className={`${styles.actionBtn} ${wished ? styles.wished : ''}`}
-          >
-            <i className={`${wished ? 'fa-solid' : 'fa-regular'} fa-heart`}></i>
-          </button>
-          <span className={styles.wishCountText}>{wishCount}</span>
+        <div className={styles.itemFooter}>
+          <span className={styles.wishCountText}>
+            <i className="fa-solid fa-heart"></i> {wishCount}
+          </span>
           <button onClick={handleCart} className={styles.cartBtn}>
             <i className="fa-solid fa-bag-shopping"></i>
           </button>

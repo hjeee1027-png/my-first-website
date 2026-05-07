@@ -178,6 +178,29 @@
 }
 .returnBtn:hover { background: #111; color: #fff; }
 
+.cancelBtn {
+  border: 1px solid #e74c3c;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #e74c3c;
+  background: #fff;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.cancelBtn:hover { background: #e74c3c; color: #fff; }
+
+.canceledBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fef5f5;
+  border: 1px solid #f5c0c0;
+  color: #c0392b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .loginRequired {
   display: flex;
   flex-direction: column;

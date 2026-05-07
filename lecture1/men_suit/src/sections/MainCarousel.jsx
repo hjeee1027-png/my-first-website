@@ -16,33 +16,34 @@ const slidesData = [
   { img: `${BASE}881_2281_401_KOR_20260504160948.jpeg`, title: 'SEASON BEST', sub: '이번 시즌, 당신의 선택' },
 ]
 
-// 앞 3장을 뒤에 추가해서 총 12개 (무한 슬라이드용)
+// pre-clone(마지막3) + real(9) + post-clone(처음3) = 총 15개
 const extendedSlides = [
-  ...slidesData,
-  slidesData[0],
-  slidesData[1],
-  slidesData[2],
+  slidesData[6], slidesData[7], slidesData[8], // 인덱스 0,1,2 (pre-clone)
+  ...slidesData,                                // 인덱스 3-11 (real)
+  slidesData[0], slidesData[1], slidesData[2], // 인덱스 12,13,14 (post-clone)
 ]
 
-const TOTAL = extendedSlides.length // 12
+const REAL_COUNT = slidesData.length // 9
+const TOTAL = extendedSlides.length  // 15
+const START = 5  // pre(3) + realIdx(2) = 5 → 3번째 real 슬라이드
+
 const CARD_WIDTH = 430
 const CARD_GAP = 16
-const VISIBLE = 5
 
 export default function MainCarousel() {
   const navigate = useNavigate()
-  // 초기 인덱스: 2 (중앙 카드가 index 2가 되도록)
-  const [current, setCurrent] = useState(2)
+  const [current, setCurrent] = useState(START)
   const [isTransition, setIsTransition] = useState(true)
+  const isJumping = useRef(false)
   const autoRef = useRef(null)
   const pausedRef = useRef(false)
 
   const startAuto = useCallback(() => {
     clearInterval(autoRef.current)
     autoRef.current = setInterval(() => {
-      if (!pausedRef.current) {
-        setCurrent(c => c + 1)
+      if (!pausedRef.current && !isJumping.current) {
         setIsTransition(true)
+        setCurrent(c => c + 1)
       }
     }, 3000)
   }, [])
@@ -52,53 +53,63 @@ export default function MainCarousel() {
     return () => clearInterval(autoRef.current)
   }, [startAuto])
 
-  // 인덱스가 끝에 도달하면 transition 없이 처음으로 점프
+  // 점프 로직: post-clone 또는 pre-clone 영역 진입 시 transition:none으로 실제 위치로 이동
   useEffect(() => {
-    if (current >= TOTAL - 3) {
-      // 원본 마지막(index 8)에 해당하는 클론 영역을 넘어가면 리셋
-      const timer = setTimeout(() => {
+    if (isJumping.current) return
+
+    if (current >= TOTAL - 3) { // >= 12: post-clone 진입
+      isJumping.current = true
+      const t = setTimeout(() => {
         setIsTransition(false)
-        setCurrent(c => c - (TOTAL - 3))
+        setCurrent(c => c - REAL_COUNT)
       }, 500)
-      return () => clearTimeout(timer)
+      return () => clearTimeout(t)
     }
-    if (current < 0) {
-      const timer = setTimeout(() => {
+
+    if (current < 3) { // pre-clone 진입
+      isJumping.current = true
+      const t = setTimeout(() => {
         setIsTransition(false)
-        setCurrent(TOTAL - 3 - 1)
+        setCurrent(c => c + REAL_COUNT)
       }, 500)
-      return () => clearTimeout(timer)
+      return () => clearTimeout(t)
     }
   }, [current])
 
+  // transition:none 완료 후 다시 transition 활성화 + jumping 해제
+  useEffect(() => {
+    if (!isTransition) {
+      const t = setTimeout(() => {
+        isJumping.current = false
+        setIsTransition(true)
+      }, 50)
+      return () => clearTimeout(t)
+    }
+  }, [isTransition])
+
   const handlePrev = () => {
+    if (isJumping.current) return
     setIsTransition(true)
     setCurrent(c => c - 1)
     pausedRef.current = true
     clearInterval(autoRef.current)
-    setTimeout(() => {
-      pausedRef.current = false
-      startAuto()
-    }, 5000)
+    setTimeout(() => { pausedRef.current = false; startAuto() }, 5000)
   }
 
   const handleNext = () => {
+    if (isJumping.current) return
     setIsTransition(true)
     setCurrent(c => c + 1)
     pausedRef.current = true
     clearInterval(autoRef.current)
-    setTimeout(() => {
-      pausedRef.current = false
-      startAuto()
-    }, 5000)
+    setTimeout(() => { pausedRef.current = false; startAuto() }, 5000)
   }
 
-  // 가운데 기준으로 상대적 위치 계산
-  const getOffset = (i) => {
-    return i - current
-  }
+  const getOffset = (i) => i - current
 
-  const progressPercent = ((current % slidesData.length) / slidesData.length) * 100
+  // 진행률: current=START(5)일 때 0%, 슬라이드 넘길수록 채워짐
+  const realIdx = ((current - 3) % REAL_COUNT + REAL_COUNT) % REAL_COUNT
+  const progressPercent = ((realIdx - 2 + REAL_COUNT) % REAL_COUNT) / REAL_COUNT * 100
 
   return (
     <section className={styles.section}>
@@ -107,7 +118,6 @@ export default function MainCarousel() {
           const offset = getOffset(i)
           const isCenter = offset === 0
           const isVisible = Math.abs(offset) <= 2
-
           const translateX = offset * (CARD_WIDTH + CARD_GAP)
 
           return (

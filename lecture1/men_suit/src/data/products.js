@@ -46,18 +46,18 @@ export const bannerSlides = [
 ]
 
 export const newArrivalProducts = [
-  { id: 1, name: '스트라이프 셋업 수트', price: 189000, originalPrice: 269000, category: 'SUIT', img: `${BASE}/new-arrival/ABG2PP1101BK_M.jpeg`, model: '173cm / 78kg / 슬림탄탄', isNew: true, discount: 30 },
-  { id: 2, name: '울 블렌드 슬랙스', price: 89000, originalPrice: 119000, category: 'PANTS', img: `${BASE}/new-arrival/ABG2PP1101CGR_M.jpeg`, model: '173cm / 74kg / 보통', isNew: true, discount: 25 },
-  { id: 3, name: '리넨 오버핏 셔츠', price: 69000, originalPrice: null, category: 'SHIRT', img: `${BASE}/new-arrival/ABF2ET1101DGN_M.jpeg`, model: '175cm / 72kg / 슬림', isNew: true, discount: 0 },
-  { id: 4, name: '코튼 니트 가디건', price: 119000, originalPrice: 159000, category: 'KNIT', img: `${BASE}/new-arrival/AEF2TT1101DNV_M.jpeg`, model: '174cm / 76kg / 보통', isNew: true, discount: 25 },
-  { id: 5, name: '테크니컬 아우터 재킷', price: 249000, originalPrice: 329000, category: 'OUTER', img: `${BASE}/new-arrival/ABF2JJ1102DNV_M.jpeg`, model: '176cm / 80kg / 탄탄', isNew: true, discount: 24 },
-  { id: 6, name: '사파리 워시드 재킷', price: 219000, originalPrice: null, category: 'OUTER', img: `${BASE}/new-arrival/ABF2JJ1102LGR_M.jpeg`, model: '174cm / 74kg / 보통', isNew: true, discount: 0 },
-  { id: 7, name: '투버튼 슬림 수트', price: 359000, originalPrice: 469000, category: 'SUIT', img: `${BASE}/new-arrival/ABG2PP1101DNV_M.jpeg`, model: '175cm / 76kg / 슬림탄탄', isNew: true, discount: 23 },
-  { id: 8, name: '코튼 옥스포드 셔츠', price: 59000, originalPrice: 79000, category: 'SHIRT', img: `${BASE}/new-arrival/ABF2ET1104GR_M.jpeg`, model: '173cm / 72kg / 슬림', isNew: true, discount: 25 },
-  { id: 9, name: '체크 울 슬랙스', price: 99000, originalPrice: 139000, category: 'PANTS', img: `${BASE}/new-arrival/ABG2PP1101LBE_M.jpeg`, model: '174cm / 76kg / 보통', isNew: false, discount: 29 },
-  { id: 10, name: '메리노 울 터틀넥', price: 109000, originalPrice: null, category: 'KNIT', img: `${BASE}/new-arrival/AEF2TT1101LGR_M.jpeg`, model: '175cm / 78kg / 탄탄', isNew: false, discount: 0 },
-  { id: 11, name: '와이드 핏 코튼 팬츠', price: 89000, originalPrice: 119000, category: 'PANTS', img: `${BASE}/new-arrival/AAF2KG1102BE_M.jpeg`, model: '175cm / 72kg / 보통', isNew: true, discount: 25 },
-  { id: 12, name: '더블 브레스티드 블레이저', price: 289000, originalPrice: 389000, category: 'SUIT', img: `${BASE}/new-arrival/AEG2PP1101BE_M.jpeg`, model: '176cm / 80kg / 탄탄', isNew: false, discount: 26 },
+  { id: 1, name: '스트라이프 셋업 수트', price: 189000, originalPrice: 269000, category: 'SUIT', img: `${BASE}/new-arrival/ABG2PP1101BK_M.jpeg`, model: '173cm / 78kg / 슬림탄탄', isNew: true, discount: 30, wish_count: 213 },
+  { id: 2, name: '울 블렌드 슬랙스', price: 89000, originalPrice: 119000, category: 'PANTS', img: `${BASE}/new-arrival/ABG2PP1101CGR_M.jpeg`, model: '173cm / 74kg / 보통', isNew: true, discount: 25, wish_count: 57 },
+  { id: 3, name: '리넨 오버핏 셔츠', price: 69000, originalPrice: null, category: 'SHIRT', img: `${BASE}/new-arrival/ABF2ET1101DGN_M.jpeg`, model: '175cm / 72kg / 슬림', isNew: true, discount: 0, wish_count: 189 },
+  { id: 4, name: '코튼 니트 가디건', price: 119000, originalPrice: 159000, category: 'KNIT', img: `${BASE}/new-arrival/AEF2TT1101DNV_M.jpeg`, model: '174cm / 76kg / 보통', isNew: true, discount: 25, wish_count: 94 },
+  { id: 5, name: '테크니컬 아우터 재킷', price: 249000, originalPrice: 329000, category: 'OUTER', img: `${BASE}/new-arrival/ABF2JJ1102DNV_M.jpeg`, model: '176cm / 80kg / 탄탄', isNew: true, discount: 24, wish_count: 162 },
+  { id: 6, name: '사파리 워시드 재킷', price: 219000, originalPrice: null, category: 'OUTER', img: `${BASE}/new-arrival/ABF2JJ1102LGR_M.jpeg`, model: '174cm / 74kg / 보통', isNew: true, discount: 0, wish_count: 38 },
+  { id: 7, name: '투버튼 슬림 수트', price: 359000, originalPrice: 469000, category: 'SUIT', img: `${BASE}/new-arrival/ABG2PP1101DNV_M.jpeg`, model: '175cm / 76kg / 슬림탄탄', isNew: true, discount: 23, wish_count: 267 },
+  { id: 8, name: '코튼 옥스포드 셔츠', price: 59000, originalPrice: 79000, category: 'SHIRT', img: `${BASE}/new-arrival/ABF2ET1104GR_M.jpeg`, model: '173cm / 72kg / 슬림', isNew: true, discount: 25, wish_count: 71 },
+  { id: 9, name: '체크 울 슬랙스', price: 99000, originalPrice: 139000, category: 'PANTS', img: `${BASE}/new-arrival/ABG2PP1101LBE_M.jpeg`, model: '174cm / 76kg / 보통', isNew: false, discount: 29, wish_count: 45 },
+  { id: 10, name: '메리노 울 터틀넥', price: 109000, originalPrice: null, category: 'KNIT', img: `${BASE}/new-arrival/AEF2TT1101LGR_M.jpeg`, model: '175cm / 78kg / 탄탄', isNew: false, discount: 0, wish_count: 128 },
+  { id: 11, name: '와이드 핏 코튼 팬츠', price: 89000, originalPrice: 119000, category: 'PANTS', img: `${BASE}/new-arrival/AAF2KG1102BE_M.jpeg`, model: '175cm / 72kg / 보통', isNew: true, discount: 25, wish_count: 83 },
+  { id: 12, name: '더블 브레스티드 블레이저', price: 289000, originalPrice: 389000, category: 'SUIT', img: `${BASE}/new-arrival/AEG2PP1101BE_M.jpeg`, model: '176cm / 80kg / 탄탄', isNew: false, discount: 26, wish_count: 301 },
 ]
 
 export const lookbookImages = [

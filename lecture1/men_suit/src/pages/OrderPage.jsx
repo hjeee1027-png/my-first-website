@@ -12,7 +12,7 @@ const periodFilters = ['전체', '3개월', '6개월']
 const BASE = '/my-first-website/men_suit/images'
 
 export default function OrderPage() {
-  const { user } = useApp()
+  const { user, showToast } = useApp()
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [period, setPeriod] = useState('전체')
@@ -57,7 +57,21 @@ export default function OrderPage() {
   }, [user])
 
   const handleReturnExchange = () => {
-    alert('고객센터(1544-0000)로 문의해주세요.')
+    alert('고객센터(1544-0000)로 문의해주세요.\n\n무료 반품/교환: 수령 후 7일 이내\n환불 처리: 3~5 영업일 소요')
+  }
+
+  const handleCancelOrder = async (orderId) => {
+    if (!window.confirm('주문을 취소하시겠습니까?\n취소 후에는 되돌릴 수 없습니다.')) return
+    const { error } = await supabase
+      .from('ms_orders')
+      .update({ payment_status: 'refunded' })
+      .eq('id', orderId)
+    if (error) {
+      showToast('주문 취소 중 오류가 발생했습니다.', 'error')
+      return
+    }
+    showToast('주문이 취소되었습니다.')
+    setOrders(prev => prev.filter(o => o.id !== orderId))
   }
 
   if (!user) {
@@ -173,11 +187,27 @@ export default function OrderPage() {
                   </div>
                 )}
 
-                {/* 배송완료: 반품/교환 버튼 */}
-                {order.delivery_status === 4 && (
+                {/* 결제완료(0): 주문취소 버튼 */}
+                {order.delivery_status === 0 && order.payment_status !== 'refunded' && (
+                  <div className={styles.returnWrap}>
+                    <button className={styles.cancelBtn} onClick={() => handleCancelOrder(order.id)}>
+                      주문 취소
+                    </button>
+                  </div>
+                )}
+
+                {/* 취소된 주문 표시 */}
+                {order.payment_status === 'refunded' && (
+                  <div className={styles.canceledBadge}>
+                    <i className="fa-solid fa-ban"></i> 주문 취소 완료
+                  </div>
+                )}
+
+                {/* 배송완료(4): 반품/교환/환불 버튼 */}
+                {order.delivery_status === 4 && order.payment_status !== 'refunded' && (
                   <div className={styles.returnWrap}>
                     <button className={styles.returnBtn} onClick={handleReturnExchange}>
-                      반품/교환 신청
+                      반품 / 교환 / 환불 신청
                     </button>
                   </div>
                 )}

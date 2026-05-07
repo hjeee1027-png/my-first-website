@@ -52,7 +52,6 @@ export default function ProductCard({ product, showFitGuide = true }) {
           </div>
         )}
 
-        {product.isNew && <span className={styles.badgeNew}>NEW</span>}
         {product.discount > 0 && (
           <span className={styles.badgeSale}>-{product.discount}%</span>
         )}
