@@ -1,25 +1,27 @@
 .backdrop {
   position: fixed;
   inset: 0;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 2000;
   overflow-y: auto;
-  padding: 40px 20px;
 }
 
 .modal {
-  position: relative;
   background: #fff;
   width: min(960px, calc(100vw - 40px));
-  margin: 0 auto;
+  margin: 40px auto;
   border-radius: 4px;
+}
+
+/* 닫기 버튼 행 */
+.modalHeader {
   display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
 }
 
 .closeBtn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
   width: 36px;
   height: 36px;
   display: flex;
@@ -31,24 +33,21 @@
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  z-index: 10;
   transition: background 0.2s;
 }
 .closeBtn:hover { background: #f5f5f5; }
 
-/* 좌측 50% */
-.left {
-  flex: 0 0 50%;
-  min-width: 0;
-  box-sizing: border-box;
-  border-right: 1px solid #eee;
+/* 2단 레이아웃 */
+.body {
   display: flex;
-  flex-direction: column;
 }
 
-.leftImgWrap {
-  width: 100%;
+/* 좌측 */
+.left {
+  width: 50%;
+  border-right: 1px solid #eee;
 }
+
 .leftImg {
   width: 100%;
   height: 280px;
@@ -57,14 +56,15 @@
 }
 
 .tableWrap {
-  padding: 24px;
+  padding: 20px 24px 24px;
   overflow-x: auto;
 }
+
 .tableTitle {
   font-size: 15px;
   font-weight: 700;
   color: #111;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .sizeTable {
@@ -87,12 +87,11 @@
 }
 .sizeTable tbody tr:hover td { background: #fafafa; }
 
-/* 우측 나머지 공간 */
+/* 우측 */
 .right {
-  flex: 1;
-  min-width: 0;
+  width: 50%;
+  padding: 40px 32px;
   box-sizing: border-box;
-  padding: 48px 32px 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -109,7 +108,6 @@
   margin-top: -12px;
 }
 
-/* 입력 필드 */
 .inputGroup {
   display: flex;
   flex-direction: column;
@@ -128,7 +126,6 @@
 .input:focus { border-color: #111; }
 .input::placeholder { color: #aaa; }
 
-/* 추천 버튼 */
 .recommendBtn {
   width: 100%;
   padding: 15px;
@@ -141,7 +138,6 @@
 }
 .recommendBtn:hover { background: #333; }
 
-/* 결과 영역 */
 .resultWrap {
   display: flex;
   flex-direction: column;
@@ -176,7 +172,6 @@
   color: #111;
   width: 100%;
   pointer-events: none;
-  cursor: default;
 }
 
 .aiDesc {
