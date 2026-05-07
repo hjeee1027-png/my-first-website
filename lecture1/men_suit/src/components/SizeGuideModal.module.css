@@ -1,4 +1,3 @@
-/* backdrop: 고정 오버레이, 스크롤 없음 */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -8,10 +7,9 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  overflow: hidden;
 }
 
-/* 모달: 최대 높이 제한 + flex 열 구조 + overflow:hidden으로 자식 넘침 차단 */
+/* 모달: flex row로 좌우 직접 배치 */
 .modal {
   position: relative;
   background: #fff;
@@ -19,17 +17,7 @@
   max-height: calc(100vh - 80px);
   border-radius: 4px;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
-}
-
-/* 스크롤 가능한 본문 영역 */
-.scrollBody {
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
 }
 
 .closeBtn {
@@ -52,13 +40,7 @@
 }
 .closeBtn:hover { background: #f5f5f5; }
 
-/* 본문 2단 레이아웃 */
-.body {
-  display: flex;
-  width: 100%;
-}
-
-/* 좌측 50% */
+/* 좌측: 고정 50%, 독립 스크롤 */
 .left {
   flex: 0 0 50%;
   min-width: 0;
@@ -66,11 +48,13 @@
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .leftImgWrap {
   width: 100%;
-  overflow: hidden;
+  flex-shrink: 0;
 }
 .leftImg {
   width: 100%;
@@ -81,8 +65,8 @@
 
 .tableWrap {
   padding: 24px;
-  flex: 1;
   overflow-x: auto;
+  flex-shrink: 0;
 }
 .tableTitle {
   font-size: 15px;
@@ -111,7 +95,7 @@
 }
 .sizeTable tbody tr:hover td { background: #fafafa; }
 
-/* 우측 */
+/* 우측: 나머지 너비 전부, 독립 스크롤 */
 .right {
   flex: 1;
   min-width: 0;
@@ -120,6 +104,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
 }
 
 .rightTitle {
@@ -188,7 +173,6 @@
   line-height: 1.6;
 }
 
-/* 피드백 버튼 - 버튼 형태이지만 호버 없음, 클릭 불가 */
 .feedbackBtn {
   display: flex;
   align-items: center;
@@ -204,7 +188,6 @@
   cursor: default;
 }
 
-/* AI 분석 설명 텍스트 */
 .aiDesc {
   font-size: 15px;
   color: #777;
