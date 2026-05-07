@@ -11,16 +11,16 @@
   overflow: hidden;
 }
 
-/* 모달: 최대 높이 제한 + flex 열 구조 */
+/* 모달: 최대 높이 제한 + flex 열 구조 + overflow:hidden으로 자식 넘침 차단 */
 .modal {
   position: relative;
   background: #fff;
-  width: 100%;
-  max-width: 1000px;
+  width: min(960px, calc(100vw - 40px));
   max-height: calc(100vh - 80px);
   border-radius: 4px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* 스크롤 가능한 본문 영역 */
@@ -56,14 +56,15 @@
   display: flex;
 }
 
-/* 좌측 50% */
+/* 좌측 50% - overflow:hidden으로 테이블 넘침 차단 */
 .left {
-  width: 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
   box-sizing: border-box;
   border-right: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  overflow: hidden;
 }
 
 .leftImgWrap {
@@ -91,13 +92,15 @@
 
 .sizeTable {
   width: 100%;
+  min-width: 360px;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 .sizeTable th,
 .sizeTable td {
   border: 1px solid #e5e5e5;
-  padding: 9px 8px;
+  padding: 8px 6px;
   text-align: center;
   color: #333;
 }
@@ -108,15 +111,16 @@
 }
 .sizeTable tbody tr:hover td { background: #fafafa; }
 
-/* 우측 50% */
+/* 우측 */
 .right {
-  width: 50%;
+  flex: 1;
+  min-width: 0;
   box-sizing: border-box;
-  padding: 48px 40px;
+  padding: 40px 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-width: 0;
+  overflow-y: auto;
 }
 
 .rightTitle {

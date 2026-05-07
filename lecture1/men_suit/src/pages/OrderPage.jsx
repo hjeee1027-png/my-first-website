@@ -18,23 +18,29 @@ export default function OrderPage() {
   const [period, setPeriod] = useState('전체')
   const [loading, setLoading] = useState(true)
 
-  // 주문 목록 조회
+  // 주문 목록 조회 (localStorage + Supabase 병합)
   useEffect(() => {
     if (!user) return
     setLoading(true)
-    let query = supabase.from('ms_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
 
     const now = new Date()
-    if (period === '3개월') {
-      const d = new Date(now); d.setMonth(d.getMonth() - 3)
-      query = query.gte('created_at', d.toISOString())
-    } else if (period === '6개월') {
-      const d = new Date(now); d.setMonth(d.getMonth() - 6)
-      query = query.gte('created_at', d.toISOString())
-    }
+    let cutDate = null
+    if (period === '3개월') { cutDate = new Date(now); cutDate.setMonth(cutDate.getMonth() - 3) }
+    else if (period === '6개월') { cutDate = new Date(now); cutDate.setMonth(cutDate.getMonth() - 6) }
+
+    const allLocal = JSON.parse(localStorage.getItem('ms_local_orders') || '[]')
+    let localOrders = allLocal.filter(o => o.user_id === user.id)
+    if (cutDate) localOrders = localOrders.filter(o => new Date(o.created_at) >= cutDate)
+
+    let query = supabase.from('ms_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+    if (cutDate) query = query.gte('created_at', cutDate.toISOString())
 
     query.then(({ data }) => {
-      if (data) setOrders(data)
+      const dbOrders = data || []
+      const dbTrackingNums = new Set(dbOrders.map(o => o.tracking_number))
+      const localOnly = localOrders.filter(o => !dbTrackingNums.has(o.tracking_number))
+      const combined = [...dbOrders, ...localOnly].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      setOrders(combined)
       setLoading(false)
     })
   }, [user, period])
@@ -62,6 +68,16 @@ export default function OrderPage() {
 
   const handleCancelOrder = async (orderId) => {
     if (!window.confirm('주문을 취소하시겠습니까?\n취소 후에는 되돌릴 수 없습니다.')) return
+
+    if (String(orderId).startsWith('local_')) {
+      const prev = JSON.parse(localStorage.getItem('ms_local_orders') || '[]')
+      const updated = prev.map(o => o.id === orderId ? { ...o, payment_status: 'refunded' } : o)
+      localStorage.setItem('ms_local_orders', JSON.stringify(updated))
+      showToast('주문이 취소되었습니다.')
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, payment_status: 'refunded' } : o))
+      return
+    }
+
     const { error } = await supabase
       .from('ms_orders')
       .update({ payment_status: 'refunded' })
@@ -71,7 +87,7 @@ export default function OrderPage() {
       return
     }
     showToast('주문이 취소되었습니다.')
-    setOrders(prev => prev.filter(o => o.id !== orderId))
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, payment_status: 'refunded' } : o))
   }
 
   if (!user) {

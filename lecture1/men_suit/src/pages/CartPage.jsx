@@ -39,7 +39,6 @@ export default function CartPage() {
   }
 
   const handlePaymentSuccess = async () => {
-    // ms_orders FK(user_id → ms_users.id) 보장: 결제 전 사용자 행 확보
     await supabase.from('ms_users').upsert(
       { id: user.id, email: user.email, name: user.user_metadata?.name || null },
       { onConflict: 'id' }
@@ -58,6 +57,12 @@ export default function CartPage() {
         color: i.color, size: i.size, img: i.img,
       })),
     }
+
+    // localStorage에 먼저 저장 (DB 실패 시에도 주문내역 보장)
+    const localOrder = { ...orderData, id: `local_${trackingNumber}`, created_at: new Date().toISOString() }
+    const localPrev = JSON.parse(localStorage.getItem('ms_local_orders') || '[]')
+    localStorage.setItem('ms_local_orders', JSON.stringify([localOrder, ...localPrev].slice(0, 100)))
+
     let { error } = await supabase.from('ms_orders').insert(orderData)
     if (error) {
       const { items, ...fallback } = orderData

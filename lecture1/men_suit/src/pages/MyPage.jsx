@@ -25,8 +25,16 @@ export default function MyPage() {
 
   useEffect(() => {
     if (!user) return
+    const allLocal = JSON.parse(localStorage.getItem('ms_local_orders') || '[]')
+    const localOrders = allLocal.filter(o => o.user_id === user.id)
     supabase.from('ms_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
-      .then(({ data }) => { if (data) setOrders(data) })
+      .then(({ data }) => {
+        const dbOrders = data || []
+        const dbTrackingNums = new Set(dbOrders.map(o => o.tracking_number))
+        const localOnly = localOrders.filter(o => !dbTrackingNums.has(o.tracking_number))
+        const combined = [...dbOrders, ...localOnly].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        setOrders(combined)
+      })
   }, [user])
 
   if (!user) {
