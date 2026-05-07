@@ -169,6 +169,19 @@ export default function OrderPage() {
                   ))}
                 </div>
 
+                {/* 배송준비중(2): 예상 배송일 */}
+                {order.delivery_status === 2 && (() => {
+                  const d = new Date(order.created_at)
+                  d.setDate(d.getDate() + 2)
+                  const dateStr = d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+                  return (
+                    <div className={styles.estimatedDelivery}>
+                      <i className="fa-solid fa-calendar-days"></i>
+                      <span>예상 배송일: <strong className={styles.estimatedHighlight}>{dateStr}</strong></span>
+                    </div>
+                  )
+                })()}
+
                 {/* 배송중: 운송장 번호 강조 표시 */}
                 {order.delivery_status === 3 && order.tracking_number && (
                   <div className={styles.trackingInfo}>

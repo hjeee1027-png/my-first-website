@@ -1,15 +1,20 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import Header from './components/layout/Header'
-import Placeholder from './components/sections/Placeholder'
+import Footer from './components/layout/Footer'
+import HeroSection from './components/sections/HeroSection'
+import NewArrivalsSection from './components/sections/NewArrivalsSection'
+import CraftsmanshipSection from './components/sections/CraftsmanshipSection'
+import BestPicksSection from './components/sections/BestPicksSection'
 
 const App = () => (
   <Box sx={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
     <Header />
-    <Placeholder number={1} height={400} />
-    <Placeholder number={2} height={360} />
-    <Placeholder number={3} height={360} />
-    <Placeholder number={4} height={360} />
+    <HeroSection />
+    <NewArrivalsSection />
+    <CraftsmanshipSection />
+    <BestPicksSection />
+    <Footer />
   </Box>
 )
 

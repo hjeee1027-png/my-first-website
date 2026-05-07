@@ -137,15 +137,24 @@ ALTER TABLE public.showrooms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 
 -- 프로필 정책: 본인만 조회/수정 가능
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
 CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- 예약 정책: 본인 예약만 조회 가능, 누구나 생성 가능
+DROP POLICY IF EXISTS "Users can view own reservations" ON public.reservations;
+DROP POLICY IF EXISTS "Anyone can create reservation" ON public.reservations;
 CREATE POLICY "Users can view own reservations" ON public.reservations FOR SELECT USING (auth.uid() = user_id OR user_id IS NULL);
 CREATE POLICY "Anyone can create reservation" ON public.reservations FOR INSERT WITH CHECK (true);
 
 -- 차량 정책: 누구나 조회 가능
+DROP POLICY IF EXISTS "Anyone can view cars" ON public.cars_data;
+DROP POLICY IF EXISTS "Anyone can view cars_search" ON public.cars_search;
+DROP POLICY IF EXISTS "Anyone can view showrooms" ON public.showrooms;
+DROP POLICY IF EXISTS "Anyone can view events" ON public.events;
 CREATE POLICY "Anyone can view cars" ON public.cars_data FOR SELECT USING (true);
 CREATE POLICY "Anyone can view cars_search" ON public.cars_search FOR SELECT USING (true);
 CREATE POLICY "Anyone can view showrooms" ON public.showrooms FOR SELECT USING (true);

@@ -59,6 +59,7 @@
   transition: background 0.2s, color 0.2s;
 }
 .statusActive { background: #111; color: #fff; }
+.statusActivePoint { background: #006BFF; color: #fff; }
 .statusBadge {
   position: absolute;
   top: -4px;

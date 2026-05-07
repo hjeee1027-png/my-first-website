@@ -139,7 +139,7 @@ export default function MyPage() {
             {statusLabels.map((label, i) => (
               <React.Fragment key={label}>
                 <div className={styles.statusStep}>
-                  <div className={`${styles.statusIcon} ${statusCounts[i] > 0 ? styles.statusActive : ''}`}>
+                  <div className={`${styles.statusIcon} ${statusCounts[i] > 0 ? (i === 0 ? styles.statusActivePoint : styles.statusActive) : ''}`}>
                     <i className={`fa-solid ${statusIcons[i]}`}></i>
                     {statusCounts[i] > 0 && <span className={styles.statusBadge}>{statusCounts[i]}</span>}
                   </div>

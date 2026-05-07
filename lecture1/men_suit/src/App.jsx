@@ -27,12 +27,22 @@ export default function App() {
   const [recentViewed, setRecentViewed] = useState([])
   const location = useLocation()
 
+  const syncUserToDb = (u) => {
+    if (!u) return
+    supabase.from('ms_users').upsert(
+      { id: u.id, email: u.email, name: u.user_metadata?.name || null },
+      { onConflict: 'id' }
+    ).then(() => {})
+  }
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
+      if (session?.user) syncUserToDb(session.user)
     })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
+      if (event === 'SIGNED_IN' && session?.user) syncUserToDb(session.user)
     })
     return () => subscription.unsubscribe()
   }, [])

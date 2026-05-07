@@ -53,15 +53,9 @@
   text-align: left;
 }
 
-/* 옆 슬라이드 캡션: 약간 작고 흐리게 */
+/* 옆 슬라이드 캡션: 동일 크기, 살짝 흐리게 */
 .captionSide {
   opacity: 0.75;
-}
-.captionSide .captionTitle {
-  font-size: 22px;
-}
-.captionSide .captionSub {
-  font-size: 13px;
 }
 
 .captionTitle {

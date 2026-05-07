@@ -45,7 +45,7 @@ export default function CartPage() {
       user_id: user.id,
       total_price: totalPrice + delivery,
       payment_status: 'paid',
-      delivery_status: 0,
+      delivery_status: 2,
       tracking_number: trackingNumber,
       items: selectedItems.map(i => ({
         id: i.id, name: i.name, qty: i.qty, price: i.price,

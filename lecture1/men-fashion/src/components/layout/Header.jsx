@@ -6,24 +6,24 @@ import {
   Collapse,
   Container,
 } from '@mui/material'
-import { Person as PersonIcon } from '@mui/icons-material'
+import PersonIcon from '@mui/icons-material/Person'
 
 const NAV_MENUS = [
   {
-    label: 'COLLECTION',
-    items: ['SS 2026', 'FW 2025', 'Archive', 'Lookbook'],
+    label: '컬렉션',
+    items: ['2026 SS', '2025 FW', '아카이브', '룩북'],
   },
   {
-    label: 'NEW ARRIVALS',
-    items: ['Top', 'Outerwear', 'Pants', 'Accessories'],
+    label: '신상품',
+    items: ['상의', '아우터', '하의', '액세서리'],
   },
   {
-    label: 'SALE',
-    items: ['Up to 30%', 'Up to 50%', 'Clearance', 'Bundle'],
+    label: '세일',
+    items: ['최대 30%', '최대 50%', '클리어런스', '묶음 할인'],
   },
   {
-    label: 'ABOUT',
-    items: ['Brand Story', 'Craftsmanship', 'Sustainability', 'Contact'],
+    label: '브랜드',
+    items: ['브랜드 스토리', '장인 정신', '지속가능성', '문의하기'],
   },
 ]
 
@@ -140,7 +140,7 @@ const Header = () => {
                 transition: 'all 0.2s',
               }}
             >
-              LOGIN
+              로그인
             </Button>
           </Box>
         </Container>
