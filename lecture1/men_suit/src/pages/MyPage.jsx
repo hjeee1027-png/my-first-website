@@ -25,7 +25,7 @@ export default function MyPage() {
 
   useEffect(() => {
     if (!user) return
-    supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+    supabase.from('ms_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
       .then(({ data }) => { if (data) setOrders(data) })
   }, [user])
 

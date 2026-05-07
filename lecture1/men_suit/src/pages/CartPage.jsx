@@ -37,7 +37,7 @@ export default function CartPage() {
 
     setChecking(true)
     const items = cart.filter(i => selected.includes(i.cartId))
-    const { error } = await supabase.from('orders').insert({
+    const { error } = await supabase.from('ms_orders').insert({
       user_id: user.id,
       total_price: totalPrice + delivery,
       payment_status: 'paid',

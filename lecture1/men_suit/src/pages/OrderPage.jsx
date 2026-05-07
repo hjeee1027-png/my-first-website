@@ -19,7 +19,7 @@ export default function OrderPage() {
   useEffect(() => {
     if (!user) return
     setLoading(true)
-    let query = supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+    let query = supabase.from('ms_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
 
     const now = new Date()
     if (period === '3개월') {

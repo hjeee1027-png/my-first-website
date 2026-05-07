@@ -91,8 +91,8 @@ export default function App() {
       if (!exists) {
         showToast('찜목록에 추가했습니다.', 'success')
         if (user) {
-          supabase.from('wishlist').insert({ user_id: user.id, product_id: product.id }).then(() => {})
-          supabase.from('products').update({ wish_count: (product.wish_count || 0) + 1 }).eq('id', product.id).then(() => {})
+          supabase.from('ms_wishlist').insert({ user_id: user.id, product_id: product.id }).then(() => {})
+          supabase.from('ms_products').update({ wish_count: (product.wish_count || 0) + 1 }).eq('id', product.id).then(() => {})
         }
       }
       return next
@@ -113,7 +113,7 @@ export default function App() {
   const logEvent = async (eventType, targetId, metadata = {}) => {
     if (!user) return
     try {
-      await supabase.from('user_logs').insert({
+      await supabase.from('ms_user_logs').insert({
         user_id: user.id,
         event_type: eventType,
         target_id: String(targetId),

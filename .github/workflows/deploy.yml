@@ -79,8 +79,8 @@ jobs:
       - name: Install & Build men_suit
         working-directory: lecture1/men_suit
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_MS_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_MS_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: rm -rf node_modules && npm install && npx vite build
 
       - name: Combine dist folders

@@ -74,7 +74,7 @@ export default function SignupPage() {
     })
 
     if (!error && data.user) {
-      await supabase.from('users').insert({
+      await supabase.from('ms_users').insert({
         id: data.user.id,
         email: form.email,
         name: form.name,
