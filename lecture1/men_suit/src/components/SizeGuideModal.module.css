@@ -1,21 +1,33 @@
-/* backdrop이 스크롤 컨테이너 역할 - body scroll은 JS로 잠금 */
+/* backdrop: 고정 오버레이, 스크롤 없음 */
 .backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
   z-index: 1000;
-  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 40px 20px;
+  overflow: hidden;
 }
 
-/* 모달: 자연스러운 높이, 잘림 없음 */
+/* 모달: 최대 높이 제한 + flex 열 구조 */
 .modal {
   position: relative;
   background: #fff;
   width: 100%;
   max-width: 1000px;
-  margin: 0 auto;
+  max-height: calc(100vh - 80px);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 스크롤 가능한 본문 영역 */
+.scrollBody {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .closeBtn {
@@ -41,7 +53,6 @@
 /* 본문 2단 레이아웃 */
 .body {
   display: flex;
-  min-height: 500px;
 }
 
 /* 좌측 50% */

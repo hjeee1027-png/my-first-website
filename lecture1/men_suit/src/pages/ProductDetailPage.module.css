@@ -137,11 +137,65 @@
   border: 1px solid #ddd;
   font-size: 13px;
   color: #555;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
   white-space: nowrap;
 }
 .sizeBtn:hover { border-color: #111; color: #111; }
 .sizeSelected { border-color: #111 !important; background: #111 !important; color: #fff !important; }
+
+/* 재고 숫자 */
+.stockCount { font-size: 10px; opacity: 0.75; }
+
+/* 품절 사이즈 */
+.sizeSoldOut,
+.sizeSoldOut:hover {
+  border-color: #ddd !important;
+  color: #ddd !important;
+  background: #fafafa !important;
+  cursor: not-allowed !important;
+}
+/* 선택됐지만 품절인 경우 (컬러 변경 시) */
+.sizeSelected.sizeSoldOut,
+.sizeSelected.sizeSoldOut:hover {
+  border-color: #e74c3c !important;
+  color: #e74c3c !important;
+  background: #fef2f2 !important;
+}
+
+/* 품절 수량 메시지 */
+.soldOutMsg {
+  font-size: 14px;
+  color: #e74c3c;
+  font-weight: 600;
+  padding: 10px 0;
+}
+
+/* 품절 가격 표시 */
+.totalSoldOut {
+  font-size: 22px;
+  font-weight: 700;
+  color: #e74c3c;
+}
+
+/* 재입고 알림신청 버튼 */
+.restockBtn {
+  flex: 1;
+  padding: 16px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+.restockBtn:hover { background: #c0392b; }
 
 /* 수량 */
 .qtyWrap { display: flex; align-items: center; gap: 0; border: 1px solid #ddd; width: fit-content; }

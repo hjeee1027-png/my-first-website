@@ -33,6 +33,14 @@ const sizeOptions = [
   { label: 'XXL', desc: '110' },
 ]
 
+const inventoryData = {
+  블랙:  { M: 0, L: 8,  XL: 5,  XXL: 12 },
+  네이비: { M: 6, L: 3,  XL: 9,  XXL: 0  },
+  그레이: { M: 11, L: 7, XL: 0,  XXL: 4  },
+  베이지: { M: 9, L: 12, XL: 6,  XXL: 8  },
+  카멜:  { M: 4, L: 0,  XL: 11, XXL: 7  },
+}
+
 export default function ProductDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -45,7 +53,6 @@ export default function ProductDetailPage() {
   const [activeImg, setActiveImg] = useState(0)
   const [qty, setQty] = useState(1)
   const [showSizeGuide, setShowSizeGuide] = useState(false)
-  const [stockInfo, setStockInfo] = useState(null)
   const [detailExpanded, setDetailExpanded] = useState(false)
 
   useEffect(() => {
@@ -64,25 +71,6 @@ export default function ProductDetailPage() {
     return () => { document.body.style.overflow = '' }
   }, [showSizeGuide])
 
-  // 재고 조회
-  useEffect(() => {
-    if (!product || !selColor || !selSize) {
-      setStockInfo(null)
-      return
-    }
-    const checkStock = async () => {
-      const { data } = await supabase
-        .from('ms_inventory')
-        .select('stock')
-        .eq('product_id', product.id)
-        .eq('color', selColor)
-        .eq('size', selSize)
-        .single()
-      setStockInfo(data ?? null)
-    }
-    checkStock()
-  }, [selColor, selSize, product])
-
   const handleColorSelect = (colorName) => {
     setSelColor(colorName)
     logEvent('click', product.id, { selected_options: { color: colorName, size: selSize } })
@@ -90,15 +78,14 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!selSize) { showToast('사이즈를 선택해주세요.', 'error'); return }
-    if (stockInfo && stockInfo.stock === 0) { showToast('품절된 상품입니다.', 'error'); return }
+    if (isSoldOut) { showToast('품절된 상품입니다.', 'error'); return }
     addToCart(product, { color: selColor, size: selSize, qty })
   }
 
   const handleBuy = async () => {
     if (!selSize) { showToast('사이즈를 선택해주세요.', 'error'); return }
-    if (stockInfo && stockInfo.stock === 0) { showToast('품절된 상품입니다.', 'error'); return }
+    if (isSoldOut) { showToast('품절된 상품입니다.', 'error'); return }
 
-    // 결제 전 재고 재확인 및 원자적 차감
     const result = await supabase.rpc('ms_decrease_inventory', {
       p_product_id: product.id,
       p_color: selColor,
@@ -107,7 +94,6 @@ export default function ProductDetailPage() {
 
     if (result.data === 0) {
       showToast('재고가 소진되었습니다.', 'error')
-      setStockInfo({ stock: 0 })
       return
     }
 
@@ -135,7 +121,8 @@ export default function ProductDetailPage() {
 
   const finalPrice = product.price
   const totalPrice = finalPrice * qty
-  const isSoldOut = stockInfo && stockInfo.stock === 0
+  const colorStock = inventoryData[selColor] || {}
+  const isSoldOut = selSize ? colorStock[selSize] === 0 : false
   const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || '고객'
 
   return (
@@ -221,33 +208,49 @@ export default function ProductDetailPage() {
             <div className={styles.optionGroup}>
               <p className={styles.optionLabel}>SIZE {selSize && <span className={styles.selectedVal}>— {selSize}</span>}</p>
               <div className={styles.sizeList}>
-                {sizeOptions.map(s => (
-                  <button
-                    key={s.label}
-                    className={`${styles.sizeBtn} ${selSize === s.label ? styles.sizeSelected : ''}`}
-                    onClick={() => setSelSize(s.label)}
-                  >
-                    {s.label}({s.desc})
-                  </button>
-                ))}
+                {sizeOptions.map(s => {
+                  const stock = colorStock[s.label] !== undefined ? colorStock[s.label] : null
+                  const soldOut = stock === 0
+                  return (
+                    <button
+                      key={s.label}
+                      className={`${styles.sizeBtn} ${selSize === s.label ? styles.sizeSelected : ''} ${soldOut ? styles.sizeSoldOut : ''}`}
+                      onClick={() => { if (!soldOut) setSelSize(s.label) }}
+                    >
+                      <span>{s.label}({s.desc})</span>
+                      {stock !== null && (
+                        <span className={styles.stockCount}>
+                          {soldOut ? '품절' : `잔여 ${stock}`}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
             {/* 수량 */}
             <div className={styles.optionGroup}>
               <p className={styles.optionLabel}>수량</p>
-              <div className={styles.qtyWrap}>
-                <button onClick={() => setQty(q => Math.max(1, q - 1))} className={styles.qtyBtn}>−</button>
-                <span className={styles.qtyNum}>{qty}</span>
-                <button onClick={() => setQty(q => q + 1)} className={styles.qtyBtn}>+</button>
-              </div>
+              {isSoldOut ? (
+                <p className={styles.soldOutMsg}>준비중입니다</p>
+              ) : (
+                <div className={styles.qtyWrap}>
+                  <button onClick={() => setQty(q => Math.max(1, q - 1))} className={styles.qtyBtn}>−</button>
+                  <span className={styles.qtyNum}>{qty}</span>
+                  <button onClick={() => setQty(q => q + 1)} className={styles.qtyBtn}>+</button>
+                </div>
+              )}
             </div>
 
             <div className={styles.divider}></div>
 
             <div className={styles.totalRow}>
               <span>총 상품 금액</span>
-              <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
+              {isSoldOut
+                ? <span className={styles.totalSoldOut}>품절</span>
+                : <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
+              }
             </div>
 
             {/* 사이즈 가이드 버튼 */}
@@ -261,9 +264,16 @@ export default function ProductDetailPage() {
                 <i className="fa-solid fa-bag-shopping"></i>
                 장바구니
               </button>
-              <button onClick={handleBuy} className={styles.buyBtn} disabled={isSoldOut}>
-                {isSoldOut ? '품절' : '구매하기'}
-              </button>
+              {isSoldOut ? (
+                <button className={styles.restockBtn} onClick={() => showToast('재입고 알림이 신청되었습니다!')}>
+                  <i className="fa-solid fa-bell"></i>
+                  재입고 알림신청
+                </button>
+              ) : (
+                <button onClick={handleBuy} className={styles.buyBtn}>
+                  구매하기
+                </button>
+              )}
             </div>
 
             <div className={styles.deliveryInfo}>

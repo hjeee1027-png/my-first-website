@@ -73,6 +73,7 @@ export default function SizeGuideModal({ onClose, user }) {
           <i className="fa-solid fa-xmark"></i>
         </button>
 
+        <div className={styles.scrollBody}>
         <div className={styles.body}>
           {/* 좌측: 이미지 + 사이즈 표 */}
           <div className={styles.left}>
@@ -157,6 +158,7 @@ export default function SizeGuideModal({ onClose, user }) {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>
