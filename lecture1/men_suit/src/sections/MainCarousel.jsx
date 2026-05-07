@@ -45,7 +45,7 @@ export default function MainCarousel() {
         setIsTransition(true)
         setCurrent(c => c + 1)
       }
-    }, 3000)
+    }, 4000)
   }, [])
 
   useEffect(() => {
